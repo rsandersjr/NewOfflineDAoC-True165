@@ -14,6 +14,7 @@ Writes godot/content/crafting/recipes.json. Reads the server database read-only.
 
     python pipeline/build_recipes.py
 """
+import argparse
 import collections
 import paths as _paths
 import csv
@@ -86,7 +87,26 @@ def base_of(name):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--annotate-existing', action='store_true',
+                        help='Preserve the installed recipe list; update only labels, handedness and model icons')
+    args = parser.parse_args()
+    previous = json.loads(OUT.read_text(encoding='utf-8')) if args.annotate_existing else None
     db = sqlite3.connect(DB.as_uri() + '?mode=ro', uri=True)
+    bonus_names = json.loads((TOP / 'godot/content/items/bonus_names.json').read_text(encoding='utf-8'))
+    product_info = {r[0].lower(): {'object_type': r[1], 'hand': r[2], 'bonus_type': r[3], 'bonus_value': r[4]}
+                    for r in db.execute('SELECT Id_nb,Object_Type,Hand,Bonus1Type,Bonus1 FROM ItemTemplate')}
+
+    def describe(entry, product_id):
+        info = product_info.get((product_id or '').lower(), {})
+        bonus = int(info.get('bonus_type', 0))
+        if info.get('object_type') == 48 and 120 <= bonus <= 144:
+            entry['bonus_name'] = bonus_names[str(bonus)][0]
+            entry['bonus_value'] = int(info['bonus_value'])
+            entry['group'] = entry['base'] + ' — ' + entry['bonus_name']
+        if 0 < int(info.get('object_type', 0)) < 32:
+            entry['hand_label'] = {0: 'Main hand', 1: 'Two-handed', 2: 'Either hand'}.get(info.get('hand'), '')
+        return entry
     items = {r[0].lower(): {'name': r[1], 'model': r[2] or 0, 'level': r[3] or 0, 'realm': r[4] or 0}
              for r in db.execute('SELECT Id_nb, Name, Model, Level, Realm FROM ItemTemplate')}
     by_name = collections.defaultdict(list)
@@ -160,13 +180,15 @@ def main():
             # its icon was a "?" in the craft window): the server's recipe of the same id, when it makes that product
             c = crafted.get(rid)
             it = items.get(c[0]) if c else None
-            if it and it['model'] and it['realm'] in (0, realm) and \
-                    base_of(it['name']).lower().replace(' ', '') == base.lower().replace(' ', ''):
+            # Preserve the installed icon lookup for period recipe synonyms (helm/coif etc.).
+            if it and it['model'] and it['realm'] in (0, realm) and (
+                    base_of(it['name']).lower().replace(' ', '') == base.lower().replace(' ', '') or c[2] == trade):
                 model = it['model']
-        out165[str(realm)][str(trade)].append({
+        product_id = crafted.get(rid, ('', 0, 0))[0]
+        out165[str(realm)][str(trade)].append(describe({
             'id': rid, 'name': name, 'base': base, 'group': labels.get((realm, trade, cat), ''), 'category': cat,
             'level': int(r[9] or 0), 'skill': int(r[10] or 0), 'model': model,
-            'ingredients': ing})
+            'ingredients': ing}, product_id))
     # still no model: the look of the other material tiers of the same product (a realm's tiers share one model)
     for trades in out165.values():
         for lst in trades.values():
@@ -189,11 +211,11 @@ def main():
         base = r[7].strip() if same else base_of(it['name'])
         realms = [it['realm']] if it['realm'] in (1, 2, 3) else [1, 2, 3]
         for realm in realms:
-            outn[str(realm)][str(skill)].append({
+            outn[str(realm)][str(skill)].append(describe({
                 'id': cid, 'name': it['name'], 'base': base,
                 'group': labels.get((realm, skill, int(r[2])), '') if same else '',
                 'category': int(r[2]) if same else 999, 'level': it['level'], 'skill': level, 'model': it['model'],
-                'ingredients': ingredients.get(prod, [])})
+                'ingredients': ingredients.get(prod, [])}, prod))
 
     def tidy(tree):
         return {realm: {trade: sorted(lst, key=lambda e: (e['category'], e['base'].lower(), e['skill'], e['id']))
@@ -202,6 +224,22 @@ def main():
 
     out = {'skills': {str(k): v for k, v in SKILLS.items()}, 'normal': tidy(outn), '1.65': tidy(out165),
            'source': 'pipeline/build_recipes.py: normal = the server database, 1.65 = the 1.64 client\'s tdl.irf'}
+    if previous is not None:
+        # Preserve established ingredient spelling and other installed list fixes.
+        for mode in ('normal', '1.65'):
+            for realm, trades in previous[mode].items():
+                for trade, entries in trades.items():
+                    fresh = {e['id']: e for e in out[mode][realm][trade]}
+                    for entry in entries:
+                        new = fresh.get(entry['id'])
+                        if new is None:
+                            continue  # retain installed entries absent from this source snapshot
+                        for key in ('model', 'bonus_name', 'bonus_value', 'hand_label'):
+                            if key in new:
+                                entry[key] = new[key]
+                        if 'bonus_name' in new:
+                            entry['group'] = new['group']
+        out = previous
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(out, separators=(',', ':')), encoding='utf-8')
     for mode in ('normal', '1.65'):

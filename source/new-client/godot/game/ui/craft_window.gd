@@ -1034,12 +1034,19 @@ func _open_keep() -> void:
 		_keep.select(0)
 
 
+static func recipe_display_name(recipe: Dictionary) -> String:
+	var text := String(recipe.get("name", ""))
+	if recipe.has("bonus_name"):
+		text += " — %d %s" % [int(recipe.get("bonus_value", 0)), String(recipe.bonus_name)]
+	return text
+
+
 func _add_row(parent: TreeItem, row: Dictionary, count := true) -> TreeItem:
 	var r: Dictionary = row.r
 	var it := _tree.create_item(parent)
 	var col := con_color(int(row.lvl), skill())
 	var short: Array = row.short
-	it.set_text(0, String(r.name))
+	it.set_text(0, recipe_display_name(r))
 	it.set_custom_color(0, col)
 	it.set_text(1, str(int(row.lvl)))
 	it.set_custom_color(1, col)
@@ -1127,11 +1134,13 @@ func _show_recipe() -> void:
 	var lvl := int(row.lvl)
 	var con := int(row.con)
 	_icon.texture = ItemDb.icon(Server.item_icon(int(selected.get("model", 0))))
-	_name.text = String(selected.name).to_upper()
+	_name.text = recipe_display_name(selected).to_upper()
 	_name.add_theme_color_override("font_color", con_color(lvl, skill()))
 	_levels.text = "REQUIRES %s %d (YOU %d)   ITEM LEVEL %d   %s" % [tname.to_upper(), lvl, skill(),
 			int(selected.get("level", 0)), String(CON_NAMES.get(con, "")).to_upper()]
 	var lines := []
+	if String(selected.get("hand_label", "")) != "":
+		lines.append("Weapon use: [b]%s[/b]" % String(selected.hand_label))
 	if con >= 3:
 		lines.append("[color=#cc80ff]Too hard for you yet: 0% to make it.[/color]")
 	elif con <= -3:

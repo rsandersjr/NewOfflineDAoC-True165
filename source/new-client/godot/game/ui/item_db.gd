@@ -179,6 +179,10 @@ static func summary(it: Dictionary) -> Array:
 		out.append_array([cd, qb])
 		if int(it.get("hand", 0)) == 1:
 			out.append("TWO-HANDED")
+		elif int(it.get("hand", 0)) == 2:
+			out.append("EITHER HAND")
+		else:
+			out.append("MAIN HAND")
 	else:
 		if kind != "" and pack_line != "":
 			out.append(kind.to_upper())

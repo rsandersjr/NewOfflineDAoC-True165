@@ -52136,6 +52136,182 @@
   {
    "sql": "UPDATE DataQuest SET SourceName = REPLACE(SourceName, 'SEARCH;12;;224;40960;40960;32768;5', 'SEARCH;12;;224;30145;31358;1500;5') WHERE Name = 'Immortal Gift' AND SourceName LIKE '%SEARCH;12;;224;40960;40960;32768;5%'",
    "reason": "True 1.65 0.8 questfix SEARCH: Immortal Gift: step 12 the forge behind the Dreaded Ursine in Treibh Caillte (zone 224 /loc 21953, 23166), radius 1500 (period walkthrough + client zone fixtures)"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=834 WHERE Id_nb='adamantium_heavy_starkakedja_helm2' AND Model=1206",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkakedja_helm2 model 1206 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=834 WHERE Name='adamantium heavy starkakedja helm' AND Realm=2 AND Object_Type=35 AND Item_Type=21 AND Model=1206",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkakedja_helm2 model 1206 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=274 WHERE Id_nb='adamantium_heavy_starkaskodd_boots2' AND Model=2807",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_boots2 model 2807 -> 274: original 1.64 Norse Studded 3 Boots"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=274 WHERE Name='adamantium heavy starkaskodd boots' AND Realm=2 AND Object_Type=34 AND Item_Type=23 AND Model=2807",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_boots2 model 2807 -> 274: original 1.64 Norse Studded 3 Boots"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=831 WHERE Id_nb='adamantium_heavy_starkaskodd_helm2' AND Model=2316",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_helm2 model 2316 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=831 WHERE Name='adamantium heavy starkaskodd helm' AND Realm=2 AND Object_Type=34 AND Item_Type=21 AND Model=2316",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_helm2 model 2316 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=272 WHERE Id_nb='adamantium_heavy_starkaskodd_sleeves2' AND Model=2805",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_sleeves2 model 2805 -> 272: original 1.64 Norse Studded 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=272 WHERE Name='adamantium heavy starkaskodd sleeves' AND Realm=2 AND Object_Type=34 AND Item_Type=28 AND Model=2805",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_starkaskodd_sleeves2 model 2805 -> 272: original 1.64 Norse Studded 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=824 WHERE Id_nb='adamantium_reinforced_lamellar_helm' AND Model=2388",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_reinforced_lamellar_helm model 2388 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=824 WHERE Name='adamantium reinforced lamellar helm' AND Realm=1 AND Object_Type=34 AND Item_Type=21 AND Model=2388",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_reinforced_lamellar_helm model 2388 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=51 WHERE Id_nb='adamantium_reinforced_lamellar_vest' AND Model=1800",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_reinforced_lamellar_vest model 1800 -> 51: original 1.64 Riveted (Studded) armor"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=51 WHERE Name='adamantium reinforced lamellar vest' AND Realm=1 AND Object_Type=34 AND Item_Type=25 AND Model=1800",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_reinforced_lamellar_vest model 1800 -> 51: original 1.64 Riveted (Studded) armor"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=834 WHERE Id_nb='asterite_heavy_starkakedja_helm2' AND Model=2299",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_helm2 model 2299 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=834 WHERE Name='asterite heavy starkakedja helm' AND Realm=2 AND Object_Type=35 AND Item_Type=21 AND Model=2299",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_helm2 model 2299 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=276 WHERE Id_nb='asterite_heavy_starkakedja_leggings2' AND Model=2810",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_leggings2 model 2810 -> 276: original 1.64 Norse Chain 3 Legs"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=276 WHERE Name='asterite heavy starkakedja leggings' AND Realm=2 AND Object_Type=35 AND Item_Type=27 AND Model=2810",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_leggings2 model 2810 -> 276: original 1.64 Norse Chain 3 Legs"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=277 WHERE Id_nb='asterite_heavy_starkakedja_sleeves2' AND Model=2715",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_sleeves2 model 2715 -> 277: original 1.64 Norse Chain 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=277 WHERE Name='asterite heavy starkakedja sleeves' AND Realm=2 AND Object_Type=35 AND Item_Type=28 AND Model=2715",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkakedja_sleeves2 model 2715 -> 277: original 1.64 Norse Chain 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=831 WHERE Id_nb='asterite_heavy_starkaskodd_helm2' AND Model=2370",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_helm2 model 2370 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=831 WHERE Name='asterite heavy starkaskodd helm' AND Realm=2 AND Object_Type=34 AND Item_Type=21 AND Model=2370",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_helm2 model 2370 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=271 WHERE Id_nb='asterite_heavy_starkaskodd_leggings2' AND Model=2866",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_leggings2 model 2866 -> 271: original 1.64 Norse Studded 3 Legs"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=271 WHERE Name='asterite heavy starkaskodd leggings' AND Realm=2 AND Object_Type=34 AND Item_Type=27 AND Model=2866",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_leggings2 model 2866 -> 271: original 1.64 Norse Studded 3 Legs"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=272 WHERE Id_nb='asterite_heavy_starkaskodd_sleeves2' AND Model=2743",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_sleeves2 model 2743 -> 272: original 1.64 Norse Studded 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=272 WHERE Name='asterite heavy starkaskodd sleeves' AND Realm=2 AND Object_Type=34 AND Item_Type=28 AND Model=2743",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_sleeves2 model 2743 -> 272: original 1.64 Norse Studded 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=270 WHERE Id_nb='asterite_heavy_starkaskodd_vest2' AND Model=1782",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_vest2 model 1782 -> 270: original 1.64 Norse Studded 3 Vest"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=270 WHERE Name='asterite heavy starkaskodd vest' AND Realm=2 AND Object_Type=34 AND Item_Type=25 AND Model=1782",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_starkaskodd_vest2 model 1782 -> 270: original 1.64 Norse Studded 3 Vest"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=54 WHERE Id_nb='asterite_reinforced_lamellar_boots' AND Model=1760",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_boots model 1760 -> 54: original 1.64 riveted (studded) boots"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=54 WHERE Name='asterite reinforced lamellar boots' AND Realm=1 AND Object_Type=34 AND Item_Type=23 AND Model=1760",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_boots model 1760 -> 54: original 1.64 riveted (studded) boots"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=80 WHERE Id_nb='asterite_reinforced_lamellar_gauntlets' AND Model=2808",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_gauntlets model 2808 -> 80: original 1.64 riveted(studded) gloves"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=80 WHERE Name='asterite reinforced lamellar gauntlets' AND Realm=1 AND Object_Type=34 AND Item_Type=22 AND Model=2808",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_gauntlets model 2808 -> 80: original 1.64 riveted(studded) gloves"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=824 WHERE Id_nb='asterite_reinforced_lamellar_helm' AND Model=2386",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_helm model 2386 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=824 WHERE Name='asterite reinforced lamellar helm' AND Realm=1 AND Object_Type=34 AND Item_Type=21 AND Model=2386",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_helm model 2386 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=51 WHERE Id_nb='asterite_reinforced_lamellar_vest' AND Model=1758",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_vest model 1758 -> 51: original 1.64 Riveted (Studded) armor"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=51 WHERE Name='asterite reinforced lamellar vest' AND Realm=1 AND Object_Type=34 AND Item_Type=25 AND Model=1758",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_reinforced_lamellar_vest model 1758 -> 51: original 1.64 Riveted (Studded) armor"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=834 WHERE Id_nb='netherium_heavy_starkakedja_helm2' AND Model=2445",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkakedja_helm2 model 2445 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=834 WHERE Name='netherium heavy starkakedja helm' AND Realm=2 AND Object_Type=35 AND Item_Type=21 AND Model=2445",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkakedja_helm2 model 2445 -> 834: original 1.64 Norse chain helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=277 WHERE Id_nb='netherium_heavy_starkakedja_sleeves2' AND Model=2786",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkakedja_sleeves2 model 2786 -> 277: original 1.64 Norse Chain 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=277 WHERE Name='netherium heavy starkakedja sleeves' AND Realm=2 AND Object_Type=35 AND Item_Type=28 AND Model=2786",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkakedja_sleeves2 model 2786 -> 277: original 1.64 Norse Chain 3 Arms"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=831 WHERE Id_nb='netherium_heavy_starkaskodd_helm2' AND Model=2806",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkaskodd_helm2 model 2806 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=831 WHERE Name='netherium heavy starkaskodd helm' AND Realm=2 AND Object_Type=34 AND Item_Type=21 AND Model=2806",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_starkaskodd_helm2 model 2806 -> 831: original 1.64 Norse studded helm 3"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=824 WHERE Id_nb='netherium_reinforced_lamellar_helm' AND Model=2280",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_reinforced_lamellar_helm model 2280 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=824 WHERE Name='netherium reinforced lamellar helm' AND Realm=1 AND Object_Type=34 AND Item_Type=21 AND Model=2280",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_reinforced_lamellar_helm model 2280 -> 824: original 1.64 Albion Studded Helm"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Model=53 WHERE Id_nb='netherium_reinforced_lamellar_sleeves' AND Model=1779",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_reinforced_lamellar_sleeves model 1779 -> 53: original 1.64 riveted (studded) arms"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Model=53 WHERE Name='netherium reinforced lamellar sleeves' AND Realm=1 AND Object_Type=34 AND Item_Type=28 AND Model=1779",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_reinforced_lamellar_sleeves model 1779 -> 53: original 1.64 riveted (studded) arms"
   }
  ]
 }

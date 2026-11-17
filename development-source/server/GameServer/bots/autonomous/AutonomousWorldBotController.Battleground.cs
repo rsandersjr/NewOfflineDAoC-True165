@@ -64,14 +64,31 @@ namespace DOL.GS
             // feeding single bots to the keep's guards (Thidranki, 2026-10-17).
             bool tooFew = assault && AutonomousBattlegroundWave.TooFewForAssault(bot.Realm, bracket);
             _rvrIntent = assault && !tooFew ? AutonomousRvrEventLayer.Intent.AssaultKeep : AutonomousRvrEventLayer.Intent.Roam;
+            if (!assault || tooFew)
+                _battlegroundGatePassed = false;
             if (tooFew)
                 return RoamBattleground(bot, bracket, central);
 
             if (assault)
             {
-                if (TryRunSiegeJob(bot)) return true;
+                GameKeepDoor shutGate = ClosedMainGate(central);
+                if (shutGate != null)
+                {
+                    _battlegroundGatePassed = false;
+                    if (TryRunSiegeJob(bot)) return true;
+                }
+                else
+                {
+                    ReportBattleAttendance(bot, GameLoop.GameLoopTime);
+                    // The breach is the end of this siege assignment. Do not send an operator
+                    // back to the portal keep for a kit while the wave goes for the lord.
+                    if (_siegeJobKeep != null)
+                        ReleaseSiegeJob(bot);
+                    if (_crewSpotRam != null)
+                        LeaveRamCrew(bot);
+                }
                 // The realm assaults as one wave (AutonomousBattlegroundWave); a bot in a fight finishes it first.
-                if (!bot.InCombat && central != null &&
+                if (!bot.InCombat && shutGate != null &&
                     AutonomousBattlegroundWave.ShouldGather(bot, bracket, central, out Vector3 staging, out string gathered))
                 {
                     if (Vector3.DistanceSquared(new(bot.X, bot.Y, bot.Z), staging) > 250 * 250)
@@ -84,7 +101,7 @@ namespace DOL.GS
                     SetBattlegroundStatus(bot, bracket, "Gathering for the assault", $"{central.Name}: {gathered}");
                     return true;
                 }
-                GameLiving target = FindRvrTarget(bot) ?? FindReachableEnemyDoor(bot, central);
+                GameLiving target = FindReachableEnemyDoor(bot, shutGate) ?? FindRvrTarget(bot);
                 if (target != null)
                 {
                     bot.StopMovingOnPath();
@@ -96,71 +113,69 @@ namespace DOL.GS
                         $"{central.Name} is held by {Holder(central)}", target.Name);
                     return false;
                 }
-                // At the keep the assault goes for the lord. Run 17 (2026-10-17): in all four battlegrounds the gates fell and
-                // guards died for four hours while every lord stayed at 100% with no bot beside him; the assault walked to the
-                // keep's centre and only took targets in reach there, and the lord stands upstairs. A closed gate on the way
-                // is battered above (FindReachableEnemyDoor) as soon as the bot stands at it.
                 GameKeepGuard lord = central.Guards.Values.FirstOrDefault(guard => guard is GuardLord && guard.IsAlive);
-                if (lord != null && lord.CurrentRegionID == bot.CurrentRegionID && bot.IsWithinRadius(lord, BattlegroundLordReach))
+                if (shutGate != null)
                 {
-                    if (bot.IsWithinRadius(lord, BattlegroundLordStrike) && GameServer.ServerRules.IsAllowedToAttack(bot, lord, true))
+                    if (IssuePath(bot, KeepRaidDoors.StandOff(central, shutGate), retargetWhileMoving: true))
+                    {
+                        if (lord != null) TraceStorm(this, bot, central, lord, shutGate, "closed-gate");
+                        SetBattlegroundStatus(bot, bracket, "Marching on the keep gate", central.Name, shutGate.Name);
+                        return true;
+                    }
+                    return false;
+                }
+
+                if (lord != null && lord.CurrentRegionID == bot.CurrentRegionID)
+                {
+                    if (_battlegroundGateKeep != central.KeepID)
+                    {
+                        _battlegroundGateKeep = central.KeepID;
+                        _battlegroundGatePassed = false;
+                    }
+
+                    // Walk beyond the final raid door. Arriving near a door centre did not
+                    // mean the bot had crossed it, and nearest-gate selection changed mid-walk.
+                    GameKeepDoor innerGate = central.Doors.Values
+                        .Where(door => KeepRaidDoors.IsRaidGate(central, door))
+                        .OrderByDescending(KeepRaidDoors.Number).FirstOrDefault();
+                    if (innerGate != null && !_battlegroundGatePassed)
+                    {
+                        Vector3 inner = BattlegroundBreachPoint(central, innerGate);
+                        Vector3 here = new(bot.X, bot.Y, bot.Z);
+                        if (IsRouteDestinationReached(here, inner) ||
+                            bot.IsWithinRadius(lord, BattlegroundLordStrike) && IsPastBattlegroundGate(central, innerGate, here))
+                            _battlegroundGatePassed = true;
+                        else if (IssuePath(bot, inner, retargetWhileMoving: true))
+                        {
+                            TraceStorm(this, bot, central, lord, innerGate, "breach");
+                            SetBattlegroundStatus(bot, bracket, "Crossing the breached keep gate", central.Name, lord.Name);
+                            return true;
+                        }
+                    }
+
+                    if ((_battlegroundGatePassed || innerGate == null) && bot.IsWithinRadius(lord, BattlegroundLordStrike) &&
+                        GameServer.ServerRules.IsAllowedToAttack(bot, lord, true) &&
+                        AutonomousZoneItinerary.HasCompleteCorridor(
+                            AutonomousKeepApproachNavigation.ForRealm(PathfindingProvider.Instance, bot.CurrentRegion, bot.Realm),
+                            bot.CurrentZone, new(bot.X, bot.Y, bot.Z), new(lord.X, lord.Y, lord.Z)))
                     {
                         bot.StopMovingOnPath();
                         bot.StopMoving();
                         bot.TargetObject = lord;
                         brain.AddToAggroList(lord, Math.Max(100, lord.EffectiveLevel * 12));
                         brain.FSM.SetCurrentState(eFSMStateType.AGGRO);
-                        SetBattlegroundStatus(bot, bracket, "Assaulting the keep lord", $"{central.Name} is held by {Holder(central)}", lord.Name);
+                        TraceStorm(this, bot, central, lord, innerGate, "lord-engage");
+                        SetBattlegroundStatus(bot, bracket, "Assaulting the keep lord", central.Name, lord.Name);
                         return false;
                     }
-                    // In through a broken main gate, as players went: run 19 (2026-10-17) showed the stormers standing at a
-                    // closed postern (never batterable) because the shortest path to the lord runs through it.
-                    Vector3 here = new(bot.X, bot.Y, bot.Z);
-                    if (_battlegroundGateKeep != central.KeepID || !bot.IsWithinRadius(lord, BattlegroundLordReach))
+                    if (IssuePath(bot, new(lord.X, lord.Y, lord.Z), retargetWhileMoving: true))
                     {
-                        _battlegroundGateKeep = central.KeepID;
-                        _battlegroundGatePassed = false;
-                    }
-                    GameKeepDoor gate = central.Doors.Values
-                        .Where(door => door.IsAttackableDoor && !door.IsPostern && (!door.IsAlive || door.State == eDoorState.Open))
-                        .OrderBy(door => bot.GetDistanceTo(door)).FirstOrDefault();
-                    // A raid door still shut: march on the next one in order and batter it (FindReachableEnemyDoor above
-                    // takes it once in reach). Pathing to the lord through the closed keep found no path: 90 stormers of
-                    // Dun Abermenai gave up their route that way in run 21 (2026-10-17). BG251-253 S1: the nearest shut
-                    // gate sent Albion/Midgard (Murdaigean), Albion/Hibernia (Thidranki) and Midgard/Hibernia (Abermenai,
-                    // Caledonia) to inner door 02, sealed behind outer gate 01. S1b: this ran only while NO gate was
-                    // broken, so with 01 down the stormers pathed to the lord through the shut 02 and stopped 289-539
-                    // from it, outside batter reach (450). Now: the raid's next shut door whenever one stands, walked to
-                    // a spot 150 in front of it along its own heading (KeepRaidDoors.StandOff), not onto its blocking polygons.
-                    if (ClosedMainGate(central) is { } shut)
-                    {
-                        // Each storm step turns the bot at once (a moving bot otherwise finished its previous walk first).
-                        if (IssuePath(bot, KeepRaidDoors.StandOff(central, shut), retargetWhileMoving: true))
-                        {
-                            TraceStorm(this, bot, central, lord, shut, "closed-gate");
-                            SetBattlegroundStatus(bot, bracket, "Marching on the keep gate", $"{central.Name}: the gates are shut", shut.Name);
-                            return true;
-                        }
-                    }
-                    if (gate != null && !_battlegroundGatePassed)
-                    {
-                        if (bot.IsWithinRadius(gate, BattlegroundGateReached))
-                            _battlegroundGatePassed = true;
-                        else if (IssuePath(bot, new Vector3(gate.X, gate.Y, gate.Z), retargetWhileMoving: true))
-                        {
-                            TraceStorm(this, bot, central, lord, gate, "gate");
-                            SetBattlegroundStatus(bot, bracket, "Storming the keep", $"{central.Name}: through the broken gate", lord.Name);
-                            return true;
-                        }
-                        else TraceStorm(this, bot, central, lord, gate, "gate-path-refused");
-                    }
-                    if (IssuePath(bot, new Vector3(lord.X, lord.Y, lord.Z), retargetWhileMoving: true))
-                    {
-                        TraceStorm(this, bot, central, lord, gate, "lord");
-                        SetBattlegroundStatus(bot, bracket, "Storming the keep", $"{central.Name}: heading for {lord.Name}", lord.Name);
+                        TraceStorm(this, bot, central, lord, innerGate, "lord");
+                        SetBattlegroundStatus(bot, bracket, "Storming the keep", "Heading for the keep lord", lord.Name);
                         return true;
                     }
-                    TraceStorm(this, bot, central, lord, gate, "lord-path-refused");
+                    TraceStorm(this, bot, central, lord, innerGate, "lord-path-refused");
+                    return false;
                 }
                 if (FollowKeepTravel(bot, _rvrDestination))
                 {
@@ -277,8 +292,6 @@ namespace DOL.GS
             static string Format(Vector3? point) => point is { } p ? $"{p.X:0},{p.Y:0},{p.Z:0}" : "-";
         }
 
-        public const int BattlegroundLordReach = 4_000;
-        public const int BattlegroundGateReached = 250;
         private int _battlegroundGateKeep;
         private bool _battlegroundGatePassed;
         public const int BattlegroundLordStrike = 900;
@@ -306,14 +319,24 @@ namespace DOL.GS
         }
 
         /// <summary>A closed gate of the enemy-held keep that this bot can stand at and hit, like players did.</summary>
-        private static GameKeepDoor FindReachableEnemyDoor(GameBot bot, AbstractGameKeep keep)
+        private static GameLiving FindReachableEnemyDoor(GameBot bot, GameKeepDoor door) =>
+            door != null && bot.IsWithinRadius(door, 450) && GameServer.ServerRules.IsAllowedToAttack(bot, door, true)
+                ? door : null;
+
+        private static Vector3 BattlegroundBreachPoint(AbstractGameKeep keep, GameKeepDoor door) =>
+            BattlegroundBreachPoint(new(keep.X, keep.Y), new(door.X, door.Y, door.Z), door.Heading);
+
+        public static Vector3 BattlegroundBreachPoint(Vector2 keepCentre, Vector3 gate, ushort heading)
         {
-            if (keep == null || keep.Realm == bot.Realm) return null;
-            return keep.Doors.Values
-                .Where(door => door.IsAlive && door.IsAttackableDoor && door.State == eDoorState.Closed &&
-                               bot.IsWithinRadius(door, 450) && GameServer.ServerRules.IsAllowedToAttack(bot, door, true))
-                .OrderBy(bot.GetDistanceTo)
-                .FirstOrDefault();
+            Vector2 inside = KeepRaidDoors.StandOff(new(gate.X, gate.Y), heading, keepCentre, -180);
+            return new(inside.X, inside.Y, gate.Z);
+        }
+
+        private static bool IsPastBattlegroundGate(AbstractGameKeep keep, GameKeepDoor door, Vector3 point)
+        {
+            Vector2 entry = new(door.X, door.Y);
+            Vector3 beyond = BattlegroundBreachPoint(keep, door);
+            return Vector2.Dot(new Vector2(beyond.X, beyond.Y) - entry, new Vector2(point.X, point.Y) - entry) > 0;
         }
 
         /// <summary>

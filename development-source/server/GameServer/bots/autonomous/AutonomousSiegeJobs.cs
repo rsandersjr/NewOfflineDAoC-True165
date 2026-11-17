@@ -34,7 +34,7 @@ namespace DOL.GS
                 .ThenBy(index => index).ToArray();
 
         public static bool TryAcquire(GameBot bot, string keep, int present, bool attacking, bool enemyEngines,
-            out BotSiegeKind kind, out int slot, ushort? destinationRegion = null, BotSiegeKind? carried = null)
+            out BotSiegeKind kind, out int slot, ushort? destinationRegion = null, BotSiegeKind? carried = null, int allowedKinds = -1)
         {
             kind = default; slot = -1;
             if (!Eligible(bot)) return false;
@@ -60,6 +60,7 @@ namespace DOL.GS
                     // Keeps audit L5: the second ram only when the raid can crew both (AutonomousRamCrews.RamsForDoor).
                     if (attacking && kind == BotSiegeKind.Ram && index >= AutonomousRamCrews.RamsForDoor(present)) continue;
                     if (kind == BotSiegeKind.Ballista && !enemyEngines) continue;
+                    if ((allowedKinds & (1 << (int)kind)) == 0) continue;
                     Jobs[key] = new(new(bot), now + 120_000, kind);
                     bot.TempProperties.SetProperty("SiegeJobUntil", now + 120_000);
                     slot = index; return true;

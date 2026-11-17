@@ -132,8 +132,29 @@ namespace DOL.GS
             bool enemyEngines = engines.Any(w => BotSiegeRuntime.LegalEnemy(bot, w));
             int present = nearby.OfType<GameBot>().Count(b => b.IsAlive && b.Realm == bot.Realm) +
                 bot.GetPlayersInRadius(6000).Count(p => p.IsAlive && p.Realm == bot.Realm);
-            if (!AutonomousSiegeJobs.TryAcquire(bot, _siegeJobKeep, present, attacking && door!=null, enemyEngines, out _siegeKind, out _siegeSlot,
-                    carried: CarriedSiegeKind(bot) ?? AbandonedSiegeKind(bot, engines)))
+            BotSiegeKind? carried = CarriedSiegeKind(bot);
+            BotSiegeKind? reclaimable = AbandonedSiegeKind(bot, engines);
+            int allowedKinds = -1;
+            if (Classic165Mode.IsOn && attacking && BattlegroundBrackets.IsBattlegroundRegion(bot.CurrentRegionID) &&
+                BattlegroundSiegeMaster(bot) is { } master)
+            {
+                // A broke operator used to reserve the first free slot and then give it back.
+                // Filter new leases using real coin and inventory; existing operators keep their leases.
+                long purse = AutonomousBotEconomy.GetMoney(bot.DatabaseID);
+                bool hasRoom = bot.Inventory?.FindFirstEmptySlot(eInventorySlot.FirstBackpack, eInventorySlot.LastBackpack)
+                    is { } empty && empty != eInventorySlot.Invalid;
+                allowedKinds = 0;
+                foreach (BotSiegeKind kind in Enum.GetValues<BotSiegeKind>())
+                {
+                    string kit = BotSiegeRuntime.Kit(bot.Realm, kind);
+                    DbItemTemplate offer = SoldBy(master, kit);
+                    if (kind == reclaimable || BotSiegeRuntime.Item(bot, kit) != null ||
+                        offer == null || (hasRoom && purse >= offer.Price))
+                        allowedKinds |= 1 << (int)kind;
+                }
+            }
+            if (!AutonomousSiegeJobs.TryAcquire(bot, _siegeJobKeep, present, attacking && door != null, enemyEngines, out _siegeKind, out _siegeSlot,
+                    carried: carried ?? reclaimable, allowedKinds: allowedKinds))
             { _siegeNextAttempt = now + 10_000; return false; }
             if (now>=_siegeNextTopup)
             {

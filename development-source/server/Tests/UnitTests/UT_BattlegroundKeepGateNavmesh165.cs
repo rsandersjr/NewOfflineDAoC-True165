@@ -126,7 +126,7 @@ public class UT_BattlegroundKeepGateNavmesh165
                 var doors = new List<Door>();
                 using (var q = db.CreateCommand())
                 {
-                    q.CommandText = $"select d.InternalID, d.X, d.Y, d.Z from Door d join Zones z on z.ZoneID = d.InternalID / 1000000 " +
+                    q.CommandText = $"select d.InternalID, d.X, d.Y, d.Z, d.Heading from Door d join Zones z on z.ZoneID = d.InternalID / 1000000 " +
                                     $"where z.RegionID = {regionId} and d.Realm not in (1, 2, 3) order by d.InternalID";
                     using var r = q.ExecuteReader();
                     while (r.Read())
@@ -138,6 +138,7 @@ public class UT_BattlegroundKeepGateNavmesh165
                         door.X = (int)p.X; door.Y = (int)p.Y; door.Z = (int)p.Z;
                         door.State = eDoorState.Closed;
                         door.DoorId = r.GetInt32(0);
+                        door.Heading = (ushort)r.GetInt32(4);
                         if (door.CurrentZone == null || !nav.HasNavmesh(door.CurrentZone)) continue;
                         if (!nav.RegisterDoor(door)) failures.Add($"{door.DoorId}: no door polygons");
                         doors.Add(door);
@@ -172,6 +173,18 @@ public class UT_BattlegroundKeepGateNavmesh165
                     }
                     Set(outer, eDoorState.Open); Set(inner, eDoorState.Open);
                     PathfindingStatus open = Walk(start.Value, end.Value);
+                    if (lord.HasValue && BattlegroundBrackets.IsBattlegroundRegion(regionId))
+                    {
+                        Vector3 breach = AutonomousWorldBotController.BattlegroundBreachPoint(
+                            new Vector2(keep.Point.X, keep.Point.Y), pi, inner.Heading);
+                        var floor = nav.GetClosestPoint(zone, breach, 48, 48, 96, nav.DefaultFilters);
+                        if (!floor.HasValue || !AutonomousWorldBotController.IsRouteDestinationReached(floor.Value, breach) ||
+                            Walk(start.Value, breach) != PathfindingStatus.PathFound ||
+                            Walk(breach, end.Value) != PathfindingStatus.PathFound)
+                            failures.Add($"{name}: assault checkpoint {breach} is not connected to both the field and lord");
+                        else
+                            TestContext.WriteLine($"BG BREACH {name}: field -> {breach} -> lord");
+                    }
                     var shut = new Dictionary<string, PathfindingStatus>();
                     foreach ((string label, Door[] closed) in new[] { ("outer", new[] { outer }), ("inner", new[] { inner }), ("both", new[] { outer, inner }) })
                     {

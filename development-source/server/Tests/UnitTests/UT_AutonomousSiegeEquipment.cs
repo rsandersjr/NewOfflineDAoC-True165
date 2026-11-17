@@ -59,6 +59,41 @@ namespace DOL.UnitTests
             finally { foreach (var bot in bots) if (bot != null) AutonomousSiegeJobs.Release(bot); }
         }
 
+        [Test]
+        public void BattlegroundSiegeLeaseSkipsAnOperatorWithoutUsableEquipment()
+        {
+            static Bot Operator()
+            {
+                var bot = (Bot)RuntimeHelpers.GetUninitializedObject(typeof(Bot));
+                bot.Realm = eRealm.Albion;
+                bot.ObjectState = GameObject.eObjectState.Active;
+                typeof(GameBot).GetField("<IsAutonomousWorldBot>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(bot, true);
+                typeof(GameLiving).GetField("<TempProperties>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(bot, new PropertyCollection());
+                return bot;
+            }
+
+            Bot unready = Operator(), ready = Operator();
+            string keep = "test-battleground-siege-" + Guid.NewGuid();
+            try
+            {
+                Assert.That(AutonomousSiegeJobs.TryAcquire(unready, keep, 8, true, false, out _, out _, 252, allowedKinds: 0),
+                    Is.False);
+                Assert.That(AutonomousSiegeJobs.TryAcquire(ready, keep, 8, true, false, out var kind, out var slot, 252,
+                    allowedKinds: 1 << (int)BotSiegeKind.Ram), Is.True);
+                Assert.That((kind, slot), Is.EqualTo((BotSiegeKind.Ram, 0)));
+                // Spending the kit to deploy must not cause an existing operator to lose its slot.
+                Assert.That(AutonomousSiegeJobs.TryAcquire(ready, keep, 8, true, false, out _, out _, 252, allowedKinds: 0),
+                    Is.True);
+            }
+            finally
+            {
+                AutonomousSiegeJobs.Release(unready);
+                AutonomousSiegeJobs.Release(ready);
+            }
+        }
+
         [TestCase(true, 180_000L)]
         [TestCase(false, 600_000L)]
         public void SupplyTime_IsBoundedAndPlayerResponsesAreFaster(bool playerResponse, long budget)

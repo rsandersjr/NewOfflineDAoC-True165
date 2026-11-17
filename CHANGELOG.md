@@ -7,6 +7,15 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Battleground keep assaults - 17 November 2026
+
+- Battleground attackers check whether they carry, can reclaim, or can afford the right equipment before claiming a
+  siege job. This keeps an operator who cannot buy a kit from tying up a slot.
+- Bots focus on the next closed main gate. When the gates open, they stop resupplying and advance through a point
+  beyond the inner gate before moving up to the keep lord. The normal keep capture rules and siege prices still apply.
+- All 5,149 server tests passed. An installed-navmesh check verified the route to the lord at all four central keeps.
+  A live bot run is still needed to confirm captures.
+
 ### Traveler's Inn dye merchants - 17 November 2026
 
 - Each realm's Traveler's Inn has a Dye Merchant who walks a short route in the guarded yard. Look for Maerwynn Dyeford

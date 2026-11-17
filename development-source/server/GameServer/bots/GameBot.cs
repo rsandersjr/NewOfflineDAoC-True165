@@ -1529,6 +1529,10 @@ namespace DOL.GS
                 if (releaseZone == null || !AutonomousRealmBoundary.Allows(Realm, releaseRegion, releaseZone.ID))
                     release = null;
             }
+            int releaseSeed = unchecked((int)DatabaseID ^ Environment.TickCount);
+            Point3D magMellLanding = IsAutonomousWorldBot && Classic165Mode.IsOn
+                ? BotReleaseBindPoints.MagMellLanding(releaseRegion, release, releaseSeed)
+                : null;
             if (release == null && IsAutonomousWorldBot && returnToParty &&
                 AutonomousRealmRaid.TryRaidRelease(this, out ushort hubRegion, out Point3D hub))
             {
@@ -1550,7 +1554,7 @@ namespace DOL.GS
             }
             release ??= _deathLocation;
             // beside a bindstone, never on it (owner 2026-11-10: bots stood up on top of Huginfell's stone)
-            release = BotReleaseBindPoints.BesideBindstone(releaseRegion, release, unchecked((int)DatabaseID ^ Environment.TickCount));
+            release = magMellLanding ?? BotReleaseBindPoints.BesideBindstone(releaseRegion, release, releaseSeed);
             // Transfer the corpse first: a failed MoveTo must not revive the bot
             // at its killer or cause HandleDeathRecovery to discard its timer.
             if (!MoveCorpseForRelease(releaseRegion, release.X, release.Y, release.Z, Heading))

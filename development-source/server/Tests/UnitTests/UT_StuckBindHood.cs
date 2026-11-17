@@ -29,6 +29,19 @@ public class UT_StuckBindHood
         Assert.That(() => BotReleaseBindPoints.RingPoints(0, 0, 100, 8, int.MinValue).ToArray(), Throws.Nothing);
     }
 
+    [TestCase(200, 345752, 490735, 5203, true)]
+    [TestCase(200, 346073, 490855, 5200, true)]
+    [TestCase(200, 346361, 490664, 5318, true)]
+    [TestCase(200, 344452, 491649, 5188, false)]
+    [TestCase(200, 347745, 490671, 5248, false)]
+    [TestCase(200, 345752, 490735, 5500, false)]
+    [TestCase(201, 345752, 490735, 5203, false)]
+    public void MagMellPlacementRecognizesSavedBindsWithoutTakingOverOtherStones(
+        int region, int x, int y, int z, bool expected)
+    {
+        Assert.That(BotReleaseBindPoints.IsMagMellBind((ushort)region, new Point3D(x, y, z)), Is.EqualTo(expected));
+    }
+
     [Test]
     public void StuckIsRefusedWhenDeadOrFighting() => Assert.Multiple(() =>
     {

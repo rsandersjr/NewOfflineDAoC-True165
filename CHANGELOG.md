@@ -7,6 +7,18 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Mag Mell respawns, jump casting and alchemy - 17 November 2026
+
+- Gamebots releasing at Mag Mell land on walkable ground near the visible bindstone on the town side of the path.
+  Older saved bind positions across the path use the same landing spots.
+- Jumping straight up interrupts an active cast under the normal movement rules. Songs and spells that allow
+  movement still follow their usual rules.
+- Updated vendor prices for 549 documented single-output alchemy recipes and two ingredients across all three realms.
+  At 5× skill gain, the helper now estimates about 263g net for 301–900 after vendor sales. The launcher applies the
+  prices to the existing world at START SERVER.
+- All 5,162 server tests passed. The six Mag Mell landing spots have verified navmesh routes into town.
+  The jump interrupt and bot releases still need an in-game check.
+
 ### Battleground keep assaults - 17 November 2026
 
 - Battleground attackers check whether they carry, can reclaim, or can afford the right equipment before claiming a

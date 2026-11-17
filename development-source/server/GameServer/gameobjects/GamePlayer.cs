@@ -8379,6 +8379,7 @@ namespace DOL.GS
         }
 
         public short FallSpeed { get; set; }
+        public bool LastPositionPacketGrounded { get; set; }
         public PlayerPositionUpdateHandler.StateFlags StateFlags { get; set; }
         public PlayerPositionUpdateHandler.ActionFlags ActionFlags { get; set; }
 

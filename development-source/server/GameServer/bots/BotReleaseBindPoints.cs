@@ -12,6 +12,57 @@ namespace DOL.GS
     {
         private sealed record Bind(Point3D Point, eRealm Realm);
         private static readonly ConcurrentDictionary<ushort, Bind[]> Regions = new();
+        // Zone 200 fixture 1103 (Hbindstone), with ground height from the Mag Mell bind.
+        private const ushort MagMellRegion = 200;
+        private static readonly Vector3 MagMellStone = new(345793, 490725, 5200);
+        private static readonly Vector3 MagMellTownApproach = new(345733, 489942, 5200);
+        // Keep releases on the town side of the stone. Each point has a route to the merchant approach.
+        private static readonly Vector2[] MagMellLandingOffsets =
+        {
+            new(-145, 0), new(-123, -77), new(-75, -125),
+            new(0, -145), new(-75, 125), new(-123, 77)
+        };
+
+        public static bool IsMagMellBind(ushort region, Point3D release)
+        {
+            // The bind area covers older saved positions that are outside the ordinary stone clearance.
+            return region == MagMellRegion && release != null &&
+                System.Math.Abs(release.Z - MagMellStone.Z) <= 128 &&
+                Vector2.DistanceSquared(new Vector2(release.X, release.Y), new Vector2(MagMellStone.X, MagMellStone.Y)) <= 750 * 750;
+        }
+
+        public static Point3D? MagMellLanding(ushort region, Point3D release, int seed)
+        {
+            if (!IsMagMellBind(region, release))
+                return null;
+
+            Zone zone = WorldMgr.GetRegion(region)?.GetZone((int)MagMellStone.X, (int)MagMellStone.Y);
+            IPathfindingMgr nav = PathfindingProvider.Instance;
+            if (zone == null || nav == null || !nav.IsAvailable || !nav.HasNavmesh(zone))
+                return null;
+
+            Vector3? town = nav.GetClosestPoint(zone, MagMellTownApproach, 32, 32, 64, nav.DefaultFilters);
+            if (!town.HasValue)
+                return null;
+
+            int first = (int)(unchecked((uint)seed) % MagMellLandingOffsets.Length);
+            for (int i = 0; i < MagMellLandingOffsets.Length; i++)
+            {
+                Vector2 offset = MagMellLandingOffsets[(first + i) % MagMellLandingOffsets.Length];
+                Vector3 landing = MagMellStone + new Vector3(offset, 0);
+                Vector3? ground = nav.GetClosestPoint(zone, landing, 16, 16, 64, nav.DefaultFilters);
+                if (!ground.HasValue || ground.Value.X > MagMellStone.X + 8 ||
+                    Vector2.DistanceSquared(new Vector2(ground.Value.X, ground.Value.Y),
+                        new Vector2(MagMellStone.X, MagMellStone.Y)) <= 120 * 120 ||
+                    !AutonomousZoneItinerary.HasCompleteCorridor(nav, zone, ground.Value, town.Value))
+                    continue;
+
+                return new Point3D((int)System.Math.Round(ground.Value.X), (int)System.Math.Round(ground.Value.Y),
+                    (int)System.Math.Round(ground.Value.Z));
+            }
+
+            return null;
+        }
 
         public static void Replace(ushort region, IEnumerable<DbBindPoint> points) =>
             Regions[region] = points.Select(p => new Bind(new Point3D(p.X, p.Y, p.Z), Owner(region, (eRealm)p.Realm))).ToArray();

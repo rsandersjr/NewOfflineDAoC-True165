@@ -128,7 +128,17 @@ namespace DOL.GS.PacketHandler.Client.v168
                     return;
                 }
 
-                bool zoneChange = newZone != client.Player.LastPositionUpdateZone;
+                GamePlayer movingPlayer = client.Player;
+                bool zoneChange = newZone != movingPlayer.LastPositionUpdateZone;
+                bool grounded = (fallingDamage & 0x8000) != 0;
+                // Ordinary horizontal movement already interrupts casts in PlayerMovementComponent.
+                // Reuse the spell movement rule for a vertical takeoff only, once per jump.
+                if (Classic165Mode.IsOn && !zoneChange && movingPlayer.IsCasting && !movingPlayer.IsSwimming && !movingPlayer.IsClimbing &&
+                    !movingPlayer.IsRiding && !movingPlayer.IsIncapacitated && (int)x == movingPlayer.X && (int)y == movingPlayer.Y &&
+                    IsJumpTakeoff(movingPlayer.LastPositionPacketGrounded, grounded, zSpeed, (int)z - movingPlayer.Z))
+                    movingPlayer.CurrentSpellHandler?.CasterMoves();
+                movingPlayer.LastPositionPacketGrounded = grounded;
+
 
                 if (zoneChange)
                 {
@@ -731,6 +741,11 @@ namespace DOL.GS.PacketHandler.Client.v168
         public static ushort GetSeatPosition(GamePlayer player)
         {
             return (ushort) (player.Steed is null ? 0 : player.Steed.RiderSlot(player));
+        }
+
+        public static bool IsJumpTakeoff(bool wasGrounded, bool grounded, float verticalSpeed, int rise)
+        {
+            return wasGrounded && !grounded && float.IsFinite(verticalSpeed) && verticalSpeed > 0 && rise > 0;
         }
 
         public static bool ProcessStateFlags(GamePlayer player, StateFlags stateFlags)

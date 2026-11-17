@@ -45,6 +45,7 @@ func setup(w: Node, h: Node) -> void:
 	h.left.connect(_left)
 	h.furniture_changed.connect(_furniture_changed)
 	h.points_toggled.connect(func(n): _hookpoints(n))
+	h.occupied_changed.connect(_occupied_changed)
 
 
 # ---------------------------------------------------------------- outside
@@ -77,6 +78,8 @@ func _house_changed(n: int) -> void:
 	_show(have.scene, "porch", bool(h.get("porch", false)))
 	_show(have.scene, "banners", bool(h.get("banner", false)))
 	_show(have.scene, "shields", bool(h.get("shield", false)))
+	_apply_emblems(have.scene, int(h.get("emblem", 0)))
+	_tint_part(have.scene, "tent", int(h.get("porch_roof_color", 0)))
 	_set_porch_collision(holder, bool(h.get("porch", false)))
 	_garden_changed(n)
 
@@ -137,6 +140,13 @@ func _entered(n: int) -> void:
 	interior.set_meta("scene", node)
 	_collide(node, interior, n)
 	_apply_slot(node, "door", int(_row(model).get("door_start", 1)) + int(housing.interior.get("door", 0)))
+	_show(node, "banners", bool(housing.interior.get("banner", false)))
+	_show(node, "shields", bool(housing.interior.get("shield", false)))
+	_apply_emblems(node, int(housing.interior.get("emblem", 0)))
+	var rugs: Array = housing.interior.get("rugs", [])
+	for i in mini(rugs.size(), 4):
+		_tint_part(node, "carpet%03d" % (i + 1), int(rugs[i]))
+	_add_fire(node, _house_file(model, "interior"))
 	_set_indoor_weather(true)
 	_furniture_changed(n)
 	_hookpoints(n)
@@ -153,6 +163,24 @@ func _left(n: int) -> void:
 func _set_indoor_weather(inside: bool) -> void:
 	if world and world.get("viewer") and world.viewer.get("sky"):
 		world.viewer.sky.housing_inside = inside
+
+
+func _occupied_changed(n: int) -> void:
+	if n == interior_number and interior:
+		for p in interior.get_meta("fire_particles", []):
+			if is_instance_valid(p):
+				p.emitting = housing.inside == n or bool(housing.house(n).get("occupied", false))
+
+
+func _add_fire(scene: Node3D, path: String) -> void:
+	var doc = JSON.parse_string(FileAccess.get_file_as_string(path))
+	var particles := []
+	for spec in doc.get("extras", {}).get("nif_particles", []):
+		var p := NifParticles.build(spec, Transform3D.IDENTITY, 400.0, _mats)
+		scene.add_child(p)
+		p.emitting = true
+		particles.append(p)
+	interior.set_meta("fire_particles", particles)
 
 
 func _furniture_changed(n: int) -> void:
@@ -292,6 +320,42 @@ func _apply_materials(scene: Node, model: int, h: Dictionary) -> void:
 	for part in SLOTS:
 		var start := int(row.get(String(SLOTS[part][0]), 0))
 		_apply_slot(scene, part, start + int(h.get(String(PACKET_FIELD[part]), 0)))
+
+
+func _tint_part(scene: Node, part: String, color: int) -> void:
+	var node := _helper(scene, part)
+	if node == null:
+		return
+	for mi in node.find_children("*", "MeshInstance3D", true, false):
+		for s in mi.mesh.get_surface_count():
+			var spec: Dictionary = mi.get_meta("spec_%d" % s, {})
+			# Tint the fabric, never adjacent metal/wood. The original NIF's
+			# basetrimcolor is the dye layer of tents and carpets.
+			var base := String(spec.get("slots", {}).get("base", {}).get("tex", ""))
+			if base != "basetrimcolor" and not part.begins_with("carpet"):
+				continue
+			var mat := _mats.material(spec).duplicate() as ShaderMaterial
+			mat.set_shader_parameter("tint", Fig3Figure.dye(color))
+			mi.set_surface_override_material(s, mat)
+
+
+func _apply_emblems(scene: Node, emblem: int) -> void:
+	for part in ["banners", "shields"]:
+		var node := _helper(scene, part)
+		if node == null:
+			continue
+		for mi in node.find_children("*", "MeshInstance3D", true, false):
+			for s in mi.mesh.get_surface_count():
+				var spec: Dictionary = mi.get_meta("spec_%d" % s, {})
+				if not String(spec.get("slots", {}).get("base", {}).get("tex", "")).begins_with("cloakpattern"):
+					continue
+				var mat := _mats.material(spec).duplicate() as ShaderMaterial
+				mat.set_shader_parameter("base_tex", Emblems.pattern_texture(emblem))
+				var logo := Emblems.logo_texture(Emblems.decode(emblem).logo) if emblem > 0 else null
+				mat.set_shader_parameter("has_dark", logo != null)
+				if logo:
+					mat.set_shader_parameter("dark_tex", logo)
+				mi.set_surface_override_material(s, mat)
 
 
 ## ph_textures row `id` on a part's meshes - only on the meshes wearing that part's own kind of texture (roof, wall,

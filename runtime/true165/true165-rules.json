@@ -52312,6 +52312,326 @@
   {
    "sql": "UPDATE ItemUnique SET Model=53 WHERE Name='netherium reinforced lamellar sleeves' AND Realm=1 AND Object_Type=34 AND Item_Type=28 AND Model=1779",
    "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_reinforced_lamellar_sleeves model 1779 -> 53: original 1.64 riveted (studded) arms"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_bladed_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium bladed fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_bladed_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium bladed moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_bladed_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium bladed moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_exceptional_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium exceptional fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_exceptional_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium exceptional moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_fortified_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium fortified fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_fortified_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium fortified moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_heavy_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium heavy bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_heavy_bladed_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium heavy bladed moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='adamantium_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='adamantium moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: adamantium_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_bladed_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite bladed fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_bladed_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite bladed moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_bladed_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite bladed moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_exceptional_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite exceptional fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_exceptional_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite exceptional moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_fortified_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite fortified fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_fortified_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite fortified moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_heavy_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite heavy bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_heavy_bladed_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite heavy bladed moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='asterite_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='asterite moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: asterite_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_bladed_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium bladed fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_bladed_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium bladed moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_bladed_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_exceptional_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium exceptional fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_exceptional_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_exceptional_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium exceptional moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_exceptional_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_fortified_fang_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium fortified fang greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fortified_fang_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_fortified_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium fortified moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_fortified_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_heavy_bladed_claw_greave2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium heavy bladed claw greave' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_bladed_claw_greave2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_heavy_bladed_moon_claw2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium heavy bladed moon claw' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_heavy_bladed_moon_claw2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Hand=2 WHERE Id_nb='netherium_moon_fang2' AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Hand=2 WHERE Name='netherium moon fang' AND Realm=2 AND Object_Type=25 AND Item_Type=11 AND Hand=1",
+   "reason": "Issue 2/3 confirmed fixes 2026-11-17: netherium_moon_fang2: crafted hand-to-hand weapon usable in either hand, not two-handed"
   }
  ]
 }

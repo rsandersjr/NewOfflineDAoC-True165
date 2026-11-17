@@ -368,6 +368,11 @@ func _collide(scene: Node, holder: Node3D, number: int) -> void:
 	floors.name = "Floors"
 	floors.collision_layer = ZoneLoader.LAYER_FLOOR
 	floors.collision_mask = 0
+	var climbs := StaticBody3D.new()
+	climbs.name = "ClimbBodies"
+	climbs.collision_layer = ZoneLoader.LAYER_WALL
+	climbs.collision_mask = 0
+	holder.add_child(climbs)
 	for b in [walls, porch, floors]:
 		b.set_meta("house_number", number)
 		b.set_meta("house_inside", holder == interior)
@@ -377,6 +382,7 @@ func _collide(scene: Node, holder: Node3D, number: int) -> void:
 		if String(mi.name).begins_with("helper_"):
 			continue                                      # (placement planes / footprints: not walked on)
 		var is_col := String(mi.name).begins_with("collision_")
+		var is_climb := String(mi.name).begins_with("climb_")
 		var faces := mi.mesh.get_faces()
 		if faces.is_empty():
 			continue
@@ -386,7 +392,10 @@ func _collide(scene: Node, holder: Node3D, number: int) -> void:
 		var cs := CollisionShape3D.new()
 		cs.shape = shape
 		cs.transform = holder.global_transform.affine_inverse() * mi.global_transform
-		if is_col:
+		if is_climb:
+			mi.visible = false
+			climbs.add_child(cs)
+		elif is_col:
 			mi.visible = false
 			var in_porch := false
 			var p := mi.get_parent()

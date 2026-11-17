@@ -1863,6 +1863,7 @@ namespace DOL.GS.Quests
 					if (p != null)
 					{
 						//log.DebugFormat("DataQuest: ReceiveItem {0} receives {1} from {2}", a.Target.Name, a.Item.Name, a.Source.Name);
+						_speaker = a.Target;
 						OnNPCReceiveItem(p, a.Target, a.Item);
 					}
 
@@ -2461,6 +2462,14 @@ namespace DOL.GS.Quests
 						}
 						break;
 
+                    case eStepType.Deliver:
+                    case eStepType.DeliverFinish:
+                    case eStepType.Collect:
+                    case eStepType.CollectFinish:
+                        // TargetText is spoken when the item is accepted, not before it is given.
+                        // The classic-quest hook supplies any recorded arrival greeting separately.
+                        break;
+
 					default:
 						{
 							if (!string.IsNullOrEmpty(TargetText))
@@ -2610,23 +2619,16 @@ namespace DOL.GS.Quests
 							{
 								TryTurnTo(obj, player);
 
-								if (!string.IsNullOrEmpty(TargetText))
-								{
-									if (obj.Realm == eRealm.None)
-									{
-										// mobs and other non realm objects send chat text and not popup text.
-										SendMessage(m_questPlayer, TargetText, 0, eChatType.CT_Say, eChatLoc.CL_ChatWindow);
-									}
-									else
-									{
-										SendMessage(m_questPlayer, TargetText, 0, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-									}
-								}
+                                string handInText = TargetText;
 
 								if (AdvanceQuestStep(obj))
 								{
 									RemoveItem(obj, player, item, true);
 									RemoveCopies(obj, player, others, needed - Math.Max(1, item.Count));
+                                    if (!string.IsNullOrEmpty(handInText))
+                                        SendMessage(player, handInText, 0,
+                                            obj.Realm == eRealm.None ? eChatType.CT_Say : eChatType.CT_System,
+                                            obj.Realm == eRealm.None ? eChatLoc.CL_ChatWindow : eChatLoc.CL_PopupWindow);
 								}
 							}
 							break;
@@ -2653,22 +2655,15 @@ namespace DOL.GS.Quests
 					{
 						TryTurnTo(obj, player);
 
-						if (!string.IsNullOrEmpty(TargetText))
-						{
-							if (obj.Realm == eRealm.None)
-							{
-								// mobs and other non realm objects send chat text and not popup text.
-								SendMessage(m_questPlayer, TargetText, 0, eChatType.CT_Say, eChatLoc.CL_ChatWindow);
-							}
-							else
-							{
-								SendMessage(m_questPlayer, TargetText, 0, eChatType.CT_System, eChatLoc.CL_PopupWindow);
-							}
-						}
+						string handInText = TargetText;
 
 						if (AdvanceQuestStep(obj))
 						{
 							RemoveItem(obj, player, item, true);
+                            if (!string.IsNullOrEmpty(handInText))
+                                SendMessage(player, handInText, 0,
+                                    obj.Realm == eRealm.None ? eChatType.CT_Say : eChatType.CT_System,
+                                    obj.Realm == eRealm.None ? eChatLoc.CL_ChatWindow : eChatLoc.CL_PopupWindow);
 						}
 					}
 					else if (StepType == eStepType.DeliverFinish)
@@ -2700,12 +2695,22 @@ namespace DOL.GS.Quests
 		/// <param name="item"></param>
 		protected virtual void OnNPCReceiveItem(GamePlayer player, GameObject obj, DbInventoryItem item)
 		{
-			if (m_questPlayer == null)
-			{
-				// Player may want to start this quest
-				CheckOfferedQuestReceiveItem(player, obj, item);
-				return;
-			}
+            if (player == null || item?.OwnerID == null)
+                return;
+
+            // An NPC's receive-item route belongs to the player's active quest when one exists,
+            // not its offer-only copy. This also handles a stacked item, for which the move-item
+            // packet does not send GiveItem. A prior successful hand-in has already cleared OwnerID.
+            DataQuest active = m_questPlayer == player ? this :
+                player.QuestList.Keys.OfType<DataQuest>().FirstOrDefault(quest => quest.ID == ID);
+            if (active != null)
+            {
+                active.OnPlayerGiveItem(player, obj, item);
+                return;
+            }
+
+            if (m_questPlayer == null)
+                CheckOfferedQuestReceiveItem(player, obj, item);
 		}
 
 		/// <summary>

@@ -37,6 +37,14 @@ release. Content changes are applied by the first START SERVER, as always.
 
 ### The world
 
+- Quest encounters: temporary enemies, including Ciar in Enchanting Willow and Fressen, no longer inherit the
+  normal quest giver's dialogue protection. A protected talking NPC also cannot suppress the fight's spawn.
+  Permanent NPCs keep their normal respawns and friendliness; encounter copies still expire and never respawn.
+- Quest hand-ins: the NPC receive-item path now checks the player's active quest, with the same item, target and
+  step checks as the give-item path. Troya's Research can accept the Larva Skin through either path before the
+  skeletal pawn step. Repeated delivery events cannot take the item twice, and hand-in dialogue is shown only
+  after acceptance, so Troya no longer thanks you for the skin or asks for a tibia before taking it.
+
 - Realm Exchange: clicking MY LISTINGS requests the current stock again, so sold items disappear and available
   listings are up to date without dropping an item to force a refresh.
 

@@ -20,6 +20,11 @@ namespace DOL.GS.Quests
         /// <summary>Called from mob aggro checks: cheap for every NPC that is not a data quest's talk target.</summary>
         public static bool Holds(GameNPC npc, GamePlayer player)
         {
+            // A temporary encounter is the fight, not the normal NPC that shares its name.
+            // Ciar's Dying Favor offer otherwise also protects the Enchanting Willow attacker.
+            if (npc?.TempProperties?.GetProperty<string>(ClassicQuests.EventSpawnProperty) is { Length: > 0 })
+                return false;
+
             if (npc == null || player == null || npc.Realm != eRealm.None ||
                 !_questNpcNames.Value.Contains(npc.Name) && !ClassicQuests.IsTalkTargetName(npc.Name))
                 return false;

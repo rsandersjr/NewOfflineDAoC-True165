@@ -1297,7 +1297,7 @@ namespace DOL.GS.Quests
             if (spawn.Peaceful || string.IsNullOrWhiteSpace(spawn.Name)) return false;
             bool Same(GameNPC n) => n?.IsAlive == true && n.ObjectState == GameObject.eObjectState.Active &&
                                     string.Equals(n.Name, spawn.Name, StringComparison.OrdinalIgnoreCase) &&
-                                    CountsAsFight(n.Flags, n.Realm, player.Realm);
+                                    CountsAsFight(n.Flags, n.Realm, player.Realm) && !QuestTalkTruce.Holds(n, player);
             if (EventSpawns.Any(e => e.Key.Item1 == player && e.Value.Any(Same))) return true;
             ushort region = spawn.Region > 0 ? spawn.Region : player.CurrentRegionID;
             ushort radius = (ushort)Math.Clamp(Math.Max(spawn.TriggerRadius, 1500), 1500, ushort.MaxValue);

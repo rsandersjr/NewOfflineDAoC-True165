@@ -5922,12 +5922,8 @@ namespace DOL.GS
 
         private double SicknessEffectiveness165()
         {
-            double penalty = Penalty(eEffect.ResurrectionIllness) + Penalty(eEffect.RvrResurrectionIllness);
+            double penalty = effectListComponent?.ResurrectionSicknessPenalty ?? 0;
             return Math.Clamp(1.0 - penalty, 0.0, 1.0);
-
-            double Penalty(eEffect type) =>
-                EffectListService.GetEffectOnTarget(this, type) is ECSGameSpellEffect { SpellHandler.Spell: { } spell }
-                    ? spell.Value * 0.01 : 0;
         }
 
         double IGamePlayer.Effectiveness

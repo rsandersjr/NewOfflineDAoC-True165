@@ -33,6 +33,10 @@ namespace DOL.GS
 
         public GameLiving Owner { get; }
         public int UsedConcentration => Volatile.Read(ref _usedConcentration);
+        // Published while this component's effect lock is held. Concentration checks can run
+        // under another actor's effect lock, so reading sickness must never acquire this one.
+        private double _resurrectionSicknessPenalty;
+        public double ResurrectionSicknessPenalty => Volatile.Read(ref _resurrectionSicknessPenalty);
         public ServiceObjectId ServiceObjectId { get; } = new(ServiceObjectType.EffectListComponent);
 
         protected EffectListComponent(GameLiving owner)
@@ -467,6 +471,7 @@ namespace DOL.GS
         private void AddOrEnableEffect(ECSGameEffect effect)
         {
             AddEffectResult result = AddOrEnableEffectInternal(effect);
+            PublishResurrectionSickness(effect.EffectType);
 
             if (result is not AddEffectResult.Failed)
                 OnEffectAddedOrEnabled(this, result, effect);
@@ -865,6 +870,7 @@ namespace DOL.GS
         private void RemoveOrDisableEffect(ECSGameEffect effect)
         {
             RemoveEffectResult result = RemoveOrDisableEffectInternal(effect);
+            PublishResurrectionSickness(effect.EffectType);
 
             if (result is not RemoveEffectResult.Failed)
                 OnEffectRemovedOrDisabled(this, result, effect);
@@ -966,6 +972,29 @@ namespace DOL.GS
                     return;
 
                 caster.effectListComponent.RemoveFromConcentrationEffectList(spellEffect);
+            }
+        }
+
+        private void PublishResurrectionSickness(eEffect changedType)
+        {
+            if (changedType is not (eEffect.ResurrectionIllness or eEffect.RvrResurrectionIllness))
+                return;
+
+            Volatile.Write(ref _resurrectionSicknessPenalty,
+                Penalty(eEffect.ResurrectionIllness) + Penalty(eEffect.RvrResurrectionIllness));
+
+            // Match GetEffects(type).FirstOrDefault(): earliest start tick, including
+            // disabled entries until they are actually removed from the effect list.
+            double Penalty(eEffect type)
+            {
+                ECSGameEffect first = null;
+                if (_effects.TryGetValue(type, out var effects))
+                    for (int i = effects.Count - 1; i >= 0; i--)
+                        if (effects[i] is not ECSPulseEffect &&
+                            (first == null || effects[i].StartTick < first.StartTick))
+                            first = effects[i];
+                return first is ECSGameSpellEffect { SpellHandler.Spell: { } spell }
+                    ? spell.Value * 0.01 : 0;
             }
         }
 

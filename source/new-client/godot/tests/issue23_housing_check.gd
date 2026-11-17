@@ -2,6 +2,9 @@ extends SceneTree
 ## Headless model/state checks; no server or player database required.
 var failures := 0
 
+class MockSky extends Node:
+	var housing_inside := false
+
 class MockViewer extends Node:
 	var sky: Node
 
@@ -22,7 +25,7 @@ func _initialize() -> void:
 	await process_frame
 	var figure = load("res://game/fig3_figure.gd")
 	var world := MockWorld.new()
-	world.viewer.sky = load("res://game/sky_system.gd").new()
+	world.viewer.sky = MockSky.new()
 	world.add_child(world.viewer)
 	world.viewer.add_child(world.viewer.sky)
 	root.add_child(world)

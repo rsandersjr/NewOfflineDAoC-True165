@@ -100,6 +100,9 @@ namespace DOL.GS
 
 		#region Requirement check
 
+        public static bool BonusFitsItem(int objectType, int bonusType) =>
+            !Classic165Mode.IsOn || bonusType is < 120 or > 144 || objectType == (int)eObjectType.Staff;
+
 		/// <summary>
 		/// This function is called when player accept the combine
 		/// </summary>
@@ -168,6 +171,12 @@ namespace DOL.GS
 							player.Out.SendMessage(LanguageMgr.GetTranslation(player.Client.Account.Language, "SpellCrafting.IsAllowedToCombine.FalseItem"), eChatType.CT_System, eChatLoc.CL_SystemWindow);
 							return false;
 						}
+
+                        if (!BonusFitsItem(item.Object_Type, currentItem.Bonus1Type))
+                        {
+                            player.Out.SendMessage("A focus gem can only be applied to a staff.", eChatType.CT_System, eChatLoc.CL_SystemWindow);
+                            return false;
+                        }
 
 						if (bonusToApply.Contains(currentItem.Bonus1Type))
 						{

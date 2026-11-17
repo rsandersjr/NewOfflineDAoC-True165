@@ -148,6 +148,30 @@ namespace DOL.UnitTests
         // ---- the spellcraft plan
 
         [Test]
+        public void PeriodFocusGemsFitOnlyStavesIncludingOwnedGems()
+        {
+            bool old = DOL.GS.ServerProperties.Properties.CLASSIC165_MODE;
+            DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = true;
+            try
+            {
+                for (int bonus = 120; bonus <= 144; bonus++)
+                {
+                    Assert.That(SpellCrafting.BonusFitsItem((int)eObjectType.Staff, bonus), Is.True);
+                    Assert.That(SpellCrafting.BonusFitsItem((int)eObjectType.Axe, bonus), Is.False);
+                    Assert.That(SpellCrafting.BonusFitsItem((int)eObjectType.Cloth, bonus), Is.False);
+                }
+                Assert.That(SpellCrafting.BonusFitsItem((int)eObjectType.Axe, (int)eProperty.Strength), Is.True);
+                var gems = new List<EnchantGemChoice> { Gem((eProperty)143, 50, 18730, owned: 1, ownedQuality: 100) };
+                var item = Item();
+                item.Object_Type = (int)eObjectType.Axe;
+                Assert.That(CraftEnchant165.PlanSpell(item, gems, 1000, false, 94).Ok, Is.False);
+                item.Object_Type = (int)eObjectType.Staff;
+                Assert.That(CraftEnchant165.PlanSpell(item, gems, 1000, false, 94).Ok, Is.True);
+            }
+            finally { DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = old; }
+        }
+
+        [Test]
         public void PlanSpell_OwnedGemsFirst_OnlyTheRestIsCraftedAndPaid()
         {
             var gems = new List<EnchantGemChoice>

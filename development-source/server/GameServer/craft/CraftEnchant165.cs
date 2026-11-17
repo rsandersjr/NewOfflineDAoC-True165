@@ -343,6 +343,8 @@ namespace DOL.GS
                 return EnchantPlan.Fail(EnchantReason.NotEnoughSkill, "you have no Spellcrafting skill.");
             if (gems == null || gems.Count == 0)
                 return EnchantPlan.Fail(EnchantReason.Other, "pick at least one gem.");
+            if (gems.Any(g => !SpellCrafting.BonusFitsItem(item.Object_Type, g.BonusType)))
+                return EnchantPlan.Fail(EnchantReason.Other, "a focus gem can only be applied to a staff.");
             int free = FreeBonusSlots(item);
             if (free <= 0)
                 return EnchantPlan.Fail(EnchantReason.ItemGone, $"the {item.Name} has no free bonus slot.");
@@ -1144,7 +1146,8 @@ namespace DOL.GS
             foreach (CraftAssist165Economics.RecipeInfo info in CraftAssist165Economics.RecipesOf(eCraftingSkill.SpellCrafting, player.Realm))
             {
                 DbItemTemplate p = info.Recipe?.Product;
-                if (p == null || p.Object_Type != (int)eObjectType.SpellcraftGem || p.Bonus1Type == 0 || existing.Contains(p.Bonus1Type))
+                if (p == null || p.Object_Type != (int)eObjectType.SpellcraftGem || p.Bonus1Type == 0 || existing.Contains(p.Bonus1Type) ||
+                    !SpellCrafting.BonusFitsItem(item.Object_Type, p.Bonus1Type))
                     continue;
                 if (!seen.Add(p.Id_nb))
                     continue;   // the same gem under a second recipe id

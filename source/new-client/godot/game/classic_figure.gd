@@ -476,13 +476,20 @@ func _show_slot(stem: String, node: String) -> void:
 					mi.visible = p == node
 
 
+# Robes 58 and 684 use detailed 1.64 textures. Dark dye 26 would otherwise
+# multiply their red and green channels by about 0.007 in linear lighting.
+# Keep the cloth near black while retaining visible folds. Blue dye is unchanged.
+static func _uses_dark_robe_shading(key: String, dyed: Color) -> bool:
+	return (key.begins_with("b_rob1_") or key.begins_with("b_rob4_")) and dyed.is_equal_approx(dye(26))
+
+
 func _paint(node: String, key: String, dyed: Color) -> void:
 	if key == "":
 		return
 	var m := _classic_material(false)
 	m.set_shader_parameter("albedo_tex", _tex(key))
 	m.set_shader_parameter("tint", dyed)
-	m.set_shader_parameter("tint_mode", 1 if dyed != Color.WHITE else 0)
+	m.set_shader_parameter("tint_mode", 3 if _uses_dark_robe_shading(key, dyed) else (1 if dyed != Color.WHITE else 0))
 	for mi in _parts(node):
 		mi.material_override = m
 
@@ -515,6 +522,8 @@ static func _classic_material(cutout: bool, single_sided := false, cloak := fals
 	var key := ("cutout" if cutout else "solid") + ("_cull" if single_sided else "") + ("_cloak" if cloak else "")
 	if not _classic_shaders.has(key):
 		var code := SHADER
+		code = code.replace("else if (tint_mode == 1) col *= tint;",
+			"else if (tint_mode == 1) col *= tint;\n\telse if (tint_mode == 3) col *= max(tint, vec3(0.04));")
 		code = code.replace("vec4 d = texture(decal_tex, UV);\n\t\tcol *= mix(vec3(1.0), d.rgb * 2.0, d.a);",
 				"vec4 d = texture(decal_tex, UV2);\n\t\tcol = mix(col, d.rgb, d.a);")
 		code = code.replace("texture(pattern_tex, UV2)", "texture(pattern_tex, UV)")

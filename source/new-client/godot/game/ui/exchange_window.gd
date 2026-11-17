@@ -410,16 +410,14 @@ func open_tab(which: String) -> void:
 ## A tab clicked: the broker is told too - its page decides what a drop does (owner 2026-11-06: "dragging the item
 ## onto the realm exchange slots still doesn't do anything" - the window had come up on BROWSE, MY LISTINGS was only
 ## this window's page, and the broker, still on its market search, refused the move without a word).
-## force: asked even when the broker should be there already (a drop, a take-back, a price waiting on it). When the
-## shared slots 150-249 are not the broker's on the server (a vault opened since), the broker is talked to again first.
+## force: ask even when the broker is already on that tab, to get current listing slots.
 func _tell_broker(which: String, force := false) -> void:
 	if not Server.active:
 		return
 	if not force and Server.exchange_mode == which and Server.chest_owner == "exchange":
 		return
-	if Server.chest_owner != "exchange":
-		Server.exchange_reconnect()
-	Server.command("/whisper manage my listings" if which == "listings" else "/whisper browse the exchange")
+	# Address the broker explicitly, independent of combat target and chat throttling.
+	Server.command("/exchangeui %s %d" % [which, Server.exchange_broker_oid])
 
 
 ## `action` once the broker has your moves and its listing chest is open (at once when it already is) - never while the

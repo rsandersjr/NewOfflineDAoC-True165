@@ -29,7 +29,7 @@ func _initialize() -> void:
 	ex.build()
 	ex.show_tab("listings")
 	ex._tab_listings.pressed.emit()
-	check(fake.commands == ["&whisper manage my listings"], "already-open listings asks broker once")
+	check(fake.commands == ["&exchangeui listings 0"], "already-open listings asks broker once")
 	fake.commands.clear()
 	server.listings = {150: "stale sold item", 151: "stale available item"}
 	server._listings_packet({"items": [{"slot": 151, "name": "Available item", "model": 1,
@@ -39,10 +39,10 @@ func _initialize() -> void:
 	check(fake.commands.is_empty(), "server reply does not request another refresh")
 	ex.show_tab("browse")
 	ex._tab_listings.pressed.emit()
-	check(fake.commands == ["&whisper manage my listings"], "switching back refreshes despite stale mode")
+	check(fake.commands == ["&exchangeui listings 0"], "switching back refreshes despite stale mode")
 	fake.commands.clear()
 	ex._tab_listings.pressed.emit()
-	check(fake.commands == ["&whisper manage my listings"], "another click requests a new snapshot")
+	check(fake.commands == ["&exchangeui listings 0"], "another click requests a new snapshot")
 	check(fake.moves.is_empty(), "tab refresh never transfers inventory")
 	server.active = false
 	fake.commands.clear()

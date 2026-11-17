@@ -7,6 +7,16 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Realm Exchange, robes and stable rides - 17 November 2026
+
+- My Listings requests fresh stock directly from the nearby Realm Exchange broker. It no longer relies on the player's
+  selected target or the chat whisper cooldown. The client and server changes should be installed together.
+- The Underhill Zealot and Aibhne retain their dark robes but use shading that preserves detail in the original 1.64
+  textures. The Underhill Companion keeps its blue robe.
+- Successful stable boarding dismisses the rider's own pets before departure. Companion and gamebot travel is unchanged.
+- Validation: 5,148 server tests passed. Headless Godot checks covered listing refresh, drag-and-drop, pricing and
+  robe materials. The robe appearance and stable ride still need an in-game check.
+
 ### Confirmed fixes - 17 November 2026
 
 - Server freeze: removed the cross-bot effect-lock dependency during concentration checks. Resurrection-sickness

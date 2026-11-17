@@ -235,7 +235,8 @@ namespace DOL.GS
 			protected override int OnTick(ECSGameTimer timer)
 			{
 				GamePlayer player = (GamePlayer) timer.Owner;
-				player.MountSteed(m_horse, true);
+				if (player.MountSteed(m_horse, true))
+					PlayerStablePetCleanup.ReleaseForRide(player);
 				return 0;
 			}
 		}

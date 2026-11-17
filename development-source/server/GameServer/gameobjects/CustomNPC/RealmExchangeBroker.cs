@@ -161,6 +161,17 @@ public sealed partial class RealmExchangeBroker : GameNPC, IGameInventoryObject
         return false;
     }
 
+    // UI tab requests do not depend on the selected combat target or the chat whisper throttle.
+    // Keep the same realm/alive/distance checks and the existing inventory snapshot/transaction paths.
+    public bool OpenUiTab(GamePlayer player, string tab)
+    {
+        if (!CanUseExchange(player) || tab is not ("browse" or "listings"))
+            return false;
+        if (tab == "listings") OpenListings(player);
+        else OpenBrowse(player);
+        return true;
+    }
+
     private void OpenBrowse(GamePlayer player)
     {
         SetActive(player, ModeBrowse);

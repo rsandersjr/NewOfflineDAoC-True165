@@ -129,6 +129,25 @@ namespace DOL.UnitTests
         }
 
         [Test]
+        public void StableBoardingCollectsPlayerTreeAndFieldPetsButNeverGroupCompanions()
+        {
+            GamePlayer player = Actor<GamePlayer>();
+            GamePlayer other = Actor<GamePlayer>();
+            GameBot companion = Actor<GameBot>();
+            ConfigureCompanion(companion, player, temporary: true);
+            GameNPC main = Pet(player);
+            GameNPC child = Pet(main);
+            GameNPC field = Pet(player);
+            GameNPC companionPet = Pet(companion);
+            GameNPC otherPet = Pet(other);
+            Set(typeof(GameLiving), main, "m_controlledBrain", new[] { (IControlledBrain)child.Brain });
+            Set(typeof(GameLiving), player, "m_controlledBrain", new[] { (IControlledBrain)main.Brain });
+
+            var found = PlayerStablePetCleanup.Collect(player, new[] { field, companion, companionPet, otherPet });
+            Assert.That(found, Is.EquivalentTo(new[] { main, child, field }));
+        }
+
+        [Test]
         public void ExactGroupCompanionPetIsAcceptedAndForeignCompanionPetIsRejected()
         {
             GamePlayer player = Actor<GamePlayer>();

@@ -52,6 +52,8 @@ func _ready() -> void:
 	add_child(fake)
 	var was_active: bool = Server.active
 	var was_mode: String = Server.world_mode
+	var was_broker: int = Server.exchange_broker_oid
+	Server.exchange_broker_oid = 642
 	Server.client = fake
 	Server.active = true                                         # (PlayerData.move's server path)
 	Server.world_mode = "1.65"
@@ -121,17 +123,18 @@ func _ready() -> void:
 	Server.on_inventory({"window": 5, "items": [_item(150, "bronze studded vest", 1), _item(152, "Lion Embossed Vambraces", 2),
 			_item(157, "Lion Embossed Vambraces", 2), _item(158, "Melodic Lute", 3)]})
 	await get_tree().create_timer(0.5).timeout
-	var c4: bool = waiting == ["&whisper manage my listings"] and fake.calls == ["&whisper manage my listings", "MoveItem 40->155 x1"]
+	var c4: bool = waiting == ["&exchangeui listings 642"] and fake.calls == ["&exchangeui listings 642", "MoveItem 40->155 x1"]
 	ok = ok and c4
 	print("[drop] 4. vault opened since: before the chest %s, after %s  %s" % [waiting, fake.calls, "OK" if c4 else "WRONG"])
 	# 5. "that slot already holds a listing": the chest asked for again
 	fake.calls.clear()
 	Server._exchange_text("The Realm Exchange could not do that: that slot already holds a listing; drop it on an empty one.")
 	await get_tree().process_frame
-	var c5: bool = fake.calls == ["&whisper manage my listings"]
+	var c5: bool = fake.calls == ["&exchangeui listings 642"]
 	ok = ok and c5
 	print("[drop] 5. 'already holds a listing': %s  %s" % [fake.calls, "OK" if c5 else "WRONG"])
 	print("[drop] %s" % ("PASS" if ok else "FAIL"))
 	Server.active = was_active
 	Server.world_mode = was_mode
+	Server.exchange_broker_oid = was_broker
 	get_tree().quit()

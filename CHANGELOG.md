@@ -37,6 +37,10 @@ release. Content changes are applied by the first START SERVER, as always.
 
 ### The world
 
+- Queued player spells remember the target selected when you requested them. Clearing or changing selection before
+  the follow-up starts no longer loses a queued buff; a queued self buff also keeps its own visibility. Range and
+  target-validity checks still apply, and `/noqueue` keeps its existing short input-buffer behavior.
+
 - Spawns behind the invisible zone walls moved to where a player can reach them: 107 in all, with the period radar
   positions first. Among them Spackit (Lough Derg), Cynwik the Wizard (now in Snowdonia Fortress, his quest markers with
   him), the Helping Dalea scimitar kits, the Morvalt Crystal beskydda, and camps in Hy Brasil, Sheeroe Hills,

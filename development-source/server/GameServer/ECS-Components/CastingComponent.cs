@@ -136,7 +136,7 @@ namespace DOL.GS
             Spell spell,
             SpellLine spellLine,
             ISpellCastingAbilityHandler spellCastingAbilityHandler = null,
-            GameLiving target = null, // Always null for players.
+            GameLiving target = null, // Players with spell queuing enabled supply their selected target.
             bool checkLos = true)
         {
             GamePlayer losChecker = checkLos && spell.RequiresLosCheck() ? GetLosChecker(target) : null;

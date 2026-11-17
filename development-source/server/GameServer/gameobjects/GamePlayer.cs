@@ -6279,8 +6279,10 @@ namespace DOL.GS
 
         public override bool CastSpell(Spell spell, SpellLine line, ISpellCastingAbilityHandler spellCastingAbilityHandler = null, bool checkLos = true)
         {
-            // Don't pass the current target to the casting component. It's supposed to be the one at cast time, not the one at queue time.
-            return castingComponent.RequestCastSpell(spell, line, spellCastingAbilityHandler, null, checkLos);
+            // A queued spell belongs to the target selected when it was requested.
+            // With /noqueue, keep the existing short input buffer's cast-time targeting.
+            GameLiving target = SpellQueue ? TargetObject as GameLiving : null;
+            return castingComponent.RequestCastSpell(spell, line, spellCastingAbilityHandler, target, checkLos);
         }
 
         public override bool CastSpell(ISpellCastingAbilityHandler ab)

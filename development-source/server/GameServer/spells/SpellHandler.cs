@@ -464,9 +464,9 @@ namespace DOL.GS.Spells
 			// Initial LoS state.
 			if (playerCaster != null)
 			{
-				// This may be wrong. This is the LoS state at the time the player used the spell, not necessarily for the target the spell is being cast on, assuming it can change.
-				// It should be fine since it's updated at the same time as `TargetObject`, and the spell handler doesn't receive a target explicitly. But it needs more testing.
-				HasLos = Caster.TargetInView;
+				// Self remains visible even if the player cleared or changed selection
+				// after queuing the cast. Other targets keep the normal visibility checks.
+				HasLos = Target == Caster || Caster.TargetInView;
 			}
 			else if (Caster is GameNPC npcOwner)
 			{

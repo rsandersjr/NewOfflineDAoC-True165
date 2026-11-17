@@ -1398,7 +1398,9 @@ public partial class DaocClient : Node
 					it["hand"] = r.Byte() >> 6;
 					int type = r.Byte();
 					it["type_damage"] = type >> 6;
-					it["object_type"] = type & 0x3F;
+					// Housing menu types 64-71 occupy the full byte; its upper bits
+					// are weapon damage only in ordinary merchant windows.
+					it["object_type"] = (int)d["window"] is 4 or 11 ? type : type & 0x3F;
 					it["can_use"] = r.Byte() != 0;
 					it["value2"] = r.ShortLE();
 					it["price"] = (long)r.IntLE();

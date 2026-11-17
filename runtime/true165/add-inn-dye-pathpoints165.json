@@ -1,0 +1,139 @@
+{
+ "table": "PathPoints",
+ "key": "PathPoints_ID",
+ "reason": "Traveler's Inn dye merchants",
+ "rows": [
+  {
+   "PathPoints_ID": "true165_inn_alb_dye-1",
+   "PathID": "true165_inn_alb_dye",
+   "Step": 1,
+   "X": 462896,
+   "Y": 648436,
+   "Z": 1759,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_alb_dye-2",
+   "PathID": "true165_inn_alb_dye",
+   "Step": 2,
+   "X": 463036,
+   "Y": 648436,
+   "Z": 1765,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_alb_dye-3",
+   "PathID": "true165_inn_alb_dye",
+   "Step": 3,
+   "X": 463036,
+   "Y": 648576,
+   "Z": 1759,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_alb_dye-4",
+   "PathID": "true165_inn_alb_dye",
+   "Step": 4,
+   "X": 462896,
+   "Y": 648576,
+   "Z": 1764,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_mid_dye-1",
+   "PathID": "true165_inn_mid_dye",
+   "Step": 1,
+   "X": 703094,
+   "Y": 791126,
+   "Z": 4595,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_mid_dye-2",
+   "PathID": "true165_inn_mid_dye",
+   "Step": 2,
+   "X": 703234,
+   "Y": 791126,
+   "Z": 4589,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_mid_dye-3",
+   "PathID": "true165_inn_mid_dye",
+   "Step": 3,
+   "X": 703234,
+   "Y": 791266,
+   "Z": 4598,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_mid_dye-4",
+   "PathID": "true165_inn_mid_dye",
+   "Step": 4,
+   "X": 703094,
+   "Y": 791266,
+   "Z": 4602,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_hib_dye-1",
+   "PathID": "true165_inn_hib_dye",
+   "Step": 1,
+   "X": 314603,
+   "Y": 635160,
+   "Z": 4851,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_hib_dye-2",
+   "PathID": "true165_inn_hib_dye",
+   "Step": 2,
+   "X": 314743,
+   "Y": 635160,
+   "Z": 4851,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_hib_dye-3",
+   "PathID": "true165_inn_hib_dye",
+   "Step": 3,
+   "X": 314743,
+   "Y": 635300,
+   "Z": 4851,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "PathPoints_ID": "true165_inn_hib_dye-4",
+   "PathID": "true165_inn_hib_dye",
+   "Step": 4,
+   "X": 314603,
+   "Y": 635300,
+   "Z": 4851,
+   "MaxSpeed": 70,
+   "WaitTime": 45,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  }
+ ]
+}

@@ -1,0 +1,2359 @@
+{
+ "table": "MerchantItem",
+ "key": "MerchantItem_ID",
+ "reason": "Traveler's Inn dye merchants",
+ "rows": [
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-0",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_blue_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-1",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "blue_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-2",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_blue_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-3",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_blue_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-4",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_turquoise_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-5",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "turquoise_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-6",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_turquoise_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-7",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_teal_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-8",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "teal_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-9",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_teal_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-10",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_teal_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-11",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_red_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-12",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "red_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-13",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_red_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-14",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "crimson_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-15",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "mauve_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-16",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "rust_colored_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-17",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_purple_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-18",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "purple_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-19",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_purple_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-20",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_purple_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-0-21",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "violet_cloth_dye",
+   "PageNumber": 0,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-0",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_blue_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-1",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "blue_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-2",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_blue_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-3",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_blue_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-4",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_turquoise_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-5",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "turquoise_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-6",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_turquoise_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-7",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_teal_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-8",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "teal_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-9",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_teal_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-10",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_teal_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-11",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_red_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-12",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "red_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-13",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_red_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-14",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "crimson_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-15",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "mauve_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-16",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "rust_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-17",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_purple_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-18",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "purple_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-19",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_purple_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-20",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_purple_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-21",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "violet_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-22",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_green_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-23",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "green_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-24",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_green_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-25",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "forest_green_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-26",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_brown_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-27",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "brown_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-28",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_brown_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-1-29",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_gray_leather_dye",
+   "PageNumber": 1,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-0",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "charcoal_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-1",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "black_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-2",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_orange_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-3",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "orange_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-4",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_orange_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-5",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_yellow_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-6",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "yellow_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-2-7",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_yellow_leather_dye",
+   "PageNumber": 2,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-0",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_blue_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-1",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "blue_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-2",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_blue_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-3",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_blue_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-4",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_turquoise_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-5",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "turquoise_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-6",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_turquoise_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-7",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_teal_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-8",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "teal_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-9",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_teal_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-10",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_teal_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-11",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_red_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-12",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "red_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-13",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_red_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-14",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "crimson_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-15",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "mauve_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-16",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "rust_colored_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-17",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_purple_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-18",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "purple_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-19",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_purple_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-20",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_purple_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-21",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "violet_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-22",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_green_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-23",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "green_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-24",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_green_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-25",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "forest_green_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-26",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_brown_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-27",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "brown_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-28",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_brown_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-3-29",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "dark_gray_enamel",
+   "PageNumber": 3,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-0",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "charcoal_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-1",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "black_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-2",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_orange_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-3",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "orange_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-4",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_orange_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-5",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "light_yellow_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-6",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "yellow_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_alb_dye-4-7",
+   "ItemListID": "true165_inn_alb_dye",
+   "ItemTemplateID": "royal_yellow_enamel",
+   "PageNumber": 4,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-0",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_blue_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-1",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "blue_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-2",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_blue_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-3",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_blue_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-4",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_turquoise_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-5",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "turquoise_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-6",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_turquoise_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-7",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_teal_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-8",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "teal_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-9",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_teal_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-10",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_teal_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-11",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_red_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-12",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "red_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-13",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_red_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-14",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "crimson_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-15",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "mauve_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-16",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "rust_colored_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-17",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_purple_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-18",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "purple_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-19",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_purple_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-20",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_purple_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-0-21",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "violet_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-0",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_blue_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-1",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "blue_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-2",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_blue_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-3",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_blue_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-4",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_turquoise_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-5",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "turquoise_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-6",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_turquoise_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-7",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_teal_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-8",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "teal_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-9",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_teal_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-10",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_teal_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-11",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_red_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-12",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "red_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-13",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_red_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-14",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "crimson_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-15",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "mauve_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-16",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "rust_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-17",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_purple_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-18",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "purple_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-19",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_purple_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-20",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_purple_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-21",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "violet_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-22",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_green_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-23",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "green_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-24",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_green_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-25",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "forest_green_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-26",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_brown_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-27",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "brown_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-28",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_brown_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-1-29",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_gray_leather_dye2",
+   "PageNumber": 1,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-0",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "charcoal_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-1",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "black_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-2",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_orange_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-3",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "orange_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-4",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_orange_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-5",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_yellow_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-6",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "yellow_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-2-7",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_yellow_leather_dye2",
+   "PageNumber": 2,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-0",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_blue_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-1",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "blue_enamel_anyrealm",
+   "PageNumber": 3,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-2",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_blue_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-3",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_blue_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-4",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_turquoise_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-5",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "turquoise_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-6",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_turquoise_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-7",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_teal_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-8",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "teal_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-9",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_teal_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-10",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_teal_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-11",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_red_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-12",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "red_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-13",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_red_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-14",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "crimson_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-15",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "mauve_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-16",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "rust_colored_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-17",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_purple_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-18",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "purple_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-19",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_purple_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-20",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_purple_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-21",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "violet_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-22",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_green_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-23",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "green_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-24",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_green_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-25",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "forest_green_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-26",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_brown_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-27",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "brown_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-28",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_brown_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-3-29",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "dark_gray_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-0",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "charcoal_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-1",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "black_enamel_anyrealm",
+   "PageNumber": 4,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-2",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_orange_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-3",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "orange_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-4",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_orange_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-5",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "light_yellow_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-6",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "yellow_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_mid_dye-4-7",
+   "ItemListID": "true165_inn_mid_dye",
+   "ItemTemplateID": "royal_yellow_enamel2",
+   "PageNumber": 4,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-0",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_blue_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-1",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "blue_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-2",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_blue_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-3",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_blue_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-4",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_turquoise_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-5",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "turquoise_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-6",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_turquoise_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-7",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_teal_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-8",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "teal_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-9",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_teal_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-10",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_teal_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-11",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_red_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-12",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "red_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-13",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_red_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-14",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "crimson_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-15",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "mauve_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-16",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "rust_colored_cloth_dye2",
+   "PageNumber": 0,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-17",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_purple_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-18",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "purple_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-19",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_purple_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-20",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_purple_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-0-21",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "violet_cloth_dye3",
+   "PageNumber": 0,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-0",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_blue_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-1",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "blue_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-2",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_blue_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-3",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_blue_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-4",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_turquoise_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-5",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "turquoise_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-6",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_turquoise_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-7",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_teal_leather_dye_anyrealm",
+   "PageNumber": 1,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-8",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "teal_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-9",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_teal_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-10",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_teal_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-11",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_red_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-12",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "red_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-13",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_red_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-14",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "crimson_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-15",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "mauve_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-16",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "rust_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-17",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_purple_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-18",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "purple_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-19",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_purple_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-20",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_purple_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-21",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "violet_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-22",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_green_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-23",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "green_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-24",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_green_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-25",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "forest_green_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-26",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_brown_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-27",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "brown_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-28",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_brown_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-1-29",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_gray_leather_dye3",
+   "PageNumber": 1,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-0",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "charcoal_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-1",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "black_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-2",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_orange_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-3",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "orange_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-4",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_orange_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-5",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_yellow_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-6",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "yellow_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-2-7",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_yellow_leather_dye3",
+   "PageNumber": 2,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-0",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_blue_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-1",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "blue_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-2",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_blue_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-3",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_blue_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-4",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_turquoise_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-5",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "turquoise_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-6",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_turquoise_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-7",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_teal_enamel_anyrealm",
+   "PageNumber": 3,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-8",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "teal_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 8,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-9",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_teal_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 9,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-10",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_teal_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 10,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-11",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_red_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 11,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-12",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "red_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 12,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-13",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_red_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 13,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-14",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "crimson_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 14,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-15",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "mauve_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 15,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-16",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "rust_colored_enamel2",
+   "PageNumber": 3,
+   "SlotPosition": 16,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-17",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_purple_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 17,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-18",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "purple_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 18,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-19",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_purple_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 19,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-20",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_purple_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 20,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-21",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "violet_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 21,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-22",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_green_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 22,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-23",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "green_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 23,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-24",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_green_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 24,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-25",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "forest_green_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 25,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-26",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_brown_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 26,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-27",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "brown_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 27,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-28",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_brown_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 28,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-3-29",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "dark_gray_enamel3",
+   "PageNumber": 3,
+   "SlotPosition": 29,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-0",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "charcoal_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-1",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "black_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-2",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_orange_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 2,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-3",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "orange_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 3,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-4",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_orange_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 4,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-5",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "light_yellow_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 5,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-6",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "yellow_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 6,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "MerchantItem_ID": "true165_inn_hib_dye-4-7",
+   "ItemListID": "true165_inn_hib_dye",
+   "ItemTemplateID": "royal_yellow_enamel3",
+   "PageNumber": 4,
+   "SlotPosition": 7,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  }
+ ]
+}

@@ -7,6 +7,13 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Traveler's Inn dye merchants - 17 November 2026
+
+- Each realm's Traveler's Inn has a Dye Merchant who walks a short route in the guarded yard. Look for Maerwynn Dyeford
+  near Marsh Town, Yrsa Pigmenthand near Huginfell, and Síofra Dyemere near Connla.
+- Each merchant sells 98 cloth dyes, leather dyes and enamels. Stock uses matching realm templates where available
+  and existing shared templates for colours without a correct realm copy.
+
 ### Realm Exchange, robes and stable rides - 17 November 2026
 
 - My Listings requests fresh stock directly from the nearby Realm Exchange broker. It no longer relies on the player's

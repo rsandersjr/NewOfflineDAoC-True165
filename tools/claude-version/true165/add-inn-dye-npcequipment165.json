@@ -1,0 +1,117 @@
+{
+ "table": "NPCEquipment",
+ "key": "NPCEquipment_ID",
+ "reason": "Traveler's Inn dye merchants",
+ "rows": [
+  {
+   "NPCEquipment_ID": "true165_inn_alb_dye-25",
+   "TemplateID": "true165_inn_alb_dye",
+   "Slot": 25,
+   "Model": 58,
+   "Color": 79,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_alb_dye-26",
+   "TemplateID": "true165_inn_alb_dye",
+   "Slot": 26,
+   "Model": 57,
+   "Color": 40,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-22",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 22,
+   "Model": 248,
+   "Color": 0,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-23",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 23,
+   "Model": 249,
+   "Color": 0,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-25",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 25,
+   "Model": 245,
+   "Color": 53,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-27",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 27,
+   "Model": 246,
+   "Color": 0,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-28",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 28,
+   "Model": 247,
+   "Color": 0,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_mid_dye-26",
+   "TemplateID": "true165_inn_mid_dye",
+   "Slot": 26,
+   "Model": 57,
+   "Color": 49,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_hib_dye-25",
+   "TemplateID": "true165_inn_hib_dye",
+   "Slot": 25,
+   "Model": 97,
+   "Color": 67,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "NPCEquipment_ID": "true165_inn_hib_dye-26",
+   "TemplateID": "true165_inn_hib_dye",
+   "Slot": 26,
+   "Model": 96,
+   "Color": 71,
+   "Effect": 0,
+   "Extension": 0,
+   "Emblem": 0,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  }
+ ]
+}

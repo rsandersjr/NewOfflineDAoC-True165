@@ -1,0 +1,28 @@
+{
+ "table": "Path",
+ "key": "Path_ID",
+ "reason": "Traveler's Inn dye merchants",
+ "rows": [
+  {
+   "Path_ID": "true165_inn_alb_dye-path",
+   "PathID": "true165_inn_alb_dye",
+   "PathType": 3,
+   "RegionID": 1,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "Path_ID": "true165_inn_mid_dye-path",
+   "PathID": "true165_inn_mid_dye",
+   "PathType": 3,
+   "RegionID": 100,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  },
+  {
+   "Path_ID": "true165_inn_hib_dye-path",
+   "PathID": "true165_inn_hib_dye",
+   "PathType": 3,
+   "RegionID": 200,
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  }
+ ]
+}

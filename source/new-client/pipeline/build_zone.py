@@ -878,6 +878,11 @@ def build(zone_id, upscale=True):
     hi = catmull_rom_2x(h)                                 # 513 x 513, 3.2 m spacing, used for the rendered ground
     (hi * M).astype('<f4').tofile(out / 'heights_2x.f32')
     water = np.asarray(Image.open(io.BytesIO(dat['water.pcx'])), dtype=np.uint8)
+    if zone_id == 205:
+        # Cullen's original mask is dry; its five lakes are recorded as river-bank strips.
+        # Keep them on rebuild without changing other zones or the renderer's shore rules.
+        from cullen_water_164 import restore_mask
+        water = restore_mask(zone_id, water, sector)
     Image.fromarray(water).save(out / 'water.png')
     # ground colour: the 8 x 8 tiles are stitched into one image per set and upscaled in one pass, so there are no
     # tile edges for the upscaler or the mipmaps to break (per-tile processing left visible seams)

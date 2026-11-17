@@ -37,6 +37,11 @@ release. Content changes are applied by the first START SERVER, as always.
 
 ### The world
 
+- Bog of Cullen: restored the five missing lakes from the original 1.64 bank outlines and water levels. The
+  conversion is limited to Cullen; its period yellow fog, other zones and the existing shoreline protections stay
+  unchanged. Rebuilding Cullen preserves the fix; existing conversions can use `pipeline/cullen_water_164.py`
+  (see the new client's README).
+
 - Quest encounters: temporary enemies, including Ciar in Enchanting Willow and Fressen, no longer inherit the
   normal quest giver's dialogue protection. A protected talking NPC also cannot suppress the fight's spawn.
   Permanent NPCs keep their normal respawns and friendliness; encounter copies still expire and never respawn.

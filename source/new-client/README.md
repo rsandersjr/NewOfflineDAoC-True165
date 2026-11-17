@@ -59,6 +59,22 @@ changes, fighters facing away), `death_log.txt` and Godot's `logs/`.
 
 ## The content pipeline
 
+Bog of Cullen's five lakes need bank coverage as well as the original `water.pcx` (which is entirely dry).
+`pipeline/build_zone.py` restores that mask on a zone-205 rebuild, using only the declared `bankpoints` in
+`sector.dat`. To update an existing conversion without rebuilding its terrain, fixtures or textures, close the
+client and run:
+
+```text
+python pipeline/cullen_water_164.py --client-164 "<DAoC 1.64.zip>" --zone-dir "godot/content/zones/zone205"
+```
+
+This previews the cell counts. Add `--apply --backup-dir "<new backup folder>"` to install, or
+`--apply --output-dir "<staging folder>"` to prepare separate data. Only Cullen's `water.png` and the five `cells`
+counts in its `zone.json` change; restore those two backed-up files to roll back. Other zones and the existing
+shoreline protections are unchanged. Check the conversion with
+`python -m unittest discover -s pipeline -p test_cullen_water_164.py -v` and, in a converted client, the headless
+`tests/cullen_water_check.gd` probe (its header has the command).
+
 The pipeline needs Python 3.10+ (`pipeline/requirements-full.txt`) and Real-ESRGAN for the 4x texture upscale
 (`realesrgan-ncnn-vulkan.exe` with its `models` folder, under `tools/realesrgan/`). Each `build_*.py` script says at its
 top what it builds and how to run it. A full rebuild takes many hours.

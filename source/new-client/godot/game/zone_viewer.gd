@@ -912,7 +912,7 @@ func _click_pick(at: Vector2) -> Dictionary:
 	var dir := cam.project_ray_normal(at)
 	var best := {}
 	var best_d := INF
-	var n: Npc = npcs.pick(cam, at) if npcs else null
+	var n: Npc = npcs.pick(cam, at, false) if npcs else null
 	if n:
 		var q := PhysicsRayQueryParameters3D.create(from, from + dir * 120.0, ZoneLoader.LAYER_WALL | ZoneLoader.LAYER_FLOOR)
 		var wall := get_world_3d().direct_space_state.intersect_ray(q)
@@ -1597,12 +1597,17 @@ var _server_steed := 0                         # the object id of the server's s
 
 
 func _server_mount(steed: int) -> void:
+	var was_mounted := _server_steed != 0
+	var mount_floor := _ride_drawn_y
 	_server_steed = steed
 	_ride_drawn_y = INF
 	player.riding = steed != 0
-	if steed == 0:
+	if steed == 0 and was_mounted:
 		var at := player.global_position
-		player.global_position = Vector3(at.x, npcs.ground_at(at) + 0.3, at.z)
+		# The terrain grid is below outdoor bridges. Pick the floor under
+		# the horse at its last drawn height, including bridge decks.
+		var reference := Vector3(at.x, mount_floor if is_finite(mount_floor) else at.y, at.z)
+		player.global_position = Vector3(at.x, npcs.floor_at(reference) + 0.3, at.z)
 
 
 func _server_dismount() -> void:

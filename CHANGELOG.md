@@ -7,6 +7,16 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Druim Ligen gates, targeting and stable rides - 17 November 2026
+
+- The inner leaves of the Hibernian border keep model draw one panel each. Door movement and collision are preserved.
+- Long enchant-helper bonus and gem-tier menus scroll inside the game window.
+- A left click targets the nearest NPC body under the pointer. Right-click interactions and item hand-ins keep
+  the existing service NPC priority.
+- Getting off a horse on a bridge uses the deck under the horse instead of the riverbed.
+- Ardee to Tir Urphost and nine other tickets that selected a later horse model use their realm's standard horse.
+  The routes and their travel speeds stay the same. Hoof audio still needs a live check.
+
 ### Mag Mell respawns, jump casting and alchemy - 17 November 2026
 
 - Gamebots releasing at Mag Mell land on walkable ground near the visible bindstone on the town side of the path.

@@ -23,7 +23,7 @@ engine builds dungeon floors from these (ZoneLoader.uses_pick).
 convert(..., keep_paths=True) (opt-in, player houses, 2026-11-02) keeps the NIF's node tree instead (KeepPaths);
 without it the output is exactly as before.
 """
-import argparse, base64, json, sys
+import argparse, base64, hashlib, json, sys
 from pathlib import Path
 import numpy as np
 
@@ -1737,6 +1737,15 @@ def convert(raw, out_path, texture_uri='textures', node_anims=False, keep_paths=
     morph_specs = []
     anim_specs = {}
     shapes, doors = collect(nif, node_anims)
+    # The period Hborderkeep1's inner gate meshes L02 and R02 each include a
+    # collision copy with a texture and stretched UVs. Keep those copies out
+    # of the rendered panels. The digest scopes the two shape indices to this asset.
+    textured_collision = ()
+    preserve_panel_collision = ()
+    if doors and hashlib.sha256(raw).hexdigest() == (
+            '857f3d2ee6d6cbd9554448314861591250857dd999878324dfa549f2c14b6b21'):
+        textured_collision = (10, 14)
+        preserve_panel_collision = (11, 15)
     for i, (shape, data, m, props) in enumerate(shapes):
         if '_door' in props:
             # a door leaf's panel / collision, in the leaf's own frame (the engine poses the leaf: closed / open)
@@ -1745,7 +1754,7 @@ def convert(raw, out_path, texture_uri='textures', node_anims=False, keep_paths=
             if not len(tri):
                 continue
             tp = props.get('NiTexturingProperty')
-            if not uv and texture_name(tp) is None:
+            if i in textured_collision or (not uv and texture_name(tp) is None):
                 node = g.mesh(f'doorcol{did}_{i}', pos, nrm, [], None, tri, None, scene_root=tree is None)
                 if tree is not None:                       # (KeepPaths: in the leaf's closed pose)
                     tree.attach_child(g, shape, node, _godot_matrix(m_leaf))
@@ -1756,6 +1765,12 @@ def convert(raw, out_path, texture_uri='textures', node_anims=False, keep_paths=
                           scene_root=tree is None)
             if tree is not None:
                 tree.attach_child(g, shape, node, _godot_matrix(m_leaf))
+            if i in preserve_panel_collision:
+                # The client used both meshes as fallback collision before the
+                # helper was tagged. Preserve that exact physical surface.
+                collision = g.mesh(f'doorcol{did}_{i}', pos, nrm, [], None, tri, None, scene_root=tree is None)
+                if tree is not None:
+                    tree.attach_child(g, shape, collision, _godot_matrix(m_leaf))
             textures.update(names)
             continue
         pivot = None

@@ -746,7 +746,7 @@ func _exit_tree() -> void:
 var last_pick_dist := INF                    # how far along the click ray the last pick() hit (metres from the camera)
 
 
-func pick(camera: Camera3D, screen_pos: Vector2) -> Npc:
+func pick(camera: Camera3D, screen_pos: Vector2, prefer_service := true) -> Npc:
 	last_pick_dist = INF
 	var from := camera.project_ray_origin(screen_pos)
 	var dir := camera.project_ray_normal(screen_pos)
@@ -770,7 +770,7 @@ func pick(camera: Camera3D, screen_pos: Vector2) -> Npc:
 			if is_instance_valid(n) and (n.state.alive or n.rez_target()):   # (a dead bot / companion: to resurrect)
 				var d := from.distance_to(hit.position)
 				if first == null:
-					if not _yields_to_service(n):
+					if not prefer_service or not _yields_to_service(n):
 						last_pick_dist = d
 						return n
 					first = n
@@ -788,7 +788,7 @@ func pick(camera: Camera3D, screen_pos: Vector2) -> Npc:
 			return beside
 		last_pick_dist = first_dist
 		return first
-	return _pick_name(camera, screen_pos)
+	return _pick_name(camera, screen_pos, prefer_service)
 
 
 ## GitHub #48: what a click prefers over a gamebot. The server sends no NPC class, so the client takes what it knows:
@@ -847,7 +847,7 @@ func _service_beside_ray(from: Vector3, dir: Vector3, hit_dist: float) -> Npc:
 
 ## The overhead names are clickable too (owner 2026-10-10: "you could click on visible names to target on the old
 ## client"): a click on a shown name or its guild line targets that NPC; the one nearest the camera wins.
-func _pick_name(camera: Camera3D, screen_pos: Vector2) -> Npc:
+func _pick_name(camera: Camera3D, screen_pos: Vector2, prefer_service := true) -> Npc:
 	var best: Npc = null
 	var best_d := INF
 	# GitHub #48: a service NPC's name under the click wins over a gamebot's name overlapping it (nearest first
@@ -880,7 +880,7 @@ func _pick_name(camera: Camera3D, screen_pos: Vector2) -> Npc:
 			if d < best_d:
 				best_d = d
 				best = n
-	if best_service != null and best != null and best != best_service and _yields_to_service(best):
+	if prefer_service and best_service != null and best != null and best != best_service and _yields_to_service(best):
 		best = best_service
 		best_d = best_service_d
 	if best != null:

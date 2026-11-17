@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://tests/druim_enchant_target_stable_check.gd" id="1"]
+
+[node name="DruimEnchantTargetStableCheck" type="Node"]
+script = ExtResource("1")

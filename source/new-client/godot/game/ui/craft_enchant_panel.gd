@@ -360,9 +360,21 @@ func _build_rows() -> void:
 		var idx := picks.size()
 		pick.bonus = CompanionUi.option(row, names, Vector2.ZERO, Vector2(bw, 18), func(_i: int): _pick_bonus(idx))
 		pick.tier = CompanionUi.option(row, ["-"], Vector2.ZERO, Vector2(tw, 18), func(_i: int): refresh())
+		_limit_choice_popup(pick.bonus)
+		_limit_choice_popup(pick.tier)
 		pick.tier.disabled = true
 		pick.gems = []
 		picks.append(pick)
+
+
+## Let PopupMenu scroll long lists inside the available game viewport.
+func _limit_choice_popup(button: OptionButton) -> void:
+	var popup := button.get_popup()
+	var fit := func():
+		var height := int(button.get_viewport_rect().size.y * 0.65)
+		popup.max_size = Vector2i(0, clampi(height, 1, 360))
+	fit.call()
+	popup.about_to_popup.connect(fit)
 
 
 ## The gems of a bonus type, weakest first.

@@ -42,6 +42,7 @@ var _rain: GPUParticles3D
 var _rain_ceiling := 10.0              # metres above the player that drops start (sky_*.dat [rain] ceiling)
 var _follow: Node3D
 var dungeon := false                   # zone.json "dungeon": no sky, sun, day/night or weather (see _setup_dungeon)
+var housing_inside := false            # server-confirmed house interior, independent of outdoor weather
 
 ## The 1.64 client's area fog (sector.dat [forest] -> content/sky/area_fog_164.json, pipeline/build_area_fog_164.py):
 ## a coloured fog over set rectangles and circles of a zone that comes in over `transition` as you walk into an area.
@@ -486,7 +487,7 @@ func _update(_delta: float) -> void:
 		for zl in _zones():
 			(zl as ZoneLoader).set_water_light(up, sun.light_color, Color(fog).lightened(0.15))
 	if _rain:
-		_rain.amount_ratio = clampf(storm * 1.2 - 0.15, 0.0, 1.0)
+		_rain.amount_ratio = 0.0 if housing_inside else clampf(storm * 1.2 - 0.15, 0.0, 1.0)
 		_rain.emitting = _rain.amount_ratio > 0.01
 		if _follow:
 			# emit from the client's rain ceiling above the player (following the feet put the emitter at ground

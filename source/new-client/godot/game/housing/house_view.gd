@@ -137,15 +137,22 @@ func _entered(n: int) -> void:
 	interior.set_meta("scene", node)
 	_collide(node, interior, n)
 	_apply_slot(node, "door", int(_row(model).get("door_start", 1)) + int(housing.interior.get("door", 0)))
+	_set_indoor_weather(true)
 	_furniture_changed(n)
 	_hookpoints(n)
 
 
 func _left(n: int) -> void:
+	_set_indoor_weather(false)
 	if interior and is_instance_valid(interior):
 		interior.queue_free()
 	interior = null
 	interior_number = 0
+
+
+func _set_indoor_weather(inside: bool) -> void:
+	if world and world.get("viewer") and world.viewer.get("sky"):
+		world.viewer.sky.housing_inside = inside
 
 
 func _furniture_changed(n: int) -> void:

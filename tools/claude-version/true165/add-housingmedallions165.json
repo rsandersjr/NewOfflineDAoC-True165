@@ -1,0 +1,91 @@
+{
+ "table": "MerchantItem",
+ "key": "MerchantItem_ID",
+ "reason": "Issue 2/3 confirmed fixes 2026-11-17: restore access to the existing housing ceremony destinations",
+ "rows": [
+  {
+   "ItemListID": "OFMerchant_Alb",
+   "ItemTemplateID": "personal_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "MerchantItem_ID": "issue23-Alb-personal_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Alb",
+   "ItemTemplateID": "guild_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "MerchantItem_ID": "issue23-Alb-guild_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Alb",
+   "ItemTemplateID": "housing_entrance_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "MerchantItem_ID": "issue23-Alb-housing_entrance_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Alb",
+   "ItemTemplateID": "hearth_bind_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "MerchantItem_ID": "issue23-Alb-hearth_bind_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Mid",
+   "ItemTemplateID": "personal_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "MerchantItem_ID": "issue23-Mid-personal_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Mid",
+   "ItemTemplateID": "guild_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "MerchantItem_ID": "issue23-Mid-guild_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Mid",
+   "ItemTemplateID": "housing_entrance_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "MerchantItem_ID": "issue23-Mid-housing_entrance_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Mid",
+   "ItemTemplateID": "hearth_bind_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "MerchantItem_ID": "issue23-Mid-hearth_bind_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Hib",
+   "ItemTemplateID": "personal_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 6,
+   "MerchantItem_ID": "issue23-Hib-personal_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Hib",
+   "ItemTemplateID": "guild_house_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 7,
+   "MerchantItem_ID": "issue23-Hib-guild_house_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Hib",
+   "ItemTemplateID": "housing_entrance_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 8,
+   "MerchantItem_ID": "issue23-Hib-housing_entrance_necklace"
+  },
+  {
+   "ItemListID": "OFMerchant_Hib",
+   "ItemTemplateID": "hearth_bind_necklace",
+   "PageNumber": 0,
+   "SlotPosition": 9,
+   "MerchantItem_ID": "issue23-Hib-hearth_bind_necklace"
+  }
+ ]
+}

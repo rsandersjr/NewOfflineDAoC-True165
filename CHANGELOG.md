@@ -7,6 +7,26 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Confirmed fixes - 17 November 2026
+
+- Server freeze: removed the cross-bot effect-lock dependency during concentration checks. Resurrection-sickness
+  penalties and concentration limits still apply.
+- Housing: interior upgrades keep their full purchase type; awning and carpet dyes, purchased guild banners/shields
+  and their emblems render; period fireplace particles run indoors; mansion ladders have climb collision; outdoor
+  rain particles stop while inside.
+- Crafted Savage claws: corrected 40 weapon templates marked two-handed so they fit either hand. Rebuilt the 24
+  classic claw models and their original 1.64 grip frames, including MoonFangs, with 4x textures.
+- Crafted armor: replaced 21 appearances absent from the 1.64 catalog and one wrong-realm helm with their classic
+  family models. Rebuilt the affected helm meshes from 1.64 and upscaled their original textures 4x. Stats stay the same.
+- Spellcraft: all 230 specialization-focus recipes show the focus line and value (including Creeping Path). Focus
+  gems are limited to staves in both normal combining and the enchanting helper, including gems already owned.
+  Weapon descriptions and recipe details now distinguish main hand, either hand and two-handed use.
+- Border-keep medallion merchants stock the existing personal-house, guild-house, housing-entrance and hearth-bind
+  medallions in all three realms. Their original prices and teleport ceremony remain.
+
+[Full findings, validation and source rebuild instructions](docs/reports/2026-11-17-confirmed-issue-fixes.md).
+These are source changes for 0.8; the published 0.7 download is unchanged.
+
 ### Battlegrounds
 
 - Gamebots: any gamebot whose level fits a battleground may grind its monsters like any hunting zone, whatever its

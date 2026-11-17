@@ -174,7 +174,8 @@ func _tab_button(text: String, at: Vector2, which: String) -> Button:
 	b.toggle_mode = true
 	b.pressed.connect(func():
 		show_tab(which)
-		_tell_broker(which))
+		# MY LISTINGS needs fresh stock even when the broker is already on that page.
+		_tell_broker(which, which == "listings"))
 	add_child(b)
 	return b
 

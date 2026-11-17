@@ -37,6 +37,9 @@ release. Content changes are applied by the first START SERVER, as always.
 
 ### The world
 
+- Realm Exchange: clicking MY LISTINGS requests the current stock again, so sold items disappear and available
+  listings are up to date without dropping an item to force a refresh.
+
 - Queued player spells remember the target selected when you requested them. Clearing or changing selection before
   the follow-up starts no longer loses a queued buff; a queued self buff also keeps its own visibility. Range and
   target-validity checks still apply, and `/noqueue` keeps its existing short input-buffer behavior.

@@ -7,6 +7,13 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Hired companion Realm Points - 18 November 2026
+
+- Players and hired companions in range share their group's Realm Points when the party kills an enemy player or
+  gamebot. A player who heals or buffs while a companion deals all the damage now earns a group share.
+- Each party's damage determines its share of the kill. The existing Realm Point caps, rank adjustments, group
+  bonus and repeat-kill window still apply. Experience, bounty points and coin use their existing rules.
+
 ### Trollheim loot and companion movement - 17 November 2026
 
 - Restored five documented drops across Olen den Bartender and Snemel den Forsumlig, and added the level-69

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using DOL.AI.Brain;
@@ -52,6 +53,20 @@ public class UT_AutonomousBotRealmPointRewards
         private RewardBot() : base((OfflineWorldBotRecord)null) { }
         public override byte Level { get; set; }
         public override eRealm Realm { get; set; }
+        public override ushort CurrentRegionID { get; set; }
+        public override int X => 0;
+        public override int Y => 0;
+        public override int Z => 0;
+    }
+
+    private sealed class RewardPlayer : GamePlayer
+    {
+        private RewardPlayer() : base(null, null) { }
+        public override eRealm Realm { get; set; }
+        public override ushort CurrentRegionID { get; set; }
+        public override int X => 0;
+        public override int Y => 0;
+        public override int Z => 0;
     }
 
     private static void SetField(Type type, object target, string name, object value) =>
@@ -66,6 +81,62 @@ public class UT_AutonomousBotRealmPointRewards
         typeof(GameBot).GetProperty(nameof(GameBot.IsTemporaryGroupHelper))!.SetValue(bot, temporary);
         SetField(typeof(GameNPC), bot, "m_ownBrain", new BotBrain { Body = bot });
         return bot;
+    }
+
+    [TestCase(true, true, 0, 1.0)]
+    [TestCase(false, true, 0, 1.0)]
+    [TestCase(true, true, 25, 0.75)]
+    [TestCase(true, false, 25, 0.75)]
+    public void HiredPartySharesDamageAcrossEligibleMembersForEitherVictimType(
+        bool botDoesAllGroupDamage, bool botVictim, int outsideDamage, double expectedShare)
+    {
+        var healer = (RewardPlayer)RuntimeHelpers.GetUninitializedObject(typeof(RewardPlayer));
+        healer.Realm = eRealm.Albion;
+        healer.CurrentRegionID = 1;
+        RewardBot hire = Bot(true, false);
+        RewardBot distantHire = Bot(true, false);
+        RewardBot helper = Bot(false, true);
+        RewardBot outsider = Bot(true, false);
+        foreach (RewardBot member in new[] { hire, distantHire, helper, outsider })
+        {
+            member.Realm = eRealm.Albion;
+            member.CurrentRegionID = 1;
+        }
+        distantHire.CurrentRegionID = 2;
+        GameLiving victim;
+        if (botVictim)
+        {
+            RewardBot bot = Bot(true, false);
+            bot.Realm = eRealm.Midgard;
+            bot.CurrentRegionID = 1;
+            victim = bot;
+        }
+        else
+        {
+            var player = (RewardPlayer)RuntimeHelpers.GetUninitializedObject(typeof(RewardPlayer));
+            player.Realm = eRealm.Midgard;
+            player.CurrentRegionID = 1;
+            victim = player;
+        }
+        Group group = new(healer);
+        var members = new List<GameLiving> { healer, hire, distantHire, helper };
+        SetField(typeof(Group), group, "_groupMembers", members);
+        foreach (GameLiving member in members)
+            member.Group = group;
+
+        var contributions = new Dictionary<GameLiving, double>
+        {
+            [botDoesAllGroupDamage ? (GameLiving)hire : healer] = 100 - outsideDamage,
+            [outsider] = outsideDamage,
+        };
+        bool IsHired(GameBot bot) => bot == hire || bot == distantHire;
+        var share = AutonomousBotRealmPointRewards.HiredGroupShares(victim, contributions, 100, IsHired).Single();
+        Assert.That(share.Members, Is.EquivalentTo(new GameLiving[] { healer, hire }));
+        Assert.That(share.DamageShare, Is.EqualTo(expectedShare));
+        int perMember = AutonomousBotRealmPointRewards.CalculateRealmPointReward(
+            900, 0, 900, 0, share.Members.Length, share.Members.Length, share.DamageShare, true);
+        Assert.That(perMember, Is.EqualTo(outsideDamage == 0 ? 506 : 379));
+        Assert.That(AutonomousBotRealmPointRewards.HiredGroupShares(victim, contributions, 100, _ => false), Is.Empty);
     }
 
     [Test]

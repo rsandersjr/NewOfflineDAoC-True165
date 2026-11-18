@@ -143,8 +143,11 @@ public static class AutonomousBotRealmPointRewards
 
         int victimRealmPointValue = GetPlayerEquivalentRealmPointValue(killedBot.Level, killedBot.RealmLevel);
         long victimExperienceValue = GetPlayerEquivalentExperienceValue(killedBot.Level);
+        var sharedRealmPoints = PayHiredGroupRealmPoints(killedBot, victimRealmPointValue, killedBot.RealmLevel,
+            hostileContributors, totalDamage, isWorthRealmPoints);
         if (isWorthRealmPoints)
-            PayGamebots(killedBot, victimRealmPointValue, killedBot.RealmLevel, hostileContributors, totalDamage, victimExperienceValue);
+            PayGamebots(killedBot, victimRealmPointValue, killedBot.RealmLevel, hostileContributors, totalDamage,
+                victimExperienceValue, sharedRealmPoints);
 
         Dictionary<GamePlayer, EntityCountTotalDamagePair> playerContributions = new();
         Dictionary<Group, EntityCountTotalDamagePair> groupContributions = new();
@@ -166,11 +169,8 @@ public static class AutonomousBotRealmPointRewards
                 AddContribution(player, pair.Value, player.Group, groupContributions);
         }
 
-        if (playerContributions.Count == 0)
-            return;
-
+        RecordHiredGroupSupportKills(killedBot, sharedRealmPoints, playerContributions);
         GameLiving creditedKiller = ResolveRootRewardOwner(killer as GameLiving);
-        int victimValue = GetPlayerEquivalentRealmPointValue(killedBot.Level, killedBot.RealmLevel);
 
         foreach (KeyValuePair<GamePlayer, EntityCountTotalDamagePair> pair in playerContributions)
         {
@@ -184,18 +184,20 @@ public static class AutonomousBotRealmPointRewards
                 double damagePercent = Math.Min(1.0, contribution.Damage / totalDamage);
                 int contributorCount = Math.Max(1, contribution.Count);
                 int groupContributorCount = player.Group == null ? 1 : contributorCount;
-                int realmPointsEarned = 0;
+                bool shared = sharedRealmPoints != null && sharedRealmPoints.ContainsKey(player);
+                int realmPointsEarned = shared ? sharedRealmPoints[player] : 0;
 
                 if (isWorthRealmPoints)
                 {
-                    DbBattleground battleground = GameServer.KeepManager.GetBattleground(player.CurrentRegionID);
-                    bool applyRankAdjustment = battleground == null || player.RealmLevel < battleground.MaxRealmLevel;
-                    realmPointsEarned = CalculateRealmPointReward(victimValue, killedBot.RealmLevel,
-                        player.RealmPointsValue, player.RealmLevel, contributorCount,
-                        groupContributorCount, damagePercent, applyRankAdjustment);
+                    if (!shared)
+                    {
+                        realmPointsEarned = CalculateRealmPointReward(victimRealmPointValue, killedBot.RealmLevel,
+                            player.RealmPointsValue, player.RealmLevel, contributorCount,
+                            groupContributorCount, damagePercent, ApplyRankAdjustment(player, player.RealmLevel));
 
-                    if (realmPointsEarned > 0)
-                        player.GainRealmPoints(realmPointsEarned, true);
+                        if (realmPointsEarned > 0)
+                            player.GainRealmPoints(realmPointsEarned, true);
+                    }
 
                     // experience too, by the player-kill rule (with its outpost bonus)
                     long experienceBase = CappedExperienceBase(victimExperienceValue, player.ExperienceValue,
@@ -216,7 +218,7 @@ public static class AutonomousBotRealmPointRewards
                 }
 
                 bool deathBlow = ReferenceEquals(player, creditedKiller);
-                bool soloKill = damagePercent >= 1.0 && contributorCount == 1;
+                bool soloKill = !shared && damagePercent >= 1.0 && contributorCount == 1;
                 player.UpdateKillStatsOnPlayerKill(killedBot.Realm, deathBlow, soloKill, realmPointsEarned);
             }
         }
@@ -229,7 +231,8 @@ public static class AutonomousBotRealmPointRewards
     /// (victimExperienceValue; 0 pays none), by the player-kill rule.
     /// </summary>
     public static void PayGamebots(GameLiving victim, int victimRealmPointValue, int victimRealmLevel,
-        IReadOnlyDictionary<GameLiving, double> hostileContributors, double totalDamage, long victimExperienceValue = 0)
+        IReadOnlyDictionary<GameLiving, double> hostileContributors, double totalDamage, long victimExperienceValue = 0,
+        IReadOnlyDictionary<GameLiving, int> sharedRealmPoints = null)
     {
         if (victim == null || victimRealmPointValue <= 0 || totalDamage <= 0) return;
         // True 1.65 Mode (owner 2026-10-30): a hired companion earns realm points from its group's kills like a group
@@ -251,17 +254,17 @@ public static class AutonomousBotRealmPointRewards
             int points = CalculateRealmPointReward(victimRealmPointValue, victimRealmLevel,
                 GetPlayerEquivalentRealmPointValue(bot.Level, bot.RealmLevel), bot.RealmLevel,
                 groupCount, groupCount, Math.Min(1.0, groupDamage / totalDamage), true);
-            if (points > 0) bot.GainRealmPoints(points, true);
+            if (points > 0 && sharedRealmPoints?.ContainsKey(bot) != true)
+                bot.GainRealmPoints(points, true);
             long experience = CalculateExperienceReward(victimExperienceValue, GetPlayerEquivalentExperienceValue(bot.Level),
                 Properties.XP_PVP_CAP_PERCENT, groupCount, groupDamage / totalDamage);
             if (experience > 0) bot.GainExperience(eXPSource.Player, experience);
         }
     }
 
-    /// <summary>A player killed in PvP pays the gamebots that fought them (players are paid by the rules).</summary>
-    public static void PayGamebotsForPlayerKill(GamePlayer killedPlayer)
+    /// <summary>Pays mixed-group RP and the existing gamebot rewards for a player victim.</summary>
+    public static IReadOnlyDictionary<GameLiving, int> PayGamebotsForPlayerKill(GamePlayer killedPlayer)
     {
-        if (killedPlayer == null) return;
         KeyValuePair<GameLiving, double>[] raw;
         lock (killedPlayer.XpGainersLock)
             raw = killedPlayer.XPGainers.ToArray();
@@ -274,8 +277,95 @@ public static class AutonomousBotRealmPointRewards
         }
         // experience under the player rule's own repeat-kill window (AwardPlayerOnPlayerKill.isWorthAnything)
         bool worthExperience = killedPlayer.DeathTime + Properties.RP_WORTH_SECONDS <= killedPlayer.PlayedTime;
+        var sharedRealmPoints = PayHiredGroupRealmPoints(killedPlayer, killedPlayer.RealmPointsValue, killedPlayer.RealmLevel,
+            hostile, raw.Sum(pair => pair.Value), worthExperience);
         PayGamebots(killedPlayer, killedPlayer.RealmPointsValue, killedPlayer.RealmLevel, hostile, hostile.Sum(pair => pair.Value),
-            worthExperience ? killedPlayer.ExperienceValue : 0);
+            worthExperience ? killedPlayer.ExperienceValue : 0, sharedRealmPoints);
+        return sharedRealmPoints;
+    }
+
+    public static IEnumerable<(GameLiving[] Members, double DamageShare)> HiredGroupShares(
+        GameLiving victim, IReadOnlyDictionary<GameLiving, double> contributors, double totalDamage, Func<GameBot, bool> isHired)
+    {
+        if (totalDamage <= 0)
+            yield break;
+
+        var groups = new HashSet<Group>();
+        foreach (var (contributor, damage) in contributors)
+        {
+            if (damage <= 0 || contributor.Group is not { } group || !groups.Add(group))
+                continue;
+
+            List<GameLiving> roster = group.GetMembersInTheGroup();
+            GameBot[] hired = roster.OfType<GameBot>().Where(bot =>
+                bot is { IsAutonomousWorldBot: true, IsTemporaryGroupHelper: false } && isHired(bot)).ToArray();
+            if (hired.Length == 0 || !roster.Any(member => member is GamePlayer))
+                continue;
+
+            GameLiving[] eligible = roster.Where(member => member.Group == group &&
+                (member is GamePlayer || member is GameBot bot && hired.Contains(bot)) &&
+                member.Realm != eRealm.None && member.Realm != victim.Realm &&
+                member.ObjectState == GameObject.eObjectState.Active &&
+                member.IsWithinRadius(victim, WorldMgr.MAX_EXPFORKILL_DISTANCE)).ToArray();
+            double groupDamage = eligible.Sum(member => contributors.GetValueOrDefault(member));
+            if (groupDamage > 0)
+                yield return (eligible, Math.Min(1.0, groupDamage / totalDamage));
+        }
+    }
+
+    private static Dictionary<GameLiving, int> PayHiredGroupRealmPoints(GameLiving victim, int victimValue,
+        int victimRealmLevel, IReadOnlyDictionary<GameLiving, double> contributors, double totalDamage, bool worthRealmPoints)
+    {
+        Dictionary<GameLiving, int> awarded = null;
+        foreach (var (members, share) in HiredGroupShares(victim, contributors, totalDamage, HiredCompanions165.IsHired))
+        {
+            foreach (GameLiving member in members)
+            {
+                int points = 0;
+                if (member is GamePlayer player)
+                {
+                    lock (player.AwardLock)
+                    {
+                        if (worthRealmPoints)
+                        {
+                            points = CalculateRealmPointReward(victimValue, victimRealmLevel, player.RealmPointsValue,
+                                player.RealmLevel, members.Length, members.Length, share, ApplyRankAdjustment(player, player.RealmLevel));
+                            if (points > 0)
+                                player.GainRealmPoints(points, true);
+                        }
+                    }
+                }
+                else if (member is GameBot bot && worthRealmPoints)
+                {
+                    points = CalculateRealmPointReward(victimValue, victimRealmLevel,
+                        GetPlayerEquivalentRealmPointValue(bot.Level, bot.RealmLevel), bot.RealmLevel,
+                        members.Length, members.Length, share, ApplyRankAdjustment(bot, bot.RealmLevel));
+                    if (points > 0)
+                        bot.GainRealmPoints(points, true);
+                }
+                (awarded ??= new())[member] = points;
+            }
+        }
+        return awarded;
+    }
+
+    private static bool ApplyRankAdjustment(GameLiving member, int realmLevel)
+    {
+        DbBattleground battleground = GameServer.KeepManager.GetBattleground(member.CurrentRegionID);
+        return battleground == null || realmLevel < battleground.MaxRealmLevel;
+    }
+
+    internal static void RecordHiredGroupSupportKills(GameLiving victim, IReadOnlyDictionary<GameLiving, int> sharedRealmPoints,
+        IReadOnlyDictionary<GamePlayer, EntityCountTotalDamagePair> playerContributions)
+    {
+        if (sharedRealmPoints == null)
+            return;
+
+        foreach (var (member, points) in sharedRealmPoints)
+        {
+            if (member is GamePlayer player && !playerContributions.ContainsKey(player))
+                player.UpdateKillStatsOnPlayerKill(victim.Realm, false, false, points);
+        }
     }
 
     /// <summary>Realm level for a realm point total, from the player table (RR1L0 = 0 ... RR5L3 = 43).</summary>

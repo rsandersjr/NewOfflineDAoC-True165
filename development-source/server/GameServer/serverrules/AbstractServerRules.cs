@@ -1954,7 +1954,7 @@ namespace DOL.GS.ServerRules
 
             killedPlayer.Statistics.AddToDeaths();
             killedPlayer.LastDeathRealmPoints = 0; // Reset first in case this is a PvE death for example.
-            AutonomousBotRealmPointRewards.PayGamebotsForPlayerKill(killedPlayer);
+            var sharedRealmPoints = AutonomousBotRealmPointRewards.PayGamebotsForPlayerKill(killedPlayer);
 
             ProcessXpGainers(killedPlayer,
                 out double totalDamage,
@@ -1963,10 +1963,11 @@ namespace DOL.GS.ServerRules
                 out Dictionary<Group, EntityCountTotalDamagePair> groupCountAndDamage,
                 out _);
 
-            if (playerCountAndDamage.Count == 0)
+            if (playerCountAndDamage.Count == 0 && sharedRealmPoints == null)
                 return;
 
-            bool isWorthAnything = false;
+            AutonomousBotRealmPointRewards.RecordHiredGroupSupportKills(killedPlayer, sharedRealmPoints, playerCountAndDamage);
+            bool isWorthAnything = sharedRealmPoints?.Values.Any(points => points > 0) == true;
 
             // Let `AwardExperience` fetch players that are in a group but didn't attack the target, and decide how things should be shared.
             foreach (var pair in playerCountAndDamage)
@@ -1975,7 +1976,11 @@ namespace DOL.GS.ServerRules
 
                 lock (player.AwardLock)
                 {
-                    AwardPlayerOnPlayerKill(pair.Key, killer, totalDamage, killedPlayer, playerCountAndDamage, groupCountAndDamage, out isWorthAnything);
+                    int? sharedPoints = sharedRealmPoints != null && sharedRealmPoints.TryGetValue(player, out int points)
+                        ? points : null;
+                    AwardPlayerOnPlayerKill(player, killer, totalDamage, killedPlayer, playerCountAndDamage,
+                        groupCountAndDamage, sharedPoints, out bool worthPlayerReward);
+                    isWorthAnything |= worthPlayerReward;
                 }
             }
 
@@ -2056,6 +2061,7 @@ namespace DOL.GS.ServerRules
             GamePlayer killedPlayer,
             Dictionary<GamePlayer, EntityCountTotalDamagePair> playerCountAndDamage,
             Dictionary<Group, EntityCountTotalDamagePair> groupCountAndDamage,
+            int? sharedRealmPoints,
             out bool isWorthAnything)
         {
             // Modify rewards (base XP, RP, BP) based on damage percent inflicted by the battlegroup, group, or player.
@@ -2090,7 +2096,10 @@ namespace DOL.GS.ServerRules
                 baseXpReward = Math.Min(baseXpReward, CalculateXpCap());
                 baseMoneyReward = Math.Min(baseMoneyReward, CalculateMoneyCap());
 
-                RewardRealmPoints(out realmPointsEarned);
+                if (sharedRealmPoints.HasValue)
+                    realmPointsEarned = sharedRealmPoints.Value;
+                else
+                    RewardRealmPoints(out realmPointsEarned);
                 RewardBountyPoints();
                 RewardExperience();
                 RewardMoney();
@@ -2212,7 +2221,8 @@ namespace DOL.GS.ServerRules
             void ProcessPlayerToAwardStats(int realmPointsEarned)
             {
                 GameObject killerToUse = killer is GameNPC petKiller && petKiller.Brain is IControlledBrain petKillerBrain ?  petKillerBrain.GetPlayerOwner() : killer;
-                playerToAward.UpdateKillStatsOnPlayerKill(killedPlayer.Realm, playerToAward == killerToUse, damagePercent >= 1.0 && entityCountTotalDamagePair.Count == 1, realmPointsEarned);
+                playerToAward.UpdateKillStatsOnPlayerKill(killedPlayer.Realm, playerToAward == killerToUse,
+                    !sharedRealmPoints.HasValue && damagePercent >= 1.0 && entityCountTotalDamagePair.Count == 1, realmPointsEarned);
             }
 
             void SendNotWorthRewardMessage()

@@ -2,6 +2,19 @@
  "source": "True 1.65 drops pass 2 (2026-10-31): Uthgard measured drops (realm-matched) + period Allakhazam Known Loot and item pages; estimates marked in fix/drops/REPORT.md + coin-only sweep (period comments/variants, 2026-10-31) + Uthgard-built items for coin-only monsters + period kill-task items restored to the monsters that dropped them (owner 2026-11-01; killtask_drops_restored.json) + Prima Atlas loot (2026-11-02) + Prima batch 2026-11-07 (Atlas drops of the new monsters and of the Atlas items built)",
  "min_kills": 20,
  "monsters": {
+  "Remandun den Laerd": {
+    "drop_count": 2,
+    "items": [
+      [
+        "Jerkin_of_Fortified_Skin",
+        25
+      ],
+      [
+        "Remadun_Den_Laerds_Vest",
+        25
+      ]
+    ]
+  },
   "abominable snowman": {
    "drop_count": 5,
    "items": [
@@ -42249,6 +42262,14 @@
     [
      "Pristine_Frost_Orm_Jerkin",
      25
+    ],
+    [
+     "Morvalt_Bladed_Ericril",
+     25
+    ],
+    [
+     "Pristine_Fire_Orm_Gloves",
+     25
     ]
    ]
   },
@@ -52076,6 +52097,18 @@
    "items": [
     [
      "Snemels_Dancing_Mug",
+     25
+    ],
+    [
+     "Snemels_Sleeves",
+     25
+    ],
+    [
+     "Snemels_Mug_of_Cheer",
+     25
+    ],
+    [
+     "Snemels_Bladed_Moon_Fang",
      25
     ]
    ]

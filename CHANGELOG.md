@@ -7,6 +7,15 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Trollheim loot and companion movement - 17 November 2026
+
+- Restored five documented drops across Olen den Bartender and Snemel den Forsumlig, and added the level-69
+  Remandun den Laerd with his two documented pieces. Remandun's exact period coordinates are unknown. His restored
+  spawn is on verified walkable floor in the troll hall.
+- Near the reported pillar, companions use grounded follow positions and the client gets exact movement endpoints.
+  An out-of-combat companion caught on the disconnected interior patch can recover to the aisle if it has a route
+  to its destination and its leader is nearby.
+
 ### Druim Ligen gates, targeting and stable rides - 17 November 2026
 
 - The inner leaves of the Hibernian border keep model draw one panel each. Door movement and collision are preserved.

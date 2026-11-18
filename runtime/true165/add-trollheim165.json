@@ -1,0 +1,34 @@
+{
+ "table": "Mob",
+ "key": "Mob_ID",
+ "reason": "Trollheim issue #4: restore level 69 Remandun den Laerd (Prima Shrouded Isles guide and 2003-09-16 Illia bestiary mob 6007). Exact period coordinates are unavailable; this placement is on reachable floor in the existing troll hall.",
+ "rows": [
+  {
+   "Mob_ID": "3d09caa1-6448-4b89-8c9a-90f3d31ce4ed",
+   "ClassType": "DOL.GS.GameNPC",
+   "Name": "Remandun den Laerd",
+   "Region": 150,
+   "X": 37100,
+   "Y": 42600,
+   "Z": 15232,
+   "Heading": 2160,
+   "Model": 840,
+   "Size": 75,
+   "Level": 69,
+   "Realm": 0,
+   "Race": 2005,
+   "BodyType": 6,
+   "Speed": 180,
+   "Flags": 0,
+   "AggroLevel": 100,
+   "AggroRange": 250,
+   "MeleeDamageType": 2,
+   "RespawnInterval": 180,
+   "FactionID": 150,
+   "NPCTemplateID": -1,
+   "RoamingRange": -1,
+   "PackageID": "true165-trollheim",
+   "LastTimeRowUpdated": "2026-11-17 00:00:00"
+  }
+ ]
+}

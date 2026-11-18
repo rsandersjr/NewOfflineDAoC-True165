@@ -30,10 +30,11 @@ public static class AutonomousBotRealmPointRewards
 
     public static int CalculateRealmPointReward(int victimRealmPointValue, int victimRealmLevel,
         int awarderRealmPointValue, int awarderRealmLevel, int participantCount,
-        int groupContributorCount, double damagePercent, bool applyRealmRankAdjustment)
+        int groupContributorCount, double damagePercent, bool applyRealmRankAdjustment,
+        bool keepPositiveReward = false)
     {
         if (victimRealmPointValue <= 0 || awarderRealmPointValue <= 0 ||
-            participantCount <= 0 || damagePercent <= 0)
+            participantCount <= 0 || !(damagePercent > 0))
         {
             return 0;
         }
@@ -51,7 +52,7 @@ public static class AutonomousBotRealmPointRewards
         if (groupContributorCount > 1)
             realmPoints += (int)(realmPoints * (groupContributorCount - 1) * 0.125);
 
-        return Math.Max(0, realmPoints);
+        return Math.Max(keepPositiveReward ? 1 : 0, realmPoints);
     }
 
     /// <summary>What a gamebot is worth in experience to the realm that kills it: a player's value (GamePlayer.ExperienceValue,
@@ -143,8 +144,8 @@ public static class AutonomousBotRealmPointRewards
 
         int victimRealmPointValue = GetPlayerEquivalentRealmPointValue(killedBot.Level, killedBot.RealmLevel);
         long victimExperienceValue = GetPlayerEquivalentExperienceValue(killedBot.Level);
-        var sharedRealmPoints = PayHiredGroupRealmPoints(killedBot, victimRealmPointValue, killedBot.RealmLevel,
-            hostileContributors, totalDamage, isWorthRealmPoints);
+        var sharedRealmPoints = PayHiredGroupRewards(killedBot, victimRealmPointValue, killedBot.RealmLevel,
+            victimExperienceValue, isWorthRealmPoints, HiredGroupShares(killedBot, hostileContributors, totalDamage, HiredCompanions165.IsHired));
         if (isWorthRealmPoints)
             PayGamebots(killedBot, victimRealmPointValue, killedBot.RealmLevel, hostileContributors, totalDamage,
                 victimExperienceValue, sharedRealmPoints);
@@ -197,16 +198,8 @@ public static class AutonomousBotRealmPointRewards
 
                         if (realmPointsEarned > 0)
                             player.GainRealmPoints(realmPointsEarned, true);
+                        PayPlayerExperience(player, victimExperienceValue, contributorCount, damagePercent);
                     }
-
-                    // experience too, by the player-kill rule (with its outpost bonus)
-                    long experienceBase = CappedExperienceBase(victimExperienceValue, player.ExperienceValue,
-                        Properties.XP_PVP_CAP_PERCENT, contributorCount);
-                    long experience = (long)(experienceBase * damagePercent);
-                    if (experience > 0)
-                        experience += ServerRules.AbstractServerRules.CalculateOutpostExperienceBonus(player, experienceBase);
-                    if (experience > 0)
-                        player.GainExperience(eXPSource.Player, experience);
                 }
                 else
                 {
@@ -249,12 +242,16 @@ public static class AutonomousBotRealmPointRewards
             .Select(pair => (Bot: (GameBot)pair.Key, Damage: pair.Value)).ToArray();
         foreach (var (bot, damage) in bots)
         {
+            bool shared = sharedRealmPoints?.ContainsKey(bot) == true;
+            if (shared && victim is GameBot)
+                continue;
+
             int groupCount = bot.Group == null ? 1 : Math.Max(1, bots.Count(other => other.Bot.Group == bot.Group));
             double groupDamage = bot.Group == null ? damage : bots.Where(other => other.Bot.Group == bot.Group).Sum(other => other.Damage);
             int points = CalculateRealmPointReward(victimRealmPointValue, victimRealmLevel,
                 GetPlayerEquivalentRealmPointValue(bot.Level, bot.RealmLevel), bot.RealmLevel,
                 groupCount, groupCount, Math.Min(1.0, groupDamage / totalDamage), true);
-            if (points > 0 && sharedRealmPoints?.ContainsKey(bot) != true)
+            if (points > 0 && !shared)
                 bot.GainRealmPoints(points, true);
             long experience = CalculateExperienceReward(victimExperienceValue, GetPlayerEquivalentExperienceValue(bot.Level),
                 Properties.XP_PVP_CAP_PERCENT, groupCount, groupDamage / totalDamage);
@@ -277,8 +274,9 @@ public static class AutonomousBotRealmPointRewards
         }
         // experience under the player rule's own repeat-kill window (AwardPlayerOnPlayerKill.isWorthAnything)
         bool worthExperience = killedPlayer.DeathTime + Properties.RP_WORTH_SECONDS <= killedPlayer.PlayedTime;
-        var sharedRealmPoints = PayHiredGroupRealmPoints(killedPlayer, killedPlayer.RealmPointsValue, killedPlayer.RealmLevel,
-            hostile, raw.Sum(pair => pair.Value), worthExperience);
+        var sharedRealmPoints = PayHiredGroupRewards(killedPlayer, killedPlayer.RealmPointsValue, killedPlayer.RealmLevel,
+            0, worthExperience,
+            HiredGroupShares(killedPlayer, hostile, raw.Sum(pair => pair.Value), HiredCompanions165.IsHired));
         PayGamebots(killedPlayer, killedPlayer.RealmPointsValue, killedPlayer.RealmLevel, hostile, hostile.Sum(pair => pair.Value),
             worthExperience ? killedPlayer.ExperienceValue : 0, sharedRealmPoints);
         return sharedRealmPoints;
@@ -313,40 +311,62 @@ public static class AutonomousBotRealmPointRewards
         }
     }
 
-    private static Dictionary<GameLiving, int> PayHiredGroupRealmPoints(GameLiving victim, int victimValue,
-        int victimRealmLevel, IReadOnlyDictionary<GameLiving, double> contributors, double totalDamage, bool worthRealmPoints)
+    public static IReadOnlyDictionary<GameLiving, int> PayHiredGroupRewards(GameLiving victim, int victimValue,
+        int victimRealmLevel, long victimExperienceValue, bool worthRewards,
+        IEnumerable<(GameLiving[] Members, double DamageShare)> groups)
     {
         Dictionary<GameLiving, int> awarded = null;
-        foreach (var (members, share) in HiredGroupShares(victim, contributors, totalDamage, HiredCompanions165.IsHired))
+        DbBattleground battleground = GameServer.KeepManager.GetBattleground(victim.CurrentRegionID);
+        // A level-20 or level-21 opponent can be worth 1 RP before the split. Keep a
+        // qualifying mixed party's battleground share from disappearing to integer rounding.
+        bool keepPositiveRealmPoints = victim is GameBot && battleground != null;
+        foreach (var (members, share) in groups)
         {
             foreach (GameLiving member in members)
             {
                 int points = 0;
-                if (member is GamePlayer player)
+                if (worthRewards && member is GamePlayer player)
                 {
                     lock (player.AwardLock)
                     {
-                        if (worthRealmPoints)
-                        {
-                            points = CalculateRealmPointReward(victimValue, victimRealmLevel, player.RealmPointsValue,
-                                player.RealmLevel, members.Length, members.Length, share, ApplyRankAdjustment(player, player.RealmLevel));
-                            if (points > 0)
-                                player.GainRealmPoints(points, true);
-                        }
+                        points = CalculateRealmPointReward(victimValue, victimRealmLevel, player.RealmPointsValue,
+                            player.RealmLevel, members.Length, members.Length, share,
+                            battleground == null || player.RealmLevel < battleground.MaxRealmLevel, keepPositiveRealmPoints);
+                        if (points > 0)
+                            player.GainRealmPoints(points, true);
+                        PayPlayerExperience(player, victimExperienceValue, members.Length, share);
                     }
                 }
-                else if (member is GameBot bot && worthRealmPoints)
+                else if (worthRewards && member is GameBot bot)
                 {
                     points = CalculateRealmPointReward(victimValue, victimRealmLevel,
                         GetPlayerEquivalentRealmPointValue(bot.Level, bot.RealmLevel), bot.RealmLevel,
-                        members.Length, members.Length, share, ApplyRankAdjustment(bot, bot.RealmLevel));
+                        members.Length, members.Length, share,
+                        battleground == null || bot.RealmLevel < battleground.MaxRealmLevel, keepPositiveRealmPoints);
                     if (points > 0)
                         bot.GainRealmPoints(points, true);
+                    long experience = CalculateExperienceReward(victimExperienceValue, GetPlayerEquivalentExperienceValue(bot.Level),
+                        Properties.XP_PVP_CAP_PERCENT, members.Length, share);
+                    if (experience > 0)
+                        bot.GainExperience(eXPSource.Player, experience);
                 }
                 (awarded ??= new())[member] = points;
             }
         }
         return awarded;
+    }
+
+    private static void PayPlayerExperience(GamePlayer player, long victimExperienceValue, int members, double share)
+    {
+        if (victimExperienceValue <= 0)
+            return;
+
+        long experienceBase = CappedExperienceBase(victimExperienceValue, player.ExperienceValue,
+            Properties.XP_PVP_CAP_PERCENT, members);
+        long experience = (long)(experienceBase * share);
+        if (experience > 0)
+            player.GainExperience(eXPSource.Player,
+                experience + ServerRules.AbstractServerRules.CalculateOutpostExperienceBonus(player, experienceBase));
     }
 
     private static bool ApplyRankAdjustment(GameLiving member, int realmLevel)

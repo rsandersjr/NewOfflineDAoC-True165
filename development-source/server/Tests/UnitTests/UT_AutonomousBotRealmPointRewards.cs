@@ -7,7 +7,10 @@ using System.Runtime.CompilerServices;
 using DOL.AI.Brain;
 using DOL.Database;
 using DOL.Database.Handlers;
+using DOL.Events;
 using DOL.GS;
+using DOL.GS.Keeps;
+using DOL.GS.ServerProperties;
 using DOL.GS.ServerRules;
 using NUnit.Framework;
 
@@ -42,7 +45,9 @@ public class UT_AutonomousBotRealmPointRewards
     public void SetUp()
     {
         _previousServer = GameServer.Instance;
-        GameServer.LoadTestDouble((RewardServer)RuntimeHelpers.GetUninitializedObject(typeof(RewardServer)));
+        var server = (RewardServer)RuntimeHelpers.GetUninitializedObject(typeof(RewardServer));
+        SetField(typeof(GameServer), server, "m_keepManager", DispatchProxy.Create<IKeepManager, EmptyReadDatabase>());
+        GameServer.LoadTestDouble(server);
     }
 
     [TearDown]
@@ -51,6 +56,8 @@ public class UT_AutonomousBotRealmPointRewards
     private sealed class RewardBot : GameBot
     {
         private RewardBot() : base((OfflineWorldBotRecord)null) { }
+        public long XpAwarded { get; private set; }
+        public override void GainExperience(GainedExperienceEventArgs args, bool notify = true) => XpAwarded += args.ExpTotal;
         public override byte Level { get; set; }
         public override eRealm Realm { get; set; }
         public override ushort CurrentRegionID { get; set; }
@@ -62,6 +69,11 @@ public class UT_AutonomousBotRealmPointRewards
     private sealed class RewardPlayer : GamePlayer
     {
         private RewardPlayer() : base(null, null) { }
+        public long XpAwarded { get; private set; }
+        public long RpAwarded { get; private set; }
+        public override void GainExperience(GainedExperienceEventArgs args, bool notify = true) => XpAwarded += args.ExpTotal;
+        public override void GainRealmPoints(long amount, bool modify, bool sendMessage, bool notify) => RpAwarded += amount;
+        public override byte Level { get; set; }
         public override eRealm Realm { get; set; }
         public override ushort CurrentRegionID { get; set; }
         public override int X => 0;
@@ -137,6 +149,71 @@ public class UT_AutonomousBotRealmPointRewards
             900, 0, 900, 0, share.Members.Length, share.Members.Length, share.DamageShare, true);
         Assert.That(perMember, Is.EqualTo(outsideDamage == 0 ? 506 : 379));
         Assert.That(AutonomousBotRealmPointRewards.HiredGroupShares(victim, contributions, 100, _ => false), Is.Empty);
+    }
+
+    [TestCase(true, true)]
+    [TestCase(false, true)]
+    [TestCase(false, false)]
+    public void EnemyGamebotKillPaysGroupExperienceOnceEvenToAnUnderBracketHire(
+        bool hireDoesAllDamage, bool worthRewards)
+    {
+        var player = (RewardPlayer)RuntimeHelpers.GetUninitializedObject(typeof(RewardPlayer));
+        SetField(typeof(GamePlayer), player, "<AwardLock>k__BackingField", new System.Threading.Lock());
+        player.Realm = eRealm.Albion;
+        player.Level = 27;
+        player.CurrentRegionID = 251;
+
+        RewardBot hire = Bot(true, false);
+        hire.Realm = eRealm.Albion;
+        hire.Level = 24;
+        hire.CurrentRegionID = 251;
+
+        RewardBot victim = Bot(true, false);
+        victim.Realm = eRealm.Midgard;
+        victim.Level = 27;
+        victim.CurrentRegionID = 251;
+
+        Group party = new(player);
+        SetField(typeof(Group), party, "_groupMembers", new List<GameLiving> { player, hire });
+        player.Group = hire.Group = party;
+
+        var damage = new Dictionary<GameLiving, double>
+        {
+            [player] = hireDoesAllDamage ? 0 : 100,
+            [hire] = hireDoesAllDamage ? 100 : 0
+        };
+
+        int previousCap = Properties.XP_PVP_CAP_PERCENT;
+        try
+        {
+            Properties.XP_PVP_CAP_PERCENT = 125;
+            long victimXp = AutonomousBotRealmPointRewards.GetPlayerEquivalentExperienceValue(victim.Level);
+            var groups = AutonomousBotRealmPointRewards.HiredGroupShares(victim, damage, 100, bot => bot == hire);
+            var shared = AutonomousBotRealmPointRewards.PayHiredGroupRewards(victim, 49, 0, victimXp, worthRewards, groups);
+            if (worthRewards)
+                AutonomousBotRealmPointRewards.PayGamebots(victim, 49, 0, damage, 100, victimXp, shared);
+
+            long hireXp = Math.Min(victimXp / 2, AutonomousBotRealmPointRewards.GetPlayerEquivalentExperienceValue(hire.Level) * 125 / 100);
+            Assert.That(hire.XpAwarded, Is.EqualTo(worthRewards ? hireXp : 0));
+            Assert.That(player.XpAwarded, Is.EqualTo(worthRewards ? victimXp / 2 : 0));
+            Assert.That(player.RpAwarded, Is.EqualTo(worthRewards ? 27 : 0));
+            Assert.That(hire.AutonomousRealmPoints, Is.EqualTo(worthRewards ? 27 : 0));
+        }
+        finally
+        {
+            Properties.XP_PVP_CAP_PERCENT = previousCap;
+        }
+    }
+
+    [Test]
+    public void EligibleBattlegroundShareSurvivesRoundingWhileZeroDamageStaysWorthless()
+    {
+        int Award(double share, bool keepPositiveReward) =>
+            AutonomousBotRealmPointRewards.CalculateRealmPointReward(1, 0, 16, 0, 2, 2,
+                share, true, keepPositiveReward);
+        Assert.That(Award(1, true), Is.EqualTo(1));
+        Assert.That(Award(1, false), Is.Zero);
+        Assert.That(Award(0, true), Is.Zero);
     }
 
     [Test]

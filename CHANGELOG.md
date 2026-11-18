@@ -7,6 +7,13 @@ The newest version is first.
 Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
 release. Content changes are applied by the first START SERVER, as always.
 
+### Battleground XP and low-value Realm Points - 18 November 2026
+
+- When a mixed party kills an enemy gamebot, players and in-range hired companions share its XP, including hires
+  below the battleground's level bracket. A hire can earn XP when the player deals all the damage, and vice versa.
+- An eligible mixed party member gets at least 1 RP on a battleground gamebot kill when rounding would have
+  dropped their share to zero. Repeat-kill restrictions, XP rates, and the companion level cap still apply.
+
 ### Hired companion Realm Points - 18 November 2026
 
 - Players and hired companions in range share their group's Realm Points when the party kills an enemy player or

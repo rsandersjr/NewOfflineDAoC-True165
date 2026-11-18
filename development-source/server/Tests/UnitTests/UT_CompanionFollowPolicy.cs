@@ -62,6 +62,16 @@ namespace DOL.UnitTests
             Assert.That(CompanionFollowPolicy.Predict(new(1, 2, 3), Vector3.Zero, 390), Is.EqualTo(new Vector3(1, 2, 3)));
         }
 
+        [Test]
+        public void TrollheimPillarEscapeTargetsTheAisleAndLeavesOtherFloorsAlone()
+        {
+            Assert.That(CompanionFollowPolicy.IsInsideTrollheimPillarPocket(150, new(32600, 28250, 14008)), Is.True);
+            Assert.That(CompanionFollowPolicy.IsInsideTrollheimPillarPocket(150, CompanionFollowPolicy.TrollheimPillarExit), Is.False);
+            Assert.That(CompanionFollowPolicy.IsNearTrollheimPillar(150, CompanionFollowPolicy.TrollheimPillarExit), Is.True);
+            Assert.That(CompanionFollowPolicy.IsNearTrollheimPillar(150, new(32600, 28250, 15232)), Is.False);
+            Assert.That(CompanionFollowPolicy.IsNearTrollheimPillar(151, new(32600, 28250, 14008)), Is.False);
+        }
+
         // owner 2026-11-06: companions stopped at the Lyonesse / Cornwall border (Lyonesse: x 286720-352256, y 630784-696320)
         [Test]
         public void ZoneExitIsWhereTheLineLeavesTheZone()

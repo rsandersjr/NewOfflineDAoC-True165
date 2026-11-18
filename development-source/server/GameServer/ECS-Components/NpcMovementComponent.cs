@@ -704,6 +704,24 @@ namespace DOL.GS
             }
             Zone zone = Owner.CurrentZone;
 
+            if (zone != null && CompanionFollowPolicy.IsNearTrollheimPillar(zone.ID, _ownerPosition) &&
+                Owner is GameBot companion && CompanionFollowPolicy.Applies(companion))
+            {
+                if (CompanionFollowPolicy.IsInsideTrollheimPillarPocket(zone.ID, destination))
+                    destination = CompanionFollowPolicy.TrollheimPillarExit;
+                if (!companion.InCombat && !companion.IsAttacking &&
+                    CompanionFollowPolicy.IsInsideTrollheimPillarPocket(zone.ID, _ownerPosition) &&
+                    CompanionFollowPolicy.IsNearTrollheimPillar(zone.ID,
+                        new(companion.PlayerGroupLeader.X, companion.PlayerGroupLeader.Y, companion.PlayerGroupLeader.Z)) &&
+                    AutonomousRendezvousNavigation.CanReachFrom(PathfindingProvider.Instance, zone,
+                        CompanionFollowPolicy.TrollheimPillarExit, destination))
+                {
+                    _ownerPosition = CompanionFollowPolicy.TrollheimPillarExit;
+                    UpdateMovement(0);
+                    _pathfinder.ForceReplot = true;
+                }
+            }
+
             if (!_pathfinder.ShouldPath(zone, destination))
             {
                 if (TryCompanionBorderStep(zone, destination, speed))
@@ -1275,6 +1293,18 @@ namespace DOL.GS
             {
                 _positionForClient = _ownerPosition;
                 _destinationForClient = Destination;
+                return;
+            }
+
+            // The client follows these packet endpoints. Extending either one past a short nav
+            // leg can put a companion on the wrong side of the Trollheim pillar.
+            if (Owner.CurrentZone is { } zone &&
+                (CompanionFollowPolicy.IsNearTrollheimPillar(zone.ID, _ownerPosition) ||
+                 CompanionFollowPolicy.IsNearTrollheimPillar(zone.ID, _destination)) &&
+                Owner is GameBot companion && CompanionFollowPolicy.Applies(companion))
+            {
+                _positionForClient = _ownerPosition;
+                _destinationForClient = _destination;
                 return;
             }
 

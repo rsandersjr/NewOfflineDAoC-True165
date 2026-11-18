@@ -182,9 +182,29 @@ namespace DOL.GS
             if (leader.IsMoving) point = Predict(point, For(bot).LeaderVelocity, leader.MaxSpeed);
             Vector3 origin = new(leader.X, leader.Y, leader.Z);
             if (leader.CurrentZone == null) return point;
-            return PathfindingProvider.Instance.GetMoveAlongSurface(leader.CurrentZone, origin, point,
-                PathfindingProvider.Instance.DefaultFilters) ?? origin;
+            var nav = PathfindingProvider.Instance;
+            if (IsNearTrollheimPillar(leader.CurrentZone.ID, origin))
+            {
+                Vector3 grounded = AutonomousNavigationSurface.MoveAlongGround(nav, leader.CurrentZone, origin, point) ?? origin;
+                if (!IsInsideTrollheimPillarPocket(leader.CurrentZone.ID, grounded))
+                    return grounded;
+                return IsInsideTrollheimPillarPocket(leader.CurrentZone.ID, origin) ? TrollheimPillarExit : origin;
+            }
+
+            return nav.GetMoveAlongSurface(leader.CurrentZone, origin, point, nav.DefaultFilters) ?? origin;
         }
+
+        // Trollheim fixture 57 (thdroommagic), pillar collision_10. The small interior mesh patch
+        // returns a partial route that ends against the pillar. The safe point is on the east aisle.
+        public static readonly Vector3 TrollheimPillarExit = new(32783, 28061, 14008);
+
+        public static bool IsNearTrollheimPillar(ushort zoneId, Vector3 position) =>
+            zoneId == 150 && Math.Abs(position.Z - 14008) <= 96 &&
+            position.X is >= 32200 and <= 33040 && position.Y is >= 27840 and <= 28672;
+
+        public static bool IsInsideTrollheimPillarPocket(ushort zoneId, Vector3 position) =>
+            zoneId == 150 && Math.Abs(position.Z - 14008) <= 40 &&
+            position.X is >= 32465 and <= 32720 && position.Y is >= 28150 and <= 28360;
 
         /// <summary>How far inside its own zone a companion stops before stepping over a zone border.</summary>
         public const float BorderInset = 48;

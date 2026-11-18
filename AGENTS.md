@@ -19,8 +19,8 @@ The only additions to the period game are the bot and companion systems and the 
   the discontinued normal mode are still in the server and the client, switched off behind `Classic165Mode.IsOn`
   (server) and `Server.world_mode` (client). Nothing new goes into them.
 - **One client.** The new client is the only one.
-- **A fresh start.** There is no progress importer.
-- **Version:** v0.7. The launcher's version is `MainForm.DisplayVersion`, and
+- **Progress transfer.** The downloader can update a supported install in place or carry its save into a fresh install.
+- **Version:** v0.8. The launcher's version is `MainForm.DisplayVersion`, and
   the client's window title is `LoginScreen.GAME_TITLE` in `godot/game/login_screen.gd`.
 
 ## Layout

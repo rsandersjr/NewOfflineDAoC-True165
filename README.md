@@ -32,19 +32,19 @@ with gamebots that level, group, trade, craft and fight on their own.
 
 ## Download and play
 
-**[Download v0.7](https://github.com/zomboden/OfflineDAoC-True165/releases/latest)**, no Git or AI tools needed.
+**[Download v0.8](https://github.com/zomboden/OfflineDAoC-True165/releases/latest)**, no Git or AI tools needed.
 **Already playing v0.1 to v0.6?** The same downloader updates your game in place with a much smaller download
-(about 3.0 GB). Your account, characters, companions and bots stay as they are.
+(the downloader shows the size). Your account, characters, companions and bots stay as they are.
 
-1. On the release page, under **Assets**, download **`Download-OfflineDAoC-True165-v0.7.zip`** (just the
+1. On the release page, under **Assets**, download **`Download-OfflineDAoC-True165-v0.8.zip`** (just the
    downloader, a few KB).
 2. Put it in a folder with a short path, such as `C:\Games\OfflineDAoC`. Right-click it, choose **Extract All…**,
    and open the extracted folder.
 3. Close the game and the launcher if they're running. Then double-click **`GET-OFFLINE-DAOC-TRUE165.cmd`**. If
    Windows SmartScreen appears, click **More info → Run anyway**. It checks your PC and asks:
    - **1 = Update my game:** it finds your `OfflineDAoC-True165` folder (or asks you to pick it), checks it, and
-     updates it in place (about 3.0 GB);
-   - **2 = New install:** the complete game, into a new folder (about 36 GB).
+     updates it in place (the downloader shows the size);
+   - **2 = New install:** the complete game, into a new folder (the downloader shows the size).
 
    If it stops, run it again; it continues where it stopped.
 4. In the `OfflineDAoC-True165` folder, double-click **`START OFFLINE DAOC TRUE 1.65.cmd`**. Click **START

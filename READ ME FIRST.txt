@@ -1,4 +1,4 @@
-OFFLINE DAOC TRUE 1.65 v0.7
+OFFLINE DAOC TRUE 1.65 v0.8
 
 This folder is the complete game: the new client, the server, the clean
 world and the launcher. It contains no one else's account, characters or
@@ -16,7 +16,7 @@ Vulkan (current drivers), and 16 GB RAM recommended.
 
 PLAY
 1. Keep this whole folder together. Don't run files from inside a ZIP.
-2. Double-click START OFFLINE DAOC TRUE 1.65.cmd. The launcher shows VERSION 0.7.
+2. Double-click START OFFLINE DAOC TRUE 1.65.cmd. The launcher shows VERSION 0.8.
 3. Click START SERVER and wait until the launcher shows RUNNING.
    The first start sets up the world and can take a few minutes.
 4. Click ENTER REALM. Your own local account is created the first time.
@@ -53,3 +53,8 @@ QUICK COMMANDS.txt          handy in-game commands
 ALL SERVER COMMANDS.txt     every command (GM-only ones marked)
 The source code and the guides for developers and AI assistants are on
 GitHub: https://github.com/zomboden/OfflineDAoC-True165
+
+OFFLINE REFERENCE TOOLS
+Open tools\OFFLINEDAOC Database\index.html in a browser, or
+tools\OFFLINEDAOC Crafting Guide\OFFLINEDAOC Crafting Guide.exe on Windows.
+Both include their data and work offline.

@@ -16,19 +16,22 @@ release page (see [docs/PLAY.md](../docs/PLAY.md)).
 ## Making a release
 
 1. **Game package:** `development-source/tools/build_release_true165.py` builds `runtime\`, `tools\dotnet\` and
-   `START OFFLINE DAOC TRUE 1.65.cmd` from a working install, with the clean world from `database/make_clean_db.py`.
+   `START OFFLINE DAOC TRUE 1.65.cmd` from a working install, with the clean world from `database/make_clean_db.py`. When starting from a frozen clean release, copy its world and refresh it with
+   the staged launcher. Add the portable reference tools under `tools/` before packing. Exclude saved progress.
 2. **Client package:** `source/new-client/tools/stage_true165_release.py` stages `new-client\` (the game, its
    converted content and the engine; no `save\`, `dev_mode.txt` or tests).
 3. **Pack:**
    ```
    python -I release/make_release_true165.py --game <game package> --client <folder holding new-client> --repo . --out <assets> --version <version>
-   python -I release/make_patch_true165.py --base 0.1=release-baselines/0.1/package.sha256 --base 0.2=release-baselines/0.2/package.sha256 --base 0.3=release-baselines/0.3/package.sha256 --base 0.4=release-baselines/0.4/package.sha256 --base 0.4.1=release-baselines/0.4.1/package.sha256 --base 0.5=release-baselines/0.5/package.sha256 --base 0.6=release-baselines/0.6/package.sha256 --game <game package> --client <folder holding new-client> --repo . --out <assets> --version <version>
+   python -I release/make_patch_true165.py --base 0.1=release-baselines/0.1/package.sha256 --base 0.2=release-baselines/0.2/package.sha256 --base 0.3=release-baselines/0.3/package.sha256 --base 0.4=release-baselines/0.4/package.sha256 --base 0.4.1=release-baselines/0.4.1/package.sha256 --base 0.5=release-baselines/0.5/package.sha256 --base 0.6=release-baselines/0.6/package.sha256 --base 0.7=release-baselines/0.7/package.sha256 --game <game package> --client <folder holding new-client> --repo . --out <assets> --version <version>
    python -I release/make_downloader_true165.py --assets <assets> --version <version>
    ```
 4. **Test** a full install from the parts on disk, as a player would:
    `GET-OFFLINE-DAOC-TRUE165.cmd -LocalAssets <assets> -Mode install`. Then update a copy of a real install of the
    previous version with `-Mode update -Update <copy> -LocalAssets <assets>`. Compare both with
-   `<assets>/baseline-<version>.sha256`.
+   `<assets>/baseline-<version>.sha256`. Also modify one file in a disposable previous-version install and
+   run the updater to exercise the fresh-install progress transfer. The downloader stages the transfer before
+   naming the new install. Compare the copied save and refresh its content with the staged launcher.
 5. **Publish:** create the release `v<version>` with `RELEASE-NOTES-<version>.md` as its text, and upload everything
    in `<assets>/v<version>/`. Check every uploaded file's SHA-256 against `SHA256SUMS.txt`. Then run the downloader
    against the live release.

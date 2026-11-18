@@ -54,7 +54,7 @@ REQUIRED = [
     "new-client/godot/content/.gdignore",
     "new-client/godot/.godot/mono/temp/bin/Debug/MMOEngine.dll",
 ]
-FORBIDDEN_NAMES = {"account.txt", "dev_mode.txt", "claude_test_account.txt", "d3d9.dll", "dxvk.conf"}
+FORBIDDEN_NAMES = {"account.txt", "dev_mode.txt", "claude_test_account.txt", "progress.json", "d3d9.dll", "dxvk.conf"}
 FORBIDDEN_PARTS = ("/logs/", "/deployment-backups/", "/mode-switch-backups/", "/keep-relic-reset-backups/",
                    "/true165-devtool-build/", "/client-opendaoc/", "/new-client/save/", "/new-client/godot/tests/",
                    "/new-client/godot/.godot/editor/", "/runtime/win-x64/", "/runtime/server/state-165/")

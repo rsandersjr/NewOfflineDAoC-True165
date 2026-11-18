@@ -11,7 +11,7 @@ param(
     [string]$Destination = '',
     # Update: the installed game folder ('pick' opens a folder picker). Default: ask.
     [string]$Update = '',
-    [string]$ReleaseVersion = '0.7',
+    [string]$ReleaseVersion = '0.8',
     # Testing only: read the release files from <folder>\v<version>\ instead of GitHub.
     [string]$LocalAssets = '',
     # Testing only: answer the questions with yes (and 'install' or 'update' instead of asking which).
@@ -43,7 +43,14 @@ function Stop-Install([string]$why) {
     Write-Host $why -ForegroundColor Yellow
     exit 1
 }
-function Get-Sha([string]$path) { return (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() }
+function Get-Sha([string]$path) {
+    $hash = [Security.Cryptography.SHA256]::Create()
+    try {
+        $stream = [IO.File]::OpenRead($path)
+        try { return [BitConverter]::ToString($hash.ComputeHash($stream)).Replace('-', '').ToLowerInvariant() }
+        finally { $stream.Dispose() }
+    } finally { $hash.Dispose() }
+}
 
 # ---------------------------------------------------------------- the PC
 Say "$Product v$ReleaseVersion - downloader"
@@ -91,7 +98,7 @@ function Get-Part($part, [int]$index, [int]$count) {
     if ($part.Name -notmatch '^[A-Za-z0-9._-]+\.zip$' -or $part.SHA256 -notmatch '^[A-Fa-f0-9]{64}$') { Stop-Install 'The download list has an invalid entry.' }
     $file = Join-Path $cache $part.Name
     $ok = (Test-Path -LiteralPath $file) -and (Get-Item -LiteralPath $file).Length -eq $part.Bytes
-    if ($ok) { $ok = (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash -eq $part.SHA256 }
+    if ($ok) { $ok = (Get-Sha $file) -eq $part.SHA256 }
     if (!$ok) {
         Say ''
         Say ("Downloading part {0} of {1} ({2:N2} GB)..." -f $index, $count, ($part.Bytes / 1GB))
@@ -99,7 +106,7 @@ function Get-Part($part, [int]$index, [int]$count) {
             Stop-Install "The download stopped: $($_.Exception.Message). Run this file again to continue; finished parts are kept."
         }
         Say 'Checking it...'
-        if ((Get-Item -LiteralPath $file).Length -ne $part.Bytes -or (Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash -ne $part.SHA256) {
+        if ((Get-Item -LiteralPath $file).Length -ne $part.Bytes -or (Get-Sha $file) -ne $part.SHA256) {
             Remove-Item -LiteralPath $file -Force -ErrorAction SilentlyContinue
             Stop-Install 'That part did not download correctly. Run this file again to retry it; finished parts are kept.'
         }
@@ -170,7 +177,7 @@ function Test-Folder([string]$game) {
     }
 }
 
-function Install-Game([string]$game) {
+function Install-Game([string]$game, [switch]$KeepMarkers) {
     $done = Join-Path $game '.install'
     if ((Test-Path -LiteralPath $game) -and !(Test-Path -LiteralPath $done)) {
         if (Test-Path -LiteralPath (Join-Path $game $StartFile)) {
@@ -208,7 +215,7 @@ function Install-Game([string]$game) {
     foreach ($rel in @($manifest.Required)) {
         if (!(Test-Path -LiteralPath (Join-Path $game $rel) -PathType Leaf)) { Stop-Install "The install is missing $rel. Run this file again." }
     }
-    Remove-Item -LiteralPath $done -Recurse -Force
+    if (!$KeepMarkers) { Remove-Item -LiteralPath $done -Recurse -Force }
 }
 
 # ---------------------------------------------------------------- update in place
@@ -267,19 +274,23 @@ function Stop-Running([string]$game) {
     }
 }
 
-# Copy a player's progress from an old folder into a fresh install (the old folder is only read).
+# Copy progress into a private staging install. The playable folder is only named after all copies succeed.
 function Copy-Progress([string]$old, [string]$new) {
     foreach ($rel in @('runtime\data\opendaoc-165.sqlite3.db', 'runtime\data\opendaoc-165.sqlite3.db-wal',
-                       'runtime\data\opendaoc-165.sqlite3.db-shm', 'runtime\account.txt')) {
+                       'runtime\data\opendaoc-165.sqlite3.db-shm', 'runtime\account.txt',
+                       'tools\OFFLINEDAOC Crafting Guide\progress.json')) {
         $src = Join-Path $old $rel
         $dst = Join-Path $new $rel
         if (Test-Path -LiteralPath $dst) { Remove-Item -LiteralPath $dst -Force }
-        if (Test-Path -LiteralPath $src) { Copy-Item -LiteralPath $src -Destination $dst -Force }
+        if (Test-Path -LiteralPath $src -PathType Leaf) {
+            [IO.Directory]::CreateDirectory((Split-Path -Parent $dst)) | Out-Null
+            Copy-Item -LiteralPath $src -Destination $dst -Force
+        }
     }
     foreach ($rel in @('runtime\server\state-165', 'new-client\save')) {
         $src = Join-Path $old $rel
         if (Test-Path -LiteralPath $src) {
-            & robocopy.exe $src (Join-Path $new $rel) /E /COPY:DAT /R:1 /W:1 /NFL /NDL /NJH /NJS /NP | Out-Null
+            & robocopy.exe $src (Join-Path $new $rel) /E /XJ /COPY:DAT /R:1 /W:1 /NFL /NDL /NJH /NJS /NP | Out-Null
             if ($LASTEXITCODE -ge 8) { Stop-Install "Copying $rel from your old folder failed. Your old folder was not changed." }
             $global:LASTEXITCODE = 0
         }
@@ -315,9 +326,20 @@ function Update-Game([string]$game) {
         Say 'and settings). Your old folder is only read, never changed.'
         if (!(Ask 'Make a fresh install and bring your save over?')) { Stop-Install 'Nothing was changed.' }
         $new = [IO.Path]::GetFullPath("$game-v$ReleaseVersion")
-        Install-Game $new
+        if (Test-Path -LiteralPath $new) {
+            Stop-Install "A folder already exists at $new. Choose the completed install or move that folder before retrying."
+        }
+        $world = Join-Path $game 'runtime\data\opendaoc-165.sqlite3.db'
+        if (!(Test-Path -LiteralPath $world -PathType Leaf) -or (Get-Item -LiteralPath $world).Length -lt 100) {
+            Stop-Install "The old install has no usable world database at $world. Nothing was copied."
+        }
+        $pending = "$new.incomplete"
+        Install-Game -game $pending -KeepMarkers
+        Stop-Running $game
         Say 'Bringing your save over...'
-        Copy-Progress $game $new
+        Copy-Progress $game $pending
+        [IO.Directory]::Move($pending, $new)
+        Remove-Item -LiteralPath (Join-Path $new '.install') -Recurse -Force
         Say ''
         Write-Host "A fresh $Product v$ReleaseVersion with your save is in $new" -ForegroundColor Green
         Say 'Play from that folder from now on. Your old folder was not changed; delete it when you are happy.'

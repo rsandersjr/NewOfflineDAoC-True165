@@ -29,7 +29,7 @@ import make_release_true165 as mr  # noqa: E402
 
 # Paths a patch never writes, replaces or removes (lower case, relative to the game folder).
 NEVER_TOUCH = ("runtime/data/", "runtime/account.txt", "runtime/logs/", "runtime/server/logs/",
-               "runtime/server/state-165/", "new-client/save/", "patch-backups/", ".install/", ".patch/")
+               "runtime/server/state-165/", "new-client/save/", "tools/offlinedaoc crafting guide/progress.json", "patch-backups/", ".install/", ".patch/")
 
 
 def never_touch(rel: str) -> bool:

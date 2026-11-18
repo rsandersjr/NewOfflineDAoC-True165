@@ -2,10 +2,9 @@
 
 The newest version is first.
 
-## Coming in 0.8
+## 0.8 (release candidate)
 
-Source only so far (2026-11-12): these changes are in the repository; they reach an installed game with the next
-release. Content changes are applied by the first START SERVER, as always.
+Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.
 
 ### Battleground XP and low-value Realm Points - 18 November 2026
 

@@ -25,7 +25,7 @@ This guide is for players. You don't need Git, an AI assistant or any programmin
 > **Already playing v0.1 to v0.6?** See [Updating](#updating): the same downloader updates your game in place.
 
 1. Open the [latest release](https://github.com/zomboden/OfflineDAoC-True165/releases/latest) and, under
-   **Assets**, download **`Download-OfflineDAoC-True165-v0.7.zip`**. It's small: just the downloader.
+   **Assets**, download **`Download-OfflineDAoC-True165-v0.8.zip`**. It's small: just the downloader.
 2. Make a folder with a short path, for example **`C:\Games\OfflineDAoC`**, and move the zip there. Avoid OneDrive,
    Program Files and very deep folders.
 3. Right-click the zip, choose **Extract All…**, and open the extracted folder.
@@ -37,7 +37,7 @@ This guide is for players. You don't need Git, an AI assistant or any programmin
 6. It downloads the game in checked parts and installs it into a new folder, **`OfflineDAoC-True165`**, next to the
    downloader's folder (for example `C:\Games\OfflineDAoC\OfflineDAoC-True165`). If that path would be too long, it
    uses `C:\Games\OfflineDAoC-True165` instead: the game needs a short path to keep its graphics cache. It shows
-   you the folder before it starts. This takes a while: about 36 GB comes down. If it stops, or you close the
+   you the folder before it starts. The downloader shows the full download size. If it stops, or you close the
    window, double-click the same file again; it continues where it stopped.
 7. At the end it offers a desktop shortcut. When it says the game is installed, you can delete the downloader
    folder.
@@ -49,7 +49,7 @@ True 1.65 is a fresh start: you begin with new characters, and there is no save 
 ## 2. Play
 
 1. Open the `OfflineDAoC-True165` folder and double-click **START OFFLINE DAOC TRUE 1.65.cmd** (or use the desktop
-   shortcut). The launcher shows **VERSION 0.7**.
+   shortcut). The launcher shows **VERSION 0.8**.
 2. Click **START SERVER** and wait until it says **RUNNING**. The first start sets up the world and can take a few
    minutes.
 3. Click **ENTER REALM**. The game opens. Your own local account is created automatically the first time.
@@ -106,7 +106,7 @@ characters, companions, bots and settings stay as they are.
    [1. Download](#1-download).
 3. Double-click **`GET-OFFLINE-DAOC-TRUE165.cmd`** and press **1 = Update my game**. It finds your
    `OfflineDAoC-True165` folder (or asks you to pick it) and shows what it will download.
-4. It checks every file it will replace first. Then it downloads the update (about 3.0 GB from any version v0.1 to v0.6, to v0.7), backs up
+4. It checks every file it will replace first. Then it downloads the cumulative update from a supported v0.1 through v0.7 install, backs up
    each file it replaces in `patch-backups\` in your game folder, and puts the new files in.
 5. Start the game as usual. The first **START SERVER** after an update brings the world up to date and can take a
    few minutes.

@@ -61,10 +61,11 @@ namespace DOL.UnitTests
             public int MeleeStarts;
             public int FollowRange;
             public bool Casting;
+            public bool Attacking;
             public bool TestWeaponAllowed;
             public override bool HasAbilityToUseItem(DbItemTemplate item) => TestWeaponAllowed || base.HasAbilityToUseItem(item);
             public override bool IsAlive => Alive;
-            public override bool IsAttacking => false;
+            public override bool IsAttacking => Attacking;
             public override bool IsCasting => Casting;
             public override bool IsMoving => false;
             public override bool IsCrowdControlled => false;
@@ -986,6 +987,40 @@ namespace DOL.UnitTests
             Assert.That(CompanionEngagementMode.Allows(damage, mob), Is.False, "the pull is over: back on the leash");
             mob.TestX = 300;
             Assert.That(CompanionEngagementMode.Allows(damage, mob), Is.True, "within 350 everyone fights");
+        }
+
+        [TestCase(true, false, true)]
+        [TestCase(true, true, false)]
+        [TestCase(false, false, false)]
+        public void IdleMeleeJoinsPublishedKillTargetDuringPlainStun(bool stunned, bool mezzed, bool joins)
+        {
+            bool oldMode = DOL.GS.ServerProperties.Properties.CLASSIC165_MODE;
+            try
+            {
+                DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = true;
+                var (player, tank, _, _, target) = Party();
+                Bot melee = MakeBot(new ClassMercenary());
+                Add(player.Group, melee);
+                melee.EnterPlayerLedGroup(player);
+                foreach (Bot bot in new[] { tank, melee })
+                {
+                    Field(typeof(GameBot), bot, "<IsTemporaryGroupHelper>k__BackingField", true);
+                    Field(typeof(GameBot), bot, "<Owner>k__BackingField", player);
+                }
+                tank.Attacking = true;
+                tank.TargetObject = target;
+                typeof(BotBrain).GetMethod("OfferKillTarget", Hidden).Invoke(B(tank), new object[] { target, false });
+
+                target.IsStunned = stunned;
+                target.IsMezzed = mezzed;
+                typeof(BotBrain).GetMethod("JoinStunnedCompanionKillTarget", Hidden).Invoke(B(melee), null);
+
+                Assert.That(B(melee).HasAggro, Is.EqualTo(joins));
+            }
+            finally
+            {
+                DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = oldMode;
+            }
         }
 
         private (Player, Bot, Bot, Bot, Enemy) Party()

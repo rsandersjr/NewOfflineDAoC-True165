@@ -1777,6 +1777,8 @@ namespace DOL.AI.Brain
             if (leaderTarget != null && PlayerLedPullCoordinator.Available(BotBody, AssistedPlayer) &&
                 Body.IsWithinRadius(leaderTarget, GROUP_DEFENSE_ASSIST_RADIUS))
                 AssistPlayerAttack(leaderTarget);
+            else if (leaderTarget == null)
+                JoinStunnedCompanionKillTarget();
 
             if (BotBody?.TryApplyEndgameCompanionUpgrade() == true)
                 return;
@@ -7461,8 +7463,8 @@ namespace DOL.AI.Brain
                         }
                     }
 
-                    // Cure Nearsight (period RvR: Nearsight is the first spell on a caster or archer; healers cure it)
-                    if (spellToCast == null && BotBody.HealSpells?.Where(spell => spell.SpellType is eSpellType.CureNearsight or
+                    // Trainable healer-line nearsight cures were added after 1.65.
+                    if (!Classic165Mode.IsOn && spellToCast == null && BotBody.HealSpells?.Where(spell => spell.SpellType is eSpellType.CureNearsight or
                                 eSpellType.CureNearsightCustom && spell.Level <= Body.Level)
                             .OrderByDescending(spell => spell.Level).FirstOrDefault() is Spell cureNearsight &&
                         CheckHealSpell(cureNearsight))

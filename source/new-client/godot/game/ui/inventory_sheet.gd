@@ -185,6 +185,13 @@ static func double_clicked() -> bool:
 	return Time.get_ticks_msec() - held_at < 300 and still
 
 
+## Godot reports both a cancelled drag and a missed drop as unsuccessful.
+static func cancel_item_drag(vp: Viewport) -> void:
+	vp.set_meta(&"inventory_drag_cancelled", true)
+	vp.gui_cancel_drag()
+	vp.remove_meta(&"inventory_drag_cancelled")
+
+
 ## Whether the mouse is over the interface (an item let go there stays in it, not on the world): any control under it
 ## except the world's drop catcher and full-screen layers (those cover the world itself).
 static func over_window(vp: Viewport) -> bool:
@@ -373,7 +380,8 @@ class BackpackRow extends Control:
 			# let go with nothing in the interface taking it and not over a window: dropped on the world (an NPC under
 			# it, else the ground at your feet) - the world's drop catcher alone missed it (owner 2026-10-11: the
 			# starting trimmed branch couldn't be dragged out of the inventory)
-			if not get_viewport().gui_is_drag_successful() and not InventorySheet.over_window(get_viewport()):
+			var vp := get_viewport()
+			if not vp.has_meta(&"inventory_drag_cancelled") and not vp.gui_is_drag_successful() and not InventorySheet.over_window(vp):
 				var scene := get_tree().current_scene
 				var ui = scene.get("ui") if scene else null
 				if ui and ui.has_signal("item_dropped_on_world"):

@@ -4,10 +4,14 @@ The newest version is first.
 
 ## 0.9 (coming next)
 
-Planned for v0.9
+### Inventory, Red Dagger and companion combat
 
-- Make right-click cancel a held item without dropping it in the world.
-- Allow matching stacks to merge when moving items into a house vault or a companion's bag.
+- Right-click or Esc cancels a held inventory item safely. Intentional placement and NPC hand-ins still work.
+- The five level-15 Red Dagger starters can be accepted through level 50. This is a quality-of-life exception to
+  the original level-19 cap. The prerequisites are preserved.
+- Idle melee companions can assist their tank against its current kill target during a plain stun. The normal
+  pull handoff, stance, and mez/root protections still apply.
+- Removed the later Cure Nearsight I and II from True 1.65 spell lists and companion healing decisions.
 
 ## 0.8
 

@@ -748,7 +748,7 @@ func _input(event: InputEvent) -> void:
 	if get_viewport().gui_is_dragging() and InventorySheet.is_item(get_viewport().gui_get_drag_data()) and (
 			(event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_RIGHT)
 			or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE)):
-		get_viewport().gui_cancel_drag()
+		InventorySheet.cancel_item_drag(get_viewport())
 		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:

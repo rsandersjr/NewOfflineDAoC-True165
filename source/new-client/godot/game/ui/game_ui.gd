@@ -2076,7 +2076,7 @@ func handle_input(event: InputEvent) -> bool:
 	if Keybinds.pressed(event, "sell") and merchant and merchant.visible and get_viewport().gui_is_dragging() 			and InventorySheet.is_item(get_viewport().gui_get_drag_data()):
 		# the item held up with the left button (owner 2026-10-11: pick it up, Shift+S - it sold in the old client)
 		var held := int(get_viewport().gui_get_drag_data().slot)
-		get_viewport().gui_cancel_drag()
+		InventorySheet.cancel_item_drag(get_viewport())
 		merchant.target_merchant()
 		PlayerData.sell(held, merchant.npc_name)
 		return true

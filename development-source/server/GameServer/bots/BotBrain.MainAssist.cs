@@ -85,6 +85,25 @@ namespace DOL.AI.Brain
             GameLoop.GameLoopTime - holder.Tick <= KillTargetStaleMilliseconds && holder.Target is { IsAlive: true } target
                 ? target : null;
 
+        /// <summary>With the pull complete, idle melee companions can join their tank before the victim's first swing.</summary>
+        private void JoinStunnedCompanionKillTarget()
+        {
+            GamePlayer leader = AssistedPlayer;
+            if (!Classic165Mode.IsOn || BotBody?.IsPlayerCompanion != true || HasAggro || Body.IsAttacking ||
+                Body.IsCrowdControlled || Body.IsCasting || !PlayerLedPullCoordinator.Available(BotBody, leader) ||
+                PrefersCurrentSpellRange() || SupportSitsOutFights() ||
+                CompanionKillTarget() is not GameNPC { IsStunned: true } target || target is GameBot ||
+                BotPvpCrowdControl.PlayerLike(target) || IsBreakablyControlled(target) || IsReservedForMez(target) ||
+                PlayerLedPullCoordinator.LeaderControlTarget(leader) == target ||
+                !Body.IsWithinRadius(target, GROUP_DEFENSE_ASSIST_RADIUS) || !CanDefendAgainst(target))
+                return;
+
+            if (BotBody.IsRecoveryResting)
+                BotBody.WakeRecoveryRest();
+            AddToAggroList(target, 1);
+            FSM.SetCurrentState(eFSMStateType.AGGRO);
+        }
+
         /// <summary>Pure rule: a member follows the kill target unless it is mesmerized/rooted, or the member is low and being hit.</summary>
         public static bool AssistsKillTarget(bool killTargetValid, bool killTargetControlled, int healthPercent, bool beingHit) =>
             killTargetValid && !killTargetControlled && !(healthPercent < MainAssistLowHealthPercent && beingHit);

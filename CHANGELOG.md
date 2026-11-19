@@ -13,6 +13,18 @@ The newest version is first.
   pull handoff, stance, and mez/root protections still apply.
 - Removed the later Cure Nearsight I and II from True 1.65 spell lists and companion healing decisions.
 
+### Academy epic and Tepok's Mine
+
+- La Morti Parla advances when Sorcerers, Wizards and Minstrels speak to Master Ferowl in Cotswold.
+  Characters already on that step can resume the quest after the content refresh.
+- Strange Matters Indeed, Connla's Well and Darksong's Dirge remain available through level 50 so
+  players can complete their epic prerequisites. This is a quality-of-life exception.
+- Restored Fire-forged Pike, Hob Hunter Ring and the six Woebegone Miner pieces to Goblin Imperator,
+  and Robe of the Overseer to Overseer Tepok. The items are documented in period Allakhazam and the
+  Prima Atlas. The robe uses Prima's 35% figure. Imperator rates use the recorded Uthgard sample
+  where available, the shared Goblin Monitor table for unmeasured armor, and 1% for the documented ring
+  whose rate is unknown.
+
 ## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.

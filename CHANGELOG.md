@@ -2,7 +2,14 @@
 
 The newest version is first.
 
-## 0.8 (release candidate)
+## 0.9 (coming next)
+
+Planned for v0.9
+
+- Make right-click cancel a held item without dropping it in the world.
+- Allow matching stacks to merge when moving items into a house vault or a companion's bag.
+
+## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.
 

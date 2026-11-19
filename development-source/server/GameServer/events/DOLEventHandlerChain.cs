@@ -73,7 +73,9 @@ namespace DOL.Events
 
         public static DOLEventHandlerChain Unsubscribe(DOLEventHandlerChain chain, DOLEventHandler handler)
         {
-            ArgumentNullException.ThrowIfNull(chain);
+            // Removing an absent handler leaves the current subscription chain intact.
+            if (chain == null)
+                return null;
 
             if (chain._handler == handler)
                 return chain._next;

@@ -2,6 +2,8 @@
 
 The newest version is first.
 
+## 1.0 (coming next)
+
 ## 0.9
 
 ### Inventory, Red Dagger and companion combat

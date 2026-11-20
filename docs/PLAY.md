@@ -25,7 +25,7 @@ This guide is for players. You don't need Git, an AI assistant or any programmin
 > **Already playing v0.1 to v0.6?** See [Updating](#updating): the same downloader updates your game in place.
 
 1. Open the [latest release](https://github.com/zomboden/OfflineDAoC-True165/releases/latest) and, under
-   **Assets**, download **`Download-OfflineDAoC-True165-v0.8.zip`**. It's small: just the downloader.
+   **Assets**, download **`Download-OfflineDAoC-True165-v0.9.zip`**. It's small: just the downloader.
 2. Make a folder with a short path, for example **`C:\Games\OfflineDAoC`**, and move the zip there. Avoid OneDrive,
    Program Files and very deep folders.
 3. Right-click the zip, choose **Extract All…**, and open the extracted folder.
@@ -49,7 +49,7 @@ True 1.65 is a fresh start: you begin with new characters, and there is no save 
 ## 2. Play
 
 1. Open the `OfflineDAoC-True165` folder and double-click **START OFFLINE DAOC TRUE 1.65.cmd** (or use the desktop
-   shortcut). The launcher shows **VERSION 0.8**.
+   shortcut). The launcher shows **VERSION 0.9**.
 2. Click **START SERVER** and wait until it says **RUNNING**. The first start sets up the world and can take a few
    minutes.
 3. Click **ENTER REALM**. The game opens. Your own local account is created automatically the first time.

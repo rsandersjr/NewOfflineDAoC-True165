@@ -85,6 +85,18 @@ namespace DOL.GS.Commands
 
         public static bool IsActive(GamePlayer player) => player != null && Sessions.ContainsKey(player);
 
+        /// <summary>Does a running /grind keep this companion's rest going? /grind waits for full health, power and
+        /// endurance (NeedsModeRest) and seats a companion at camp that is short; the companion's own follow rest stands
+        /// at 90% endurance, so the two stood it up and sat it down every second between 90% and 100% (owner 2026-11-13,
+        /// sit/stand loops at the bears). While the grind still wants it rested at its camp, the follow rest keeps it
+        /// seated.</summary>
+        public static bool HoldsRest(GameBot bot)
+        {
+            GamePlayer player = bot == null ? null : HiredCompanions165.IsHired(bot) ? bot.CompanionPlayer : bot.Owner;
+            return player != null && Sessions.TryGetValue(player, out Session session) &&
+                IsOwnedCompanion(player, session.Group, bot) && AtCamp(session, bot) && NeedsModeRest(bot);
+        }
+
         // Your own companions: /spawn helpers, and in True 1.65 Mode your hired companions (owner 2026-11-08: /grind back
         // for the hired group).
         public static bool IsOwnedCompanion(GamePlayer player, Group group, GameLiving member) =>

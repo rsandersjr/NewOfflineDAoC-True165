@@ -1793,9 +1793,21 @@ namespace DOL.GS.ServerRules
             }
         }
 
-        /// <summary>A hired companion below its (online) player's level: no per-kill XP cap (see AwardBotOnNpcKill).</summary>
+        /// <summary>A hired companion below its (online) player's level: no per-kill XP cap and always the full group share
+        /// (see AwardBotOnNpcKill and GroupShareIsFull).</summary>
         public static bool CatchesUp(GameBot bot) =>
             HiredCompanions165.IsHired(bot) && bot.CompanionPlayer is { } player && bot.Level < player.Level;
+
+        /// <summary>Does a bot's share of a group kill use the monster's full value (split by the member count)? Period
+        /// rule: yes when the monster is a challenge for the group (its con to the highest member at least yellow / orange
+        /// / red for 1-3 / 4-7 / 8 members), for the highest member itself, or when the monster cons no higher to the bot
+        /// than to the highest member; otherwise the bot gets the value of a monster that cons to it as it does to the
+        /// highest member. A hired companion below its player's level always gets the full share (owner 2026-11-13: a
+        /// level 5 companion beside three level 18s got almost nothing from a yellow level 18 bear and four levels from an
+        /// orange level 19 one). A grey monster still pays nobody (checked before this).</summary>
+        public static bool GroupShareIsFull(ConColor highestCon, ConColor challengeThreshold, bool isHighestMember,
+            ConColor ownCon, bool catchesUp) =>
+            catchesUp || highestCon >= challengeThreshold || isHighestMember || ownCon <= highestCon;
 
         private static void AwardBotOnNpcKill(GameBot botToAward,
             double npcTotalDamageReceived,
@@ -1907,8 +1919,8 @@ namespace DOL.GS.ServerRules
                     _ => ConColor.YELLOW,
                 };
 
-                if (highestCon >= challengeThreshold || highestLevelMember == botToAward ||
-                    ConLevels.GetConColor(botToAward.GetConLevel(killedNpc)) <= highestCon)
+                if (GroupShareIsFull(highestCon, challengeThreshold, highestLevelMember == botToAward,
+                        ConLevels.GetConColor(botToAward.GetConLevel(killedNpc)), CatchesUp(botToAward)))
                 {
                     return (long)Math.Ceiling((double)killedNpc.ExperienceValue / memberCount);
                 }

@@ -2,7 +2,7 @@
 
 The newest version is first.
 
-## 0.9 (coming next)
+## 0.9
 
 ### Inventory, Red Dagger and companion combat
 
@@ -12,6 +12,11 @@ The newest version is first.
 - Idle melee companions can assist their tank against its current kill target during a plain stun. The normal
   pull handoff, stance, and mez/root protections still apply.
 - Removed the later Cure Nearsight I and II from True 1.65 spell lists and companion healing decisions.
+
+- If a party member can resurrect them, fallen companions keep their corpses available for at least five minutes.
+
+- Hired companions finish resting when /grind is waiting for full endurance.
+- Hired companions below the player's level receive their full eligible share of group PvE XP.
 
 ### Academy epic and Tepok's Mine
 

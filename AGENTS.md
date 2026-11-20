@@ -20,7 +20,7 @@ The only additions to the period game are the bot and companion systems and the 
   (server) and `Server.world_mode` (client). Nothing new goes into them.
 - **One client.** The new client is the only one.
 - **Progress transfer.** The downloader can update a supported install in place or carry its save into a fresh install.
-- **Version:** v0.8. The launcher's version is `MainForm.DisplayVersion`, and
+- **Version:** v0.9. The launcher's version is `MainForm.DisplayVersion`, and
   the client's window title is `LoginScreen.GAME_TITLE` in `godot/game/login_screen.gd`.
 
 ## Layout

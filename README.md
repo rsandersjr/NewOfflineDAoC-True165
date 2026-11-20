@@ -32,11 +32,11 @@ with gamebots that level, group, trade, craft and fight on their own.
 
 ## Download and play
 
-**[Download v0.8](https://github.com/zomboden/OfflineDAoC-True165/releases/latest)**, no Git or AI tools needed.
+**[Download v0.9](https://github.com/zomboden/OfflineDAoC-True165/releases/latest)**, no Git or AI tools needed.
 **Already playing v0.1 to v0.6?** The same downloader updates your game in place with a much smaller download
 (the downloader shows the size). Your account, characters, companions and bots stay as they are.
 
-1. On the release page, under **Assets**, download **`Download-OfflineDAoC-True165-v0.8.zip`** (just the
+1. On the release page, under **Assets**, download **`Download-OfflineDAoC-True165-v0.9.zip`** (just the
    downloader, a few KB).
 2. Put it in a folder with a short path, such as `C:\Games\OfflineDAoC`. Right-click it, choose **Extract All…**,
    and open the extracted folder.

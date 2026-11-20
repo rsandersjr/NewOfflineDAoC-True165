@@ -21,6 +21,28 @@ namespace DOL.GS.Tests
         public void DatabaseNotesAreHidden(string description, bool shown) =>
             Assert.That(ItemTooltip165.ShowsDescription(description), Is.EqualTo(shown));
 
+        [TestCase(eObjectType.PolearmWeapon, eInventorySlot.TwoHandWeapon, 0, 1, "Polearm Weapon", "Two-Handed")]
+        [TestCase(eObjectType.TwoHandedWeapon, eInventorySlot.TwoHandWeapon, 2, 1, "2-Handed Weapon", "Two-Handed")]
+        [TestCase(eObjectType.ThrustWeapon, eInventorySlot.LeftHandWeapon, 0, 2, "Thrusting Weapon", "Usable in Left Hand")]
+        [TestCase(eObjectType.SlashingWeapon, eInventorySlot.RightHandWeapon, 2, 0, "Slashing Weapon", null)]
+        public void WeaponDetailsMatchTheServerEquipSlot(eObjectType type, eInventorySlot slot, int storedHand,
+            int handFlag, string family, string hand)
+        {
+            var lines = new List<string>();
+            ItemTooltip165.AddWeaponDetails(lines, (int)type, (int)slot);
+            Assert.That(lines, Is.EqualTo(hand == null ? new[] { family } : new[] { family, hand }));
+            Assert.That(ItemTooltip165.WeaponHandFlag((int)type, (int)slot, storedHand), Is.EqualTo(handFlag));
+        }
+
+        [Test]
+        public void ShieldDoesNotAcquireWeaponLabelsOrFlags()
+        {
+            var lines = new List<string>();
+            ItemTooltip165.AddWeaponDetails(lines, (int)eObjectType.Shield, (int)eInventorySlot.LeftHandWeapon);
+            Assert.That(lines, Is.Empty);
+            Assert.That(ItemTooltip165.WeaponHandFlag((int)eObjectType.Shield, (int)eInventorySlot.LeftHandWeapon, 0), Is.Zero);
+        }
+
         [Test]
         public void DisabledClassesAreLeftOutOfUsableBy()
         {

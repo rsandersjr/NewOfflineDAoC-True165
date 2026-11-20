@@ -7,10 +7,13 @@ extends RefCounted
 const ITEMS := "res://content/items/items.json"
 const ICONS := "res://content/ui/icons"
 const DAMAGE := {1: "Crush", 2: "Slash", 3: "Thrust"}
-const OBJECT_TYPES := {1: "Generic Weapon", 2: "Crushing", 3: "Slashing", 4: "Thrusting", 8: "Staff", 9: "Longbow",
-		11: "Sword", 12: "Hammer", 13: "Axe", 15: "Composite Bow", 18: "Recurve Bow", 19: "Blades", 20: "Blunt",
-		21: "Piercing", 32: "Cloth", 33: "Leather", 34: "Studded", 35: "Chain", 36: "Plate", 37: "Reinforced",
-		38: "Scale", 41: "Magical", 42: "Shield", 43: "Arrow", 44: "Bolt", 46: "Poison", 16: "Thrown"}
+const OBJECT_TYPES := {1: "Generic", 2: "Crushing", 3: "Slashing", 4: "Thrusting", 5: "Fired",
+		6: "2-Handed", 7: "Polearm", 8: "Staff", 9: "Longbow", 10: "Crossbow", 11: "Sword", 12: "Hammer",
+		13: "Axe", 14: "Spear", 15: "Composite Bow", 16: "Thrown", 17: "Left Axe", 18: "Recurve Bow",
+		19: "Blades", 20: "Blunt", 21: "Piercing", 22: "Large Weapons", 23: "Celtic Spear",
+		24: "Flexible", 25: "Hand-to-Hand", 26: "Scythe", 27: "Fist Wraps", 28: "Mauler Staff",
+		32: "Cloth", 33: "Leather", 34: "Studded", 35: "Chain", 36: "Plate", 37: "Reinforced",
+		38: "Scale", 41: "Magical", 42: "Shield", 43: "Arrow", 44: "Bolt", 46: "Poison"}
 
 static var _data := {}
 static var _shops := {}
@@ -170,7 +173,7 @@ static func summary(it: Dictionary) -> Array:
 	elif ot == SHIELD_TYPE:
 		out.append_array(["SHIELD", "SIZE: %s" % ["", "SMALL", "MEDIUM", "LARGE"][clampi(int(it.get("type_damage", 1)), 0, 3)], cd, qb])
 	elif ot > 0 and ot < 32:
-		out.append((kind if kind.ends_with("Weapon") else "%s Weapon" % kind).to_upper())
+		out.append(("%s Weapon" % kind).to_upper())
 		if DAMAGE.has(int(it.get("type_damage", 0))):
 			out.append(("%s DAMAGE" % DAMAGE[int(it.type_damage)]).to_upper())
 		out.append("DPS: %.1f   SPD: %.1f" % [int(it.dps_af) / 10.0, int(it.spd_abs) / 10.0])
@@ -180,7 +183,7 @@ static func summary(it: Dictionary) -> Array:
 		if int(it.get("hand", 0)) == 1:
 			out.append("TWO-HANDED")
 		elif int(it.get("hand", 0)) == 2:
-			out.append("EITHER HAND")
+			out.append("USABLE IN LEFT HAND")
 		else:
 			out.append("MAIN HAND")
 	else:
@@ -202,7 +205,7 @@ static func delve(it: Dictionary) -> Array:
 	var ot := int(it.get("object_type", 0))
 	var kind: String = OBJECT_TYPES.get(ot, "")
 	if kind != "":
-		lines.append(kind.to_upper())
+		lines.append(("%s Weapon" % kind if ot > 0 and ot <= 28 else kind).to_upper())
 	if ot >= 32 and ot <= 38:
 		lines.append("ARMOR FACTOR: %d" % int(it.dps_af))
 		lines.append("ABSORB: %d%%" % int(it.spd_abs))
@@ -212,6 +215,10 @@ static func delve(it: Dictionary) -> Array:
 		if DAMAGE.has(int(it.get("type_damage", 0))):
 			lines.append("DAMAGE TYPE: %s" % String(DAMAGE[int(it.type_damage)]).to_upper())
 		lines.append("DPS: %.1f" % (int(it.dps_af) / 10.0))
+		if int(it.get("hand", 0)) == 2:
+			lines.append("USABLE IN LEFT HAND")
+		elif int(it.get("hand", 0)) == 1:
+			lines.append("TWO-HANDED")
 	var bonuses := []
 	for i in range(1, 11):
 		var v := int(it.get("bonus%d" % i, 0))

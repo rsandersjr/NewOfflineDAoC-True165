@@ -568,7 +568,9 @@ namespace DOL.GS.PacketHandler
 					}
 					else
 					{
-						pak.WriteByte((byte)(item.Hand << 6));
+						pak.WriteByte((byte)((Classic165Mode.IsOn
+						    ? ItemTooltip165.WeaponHandFlag(item.Object_Type, item.Item_Type, item.Hand)
+						    : item.Hand) << 6));
 					}
 
 					pak.WriteByte((byte)((item.Type_Damage > 3 ? 0 : item.Type_Damage << 6) | item.Object_Type));
@@ -718,7 +720,9 @@ namespace DOL.GS.PacketHandler
 								}
 								else
 								{
-									pak.WriteByte((byte)(item.Hand << 6));
+									pak.WriteByte((byte)((Classic165Mode.IsOn
+									    ? ItemTooltip165.WeaponHandFlag(item.Object_Type, item.Item_Type, item.Hand)
+									    : item.Hand) << 6));
 								}
 
 								pak.WriteByte((byte)((item.Type_Damage << 6) | item.Object_Type));

@@ -944,7 +944,9 @@ namespace DOL.GS.PacketHandler
 			if (item.Object_Type == (int)eObjectType.GardenObject)
 				pak.WriteByte((byte)(item.DPS_AF));
 			else
-				pak.WriteByte((byte)(item.Hand << 6));
+				pak.WriteByte((byte)((Classic165Mode.IsOn
+				    ? ItemTooltip165.WeaponHandFlag(item.Object_Type, item.Item_Type, item.Hand)
+				    : item.Hand) << 6));
 
 			pak.WriteByte((byte)((item.Type_Damage > 3 ? 0 : item.Type_Damage << 6) | item.Object_Type));
 			pak.WriteByte(0x00); //unk 1.112
@@ -1112,7 +1114,9 @@ namespace DOL.GS.PacketHandler
 			if (template.Object_Type == (int)eObjectType.GardenObject)
 				pak.WriteByte((byte)(template.DPS_AF));
 			else
-				pak.WriteByte((byte)(template.Hand << 6));
+				pak.WriteByte((byte)((Classic165Mode.IsOn
+				    ? ItemTooltip165.WeaponHandFlag(template.Object_Type, template.Item_Type, template.Hand)
+				    : template.Hand) << 6));
 			pak.WriteByte((byte)((template.Type_Damage > 3
 				? 0
 				: template.Type_Damage << 6) | template.Object_Type));

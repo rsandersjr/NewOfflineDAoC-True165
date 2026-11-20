@@ -26,6 +26,42 @@ namespace DOL.GS
                      text.StartsWith("Loot gem (period", StringComparison.Ordinal));
         }
 
+        /// <summary>The hand bits in the classic item packet must agree with the slot the server accepts.</summary>
+        public static int WeaponHandFlag(int objectType, int slot, int storedHand)
+        {
+            if (objectType < (int)eObjectType.GenericWeapon || objectType > (int)eObjectType._LastWeapon)
+                return storedHand;
+
+            return (eInventorySlot)slot switch
+            {
+                eInventorySlot.RightHandWeapon => 0,
+                eInventorySlot.LeftHandWeapon => 2,
+                eInventorySlot.TwoHandWeapon => 1,
+                _ => storedHand
+            };
+        }
+
+        public static void AddWeaponDetails(IList<string> lines, int objectType, int slot)
+        {
+            if (objectType < (int)eObjectType.GenericWeapon || objectType > (int)eObjectType._LastWeapon)
+                return;
+
+            string family = (eObjectType)objectType switch
+            {
+                eObjectType.TwoHandedWeapon => "2-Handed",
+                eObjectType.LargeWeapons => "Large Weapons",
+                eObjectType.HandToHand => "Hand-to-Hand",
+                _ => System.Globalization.CultureInfo.InvariantCulture.TextInfo.ToTitleCase(
+                    GlobalConstants.ObjectTypeToName(objectType).Replace(" (weapon)", string.Empty))
+            };
+            lines.Add($"{family} Weapon");
+
+            if (slot == (int)eInventorySlot.LeftHandWeapon)
+                lines.Add("Usable in Left Hand");
+            else if (slot == (int)eInventorySlot.TwoHandWeapon)
+                lines.Add("Two-Handed");
+        }
+
         private static string _disabledSource;
         private static HashSet<int> _disabled = [];
 

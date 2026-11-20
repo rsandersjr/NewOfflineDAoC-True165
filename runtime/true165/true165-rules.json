@@ -52664,6 +52664,10 @@
   {
    "sql": "UPDATE DataQuest SET MaxLevel = 50 WHERE ID IN (20228,20229,20230,20231,20251,20252,20253,20254,21021,21022) AND MaxLevel < 50",
    "reason": "Epic access: required Connla's Well, Strange Matters Indeed and Darksong's Dirge remain available through level 50 as a quality-of-life exception"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Realm=1, Object_Type=3, Type_Damage=2 WHERE Id_nb='Exquisite_Avernal_Malison_Short_Sword' AND Realm=0 AND Object_Type=11 AND Type_Damage=0 AND Item_Type=10 AND Hand=0",
+   "reason": "Issue 12: Pico's Albion short sword uses Albion Slash metadata; retain the sold template's main-hand slot because period offhand eligibility is unverified"
   }
  ]
 }

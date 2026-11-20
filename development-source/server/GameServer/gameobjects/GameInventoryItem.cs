@@ -1583,6 +1583,9 @@ namespace DOL.GS
 
         protected virtual void DelveWeaponStats(List<String> delve, GamePlayer player)
         {
+            if (Classic165Mode.IsOn)
+                ItemTooltip165.AddWeaponDetails(delve, Object_Type, Item_Type);
+
             double itemDPS = DPS_AF / 10.0;
             double clampedDPS = Math.Min(itemDPS, 1.2 + 0.3 * player.Level);
             if (player.RealmLevel > 39)

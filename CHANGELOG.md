@@ -25,6 +25,13 @@ The newest version is first.
   where available, the shared Goblin Monitor table for unmeasured armor, and 1% for the documented ring
   whose rate is unknown.
 
+### Weapon tooltips
+
+- Weapon information shows the weapon family separately from damage type, including Polearm and 2-Handed.
+- Restored the classic Usable in Left Hand line. The tooltip follows the equip slot the server actually accepts.
+- Pico's Exquisite Avernal Malison Short Sword uses Albion Slash metadata. Its existing main-hand slot is retained
+  because the period evidence does not establish offhand eligibility.
+
 ## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.

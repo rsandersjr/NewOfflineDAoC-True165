@@ -1245,6 +1245,9 @@ namespace DOL.GS.PacketHandler.Client.v168
 		/// </summary>
 		public static void WriteClassicWeaponInfos(IList<string> output, DbInventoryItem item, GameClient client)
 		{
+            if (Classic165Mode.IsOn)
+                ItemTooltip165.AddWeaponDetails(output, item.Object_Type, item.Item_Type);
+
 			double itemDps = item.DPS_AF * 0.1;
 			double clampedDps = Math.Min(itemDps, client.Player.GetWeaponDpsCap());
 			double itemSpd = item.SPD_ABS * 0.1;

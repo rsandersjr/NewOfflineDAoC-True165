@@ -39,6 +39,11 @@ The newest version is first.
 - Restored Nokkvi's Vile Slayer's documented 64-damage-over-time proc. Removed dangling proc or charge
   references from 13 obtainable weapons and shields whose original effects could not be verified.
 
+### Guild ranks
+
+- Editing a guild rank's Dues or Withdraw permission now changes only the selected permission.
+  The Release permission is preserved.
+
 ## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.

@@ -32,6 +32,13 @@ The newest version is first.
 - Pico's Exquisite Avernal Malison Short Sword uses Albion Slash metadata. Its existing main-hand slot is retained
   because the period evidence does not establish offhand eligibility.
 
+### Weapon condition and spell effects
+
+- Pico's Exquisite Avernal Malison Quarterstaff, the Gilded Sea Spear and Guardian's Bow now have normal
+  condition and durability. The content refresh also repairs existing copies affected by the broken caps.
+- Restored Nokkvi's Vile Slayer's documented 64-damage-over-time proc. Removed dangling proc or charge
+  references from 13 obtainable weapons and shields whose original effects could not be verified.
+
 ## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.

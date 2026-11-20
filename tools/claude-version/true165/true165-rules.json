@@ -52668,6 +52668,34 @@
   {
    "sql": "UPDATE ItemTemplate SET Realm=1, Object_Type=3, Type_Damage=2 WHERE Id_nb='Exquisite_Avernal_Malison_Short_Sword' AND Realm=0 AND Object_Type=11 AND Type_Damage=0 AND Item_Type=10 AND Hand=0",
    "reason": "Issue 12: Pico's Albion short sword uses Albion Slash metadata; retain the sold template's main-hand slot because period offhand eligibility is unverified"
+  },
+  {
+   "sql": "UPDATE Inventory SET Condition=CASE WHEN Condition BETWEEN 0 AND 1 THEN 50000 ELSE Condition END, Durability=CASE WHEN Durability BETWEEN 0 AND 1 THEN 50000 ELSE Durability END WHERE (Condition BETWEEN 0 AND 1 OR Durability BETWEEN 0 AND 1) AND (ITemplate_Id IN (SELECT Id_nb FROM ItemTemplate WHERE Id_nb IN ('Exquisite_Avernal_Malison_Quarterstaff', 'Gilded_Sea_Spear', 'Guardians_Bow') AND Condition=1 AND MaxCondition=1 AND Durability=1 AND MaxDurability=1) OR UTemplate_Id IN (SELECT Id_nb FROM ItemUnique WHERE Name IN ('Exquisite Avernal Malison Quarterstaff', 'Gilded Sea Spear', 'Guardian''s Bow') AND Condition=1 AND MaxCondition=1 AND Durability=1 AND MaxDurability=1))",
+   "reason": "Issue 12 follow-up: repair existing copies before replacing the three broken weapon wear caps"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Condition=50000, MaxCondition=50000, Durability=50000, MaxDurability=50000 WHERE Id_nb IN ('Exquisite_Avernal_Malison_Quarterstaff', 'Gilded_Sea_Spear', 'Guardians_Bow') AND Condition=1 AND MaxCondition=1 AND Durability=1 AND MaxDurability=1",
+   "reason": "Issue 12 follow-up: restore the standard condition and durability caps on Pico\u2019s Quarterstaff, Gilded Sea Spear and Guardian\u2019s Bow"
+  },
+  {
+   "sql": "UPDATE ItemUnique SET Condition=50000, MaxCondition=50000, Durability=50000, MaxDurability=50000 WHERE Name IN ('Exquisite Avernal Malison Quarterstaff', 'Gilded Sea Spear', 'Guardian''s Bow') AND Condition=1 AND MaxCondition=1 AND Durability=1 AND MaxDurability=1",
+   "reason": "Issue 12 follow-up: restore the standard condition and durability caps on Pico\u2019s Quarterstaff, Gilded Sea Spear and Guardian\u2019s Bow"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET ProcSpellID=31124 WHERE Id_nb='Nokkvis_Vile_Slayer' AND ProcSpellID=32012 AND NOT EXISTS (SELECT 1 FROM Spell WHERE SpellID=32012) AND EXISTS (SELECT 1 FROM Spell WHERE SpellID=31124 AND Damage=64)",
+   "reason": "Issue 12 follow-up: restore Nokkvi\u2019s 64-damage DoT, matching the duplicate drop template and the archived November 2003 item report"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET ProcSpellID=0 WHERE (Id_nb, ProcSpellID) IN (('Baln`s Mephitic Bludgeoner', 32230), ('Dread_Bone_Spear', 32158), ('Exquisite_Avernal_Malison_Quarterstaff', 16000), ('Fate_Sealer', 32031), ('Shimmering_Fate_Stealer', 32031), ('Icy_War_Spear', 32151), ('Legions_Flawless_Soul_Crusher', 32181)) AND NOT EXISTS (SELECT 1 FROM Spell WHERE SpellID=ItemTemplate.ProcSpellID)",
+   "reason": "Issue 12 follow-up: clear missing proc references where the original effect could not be verified"
+  },
+  {
+   "sql": "UPDATE Inventory SET Charges=0 WHERE Charges<>0 AND ITemplate_Id IN (SELECT Id_nb FROM ItemTemplate WHERE (Id_nb, SpellID) IN (('Ancient Vitriolic Fang', 4075), ('Bane_of_Life', 33333), ('Blackened_Granite_Shield', 32190), ('Burr''s_Prey_Seeker', 40003), ('Guthlac_Great_Shield', 32151), ('Seething_Ember', 32171)) AND NOT EXISTS (SELECT 1 FROM Spell WHERE SpellID=ItemTemplate.SpellID))",
+   "reason": "Issue 12 follow-up: clear unusable charge counters on existing copies"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET SpellID=0, Charges=0, MaxCharges=0 WHERE (Id_nb, SpellID) IN (('Ancient Vitriolic Fang', 4075), ('Bane_of_Life', 33333), ('Blackened_Granite_Shield', 32190), ('Burr''s_Prey_Seeker', 40003), ('Guthlac_Great_Shield', 32151), ('Seething_Ember', 32171)) AND NOT EXISTS (SELECT 1 FROM Spell WHERE SpellID=ItemTemplate.SpellID)",
+   "reason": "Issue 12 follow-up: clear missing charged effects on obtainable weapons and shields"
   }
  ]
 }

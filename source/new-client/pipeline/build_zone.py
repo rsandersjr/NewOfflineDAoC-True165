@@ -435,11 +435,11 @@ def _axis_angle(angle, ax):
                      [z * x * C - y * s_, z * y * C + x * s_, c + z * z * C]])
 
 
-def build_dungeon(zone_id, upscale, zdir, out, dat, sector):
+def build_dungeon(zone_id, upscale, zdir, out, dat, sector, *, piece_dir=None, textures=None):
     """A dungeon: its pieces placed by dungeon.place in the dungeon frame (see DUNGEON_ORIGIN). Each placement is a
     fixture with a full basis (a few pieces carry tiny tilts)."""
     ox, oy, oz = DUNGEON_ORIGIN
-    files = {p.name.lower(): p for p in (CLIENT / 'zones/Dnifs').iterdir()}
+    files = {p.name.lower(): p for p in (piece_dir or CLIENT / 'zones/Dnifs').iterdir()}
     mdir = out / 'models'
     mdir.mkdir(exist_ok=True)
     chunks = [l.strip() for l in dat['dungeon.chunk'].decode('latin1').splitlines() if l.strip()]
@@ -485,7 +485,7 @@ def build_dungeon(zone_id, upscale, zdir, out, dat, sector):
                            'yaw': 0.0, 'scale': 1.0, 'collide': True, 'id': len(placements)})
     lights = zone_lights(dat)
     exits = zone_exits(dat)
-    idx = TextureIndex()
+    idx = textures if textures is not None else TextureIndex()
     odir = out / 'textures/original'
     odir.mkdir(parents=True, exist_ok=True)
     missing = []

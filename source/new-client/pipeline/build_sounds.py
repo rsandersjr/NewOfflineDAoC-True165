@@ -331,11 +331,11 @@ def _find(name):
     return None
 
 
-def zone_audio(zone_id, used_ids, used_mp3s, used_names=None):
+def zone_audio(zone_id, used_ids, used_mp3s, used_names=None, *, source_dir=None):
     used_names = set() if used_names is None else used_names
     """Audio block for one zone; records the sound ids / mp3s it needs."""
     # zones/, frontiers/zones/ (the Albion epic dungeons), the 1.64 client's phousing/zones/ (the period housing zones)
-    path = _paths.zone_dir(zone_id) / 'sounds.dat'
+    path = (source_dir or _paths.zone_dir(zone_id)) / 'sounds.dat'
     regions = parse_sounds_dat(path.read_text(encoding='latin1')) if path.exists() else []
     for reg in regions:
         for s in reg['sounds']:
@@ -477,11 +477,11 @@ def export(used_ids, used_mp3s, extra_ids=(), creature_set_ids=(), weapon_set_id
     return missing
 
 
-def build(zone_id):
+def build(zone_id, *, source_dir=None):
     """content/zones/zoneNNN/audio.json + the client files it plays. References the client itself can't play
     (no cc_sounds row, e.g. Lough Derg's lake loop 176) stay silent and are listed under 'dead_refs' for the owner."""
     used, mp3, names = set(), set(), set()
-    audio = zone_audio(zone_id, used, mp3, names)
+    audio = zone_audio(zone_id, used, mp3, names, source_dir=source_dir)
     missing = set(export(used, mp3, structure_names=names))
     by_id, by_name = sound_tables()
     groups, queues, loops = structures()

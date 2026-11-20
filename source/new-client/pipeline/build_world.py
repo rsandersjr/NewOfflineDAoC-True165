@@ -3,6 +3,7 @@ the Real-ESRGAN upscales run inside build_zone / build_monsters):
 
     python build_world.py 201 202 203 ...        # zones (terrain or city)
     python build_world.py --hibernia              # every 1.65 Hibernian outdoor zone not built yet
+    python build_world.py 245 247 --frontier-dungeons  # Old Frontier dungeon chain
 
 Per zone: build_zone.py, build_npcs.py, build_monsters.py, build_merchants.py, build_quests.py, build_sounds.py. At the end
 build_armor.py and build_weapons.py (the new NPCs' equipment). A zone that fails is logged and the rest go on.
@@ -53,6 +54,8 @@ def main():
             run([step, f'--zone={z}'], z)
         run(['build_sounds.py', str(z)], z)
     run(['build_zone_index.py'], 'all')                  # zones' places in their regions (border crossing)
+    if '--frontier-dungeons' in sys.argv and not run(['build_frontier_dungeons.py'], 'frontier dungeons'):
+        raise SystemExit(1)
     run(['build_armor.py'], 'all')
     run(['build_weapons.py'], 'all')
     print('world build done', flush=True)

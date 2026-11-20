@@ -101,6 +101,14 @@ The True 1.65 pieces come from the real 1.64 client (`DAoC 1.64.zip`): the class
 `content/spells/spell_fx_165.json`). After a model or effect rebuild, repack the scenes:
 `Godot --headless --path godot -s res://tools/pack_scenes.gd -- --force res://content/monsters/effects`.
 
+### Old Frontier dungeon chain
+
+With zones 245 and 247 already converted, run `python pipeline/build_frontier_dungeons.py` from the client folder.
+It installs their built geometry and textures under the server's zone IDs 277 and 276, then converts the original
+Summoner's Hall (248) from `DAOC_164_ZIP`. The shared dungeon converter runs the usual local Real-ESRGAN pass
+for environment textures. It also exports NPCs using the server's actual dungeon regions and marks the three
+assets as built in the zone index. Pack the new zone's glTF scenes and export collision as for other dungeons.
+
 ## Rules for working on it (people and LLMs)
 
 - **True 1.65 Mode only.** Normal mode is discontinued; some of its code paths are still in the client (behind

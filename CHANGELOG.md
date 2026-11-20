@@ -44,6 +44,13 @@ The newest version is first.
 - Editing a guild rank's Dues or Withdraw permission now changes only the selected permission.
   The Release permission is preserved.
 
+### Old Frontier dungeons
+
+- Hall of the Corrupt and Marfach Caverns now load under their live server zone IDs. Characters saved inside
+  can log in there again.
+- Built the original Summoner's Hall from the 1.64 client archives with the same local texture upscale used by
+  other zones. The three frontier dungeon routes into the hall and their return routes are available.
+
 ## 0.8
 
 Content changes apply on the first START SERVER. The release includes the offline database and crafting guide.

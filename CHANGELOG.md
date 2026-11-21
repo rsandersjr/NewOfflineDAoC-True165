@@ -4,6 +4,11 @@ The newest version is first.
 
 ## 1.0 (coming next)
 
+- Thane's Blood now checks for the worn Charm on the Seer kill and advances when the Ancient Axe is equipped.
+  Existing characters on the axe step can equip the axe they already own and resume the quest.
+- Restored equippable quest gear and the documented wear checks in Arc of Ages, Bandit Camp, Better Off Buried,
+  Thorgil's Daughter, Dark Essence, Magical Disturbances, and Juuso's Potion.
+
 ## 0.9
 
 ### Inventory, Red Dagger and companion combat

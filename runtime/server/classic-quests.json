@@ -1166,7 +1166,11 @@
       "X": 497464,
       "Y": 586364,
       "Z": 2480
-     }
+     },
+     "Wearing": [
+      "cq_staff_of_enlightenment"
+     ],
+     "NeedsItem": "cq_staff_of_enlightenment"
     },
     {
      "Custom": {
@@ -1295,7 +1299,11 @@
       "X": 497464,
       "Y": 586364,
       "Z": 2480
-     }
+     },
+     "Wearing": [
+      "cq_staff_of_enlightenment"
+     ],
+     "NeedsItem": "cq_staff_of_enlightenment"
     },
     {
      "Custom": {
@@ -1424,7 +1432,11 @@
       "X": 497464,
       "Y": 586364,
       "Z": 2480
-     }
+     },
+     "Wearing": [
+      "cq_staff_of_enlightenment"
+     ],
+     "NeedsItem": "cq_staff_of_enlightenment"
     },
     {
      "Custom": {
@@ -16275,7 +16287,13 @@
       "Z": 2894
      },
      "NeedsItem": "cq_note_to_cleddyf",
-     "Issuer": "bandit messenger"
+     "Issuer": "bandit messenger",
+     "Wearing": [
+      "cq_bandit_tunic"
+     ],
+     "Grant": [
+      "cq_bandit_tunic"
+     ]
     },
     {
      "Marker": {
@@ -43412,7 +43430,12 @@
       "X": 433840,
       "Y": 434941,
       "Z": 4359
-     }
+     },
+     "Wearing": [
+      "cq_druid_s_necklace"
+     ],
+     "NeedsItem": "cq_druid_s_necklace",
+     "Issuer": "Aapo"
     },
     {
      "Marker": {
@@ -43420,7 +43443,12 @@
       "X": 433840,
       "Y": 434941,
       "Z": 4359
-     }
+     },
+     "Wearing": [
+      "cq_druid_s_necklace"
+     ],
+     "NeedsItem": "cq_druid_s_necklace",
+     "Issuer": "Aapo"
     },
     {
      "Marker": {
@@ -65934,7 +65962,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -66021,7 +66052,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -66108,7 +66142,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -66195,7 +66232,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -66282,7 +66322,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -66369,7 +66412,10 @@
      "Grant": [
       "cq_morvalt_finger_bone_charm"
      ],
-     "GrantFrom": "Meregrota Solvor"
+     "GrantFrom": "Meregrota Solvor",
+     "Wearing": [
+      "cq_morvalt_finger_bone_charm"
+     ]
     },
     {
      "Marker": {
@@ -68851,14 +68897,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -68903,14 +68953,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -68955,14 +69009,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -69007,14 +69065,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -69059,14 +69121,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -69111,14 +69177,18 @@
       "X": 874090,
       "Y": 690382,
       "Z": 2802
-     }
+     },
+     "Wearing": [
+      "cq_charm"
+     ],
+     "NeedsItem": "cq_charm",
+     "Issuer": "Dahn"
     },
     {
      "Custom": {
-      "Kind": "use_item",
+      "Kind": "equip_item",
       "Item": "cq_ancient_axe",
-      "Consume": false,
-      "Give": false
+      "Give": true
      }
     },
     {
@@ -75320,7 +75390,10 @@
      "Grant": [
       "cq_tomte_tooth_earring"
      ],
-     "GrantFrom": "Emmerick Averrson"
+     "GrantFrom": "Emmerick Averrson",
+     "Wearing": [
+      "cq_tomte_tooth_earring"
+     ]
     },
     {
      "Marker": {
@@ -79805,7 +79878,12 @@
       "X": 764974,
       "Y": 660322,
       "Z": 5942
-     }
+     },
+     "Wearing": [
+      "cq_ring_av_den_dode"
+     ],
+     "NeedsItem": "cq_ring_av_den_dode",
+     "Issuer": "Agnor Crusher"
     },
     {
      "Marker": {
@@ -79840,7 +79918,11 @@
       "Y": 772280,
       "Z": 0,
       "Radius": 400
-     }
+     },
+     "Wearing": [
+      "cq_ring_av_den_dode"
+     ],
+     "NeedsItem": "cq_ring_av_den_dode"
     },
     {
      "Marker": {
@@ -81827,6 +81909,9 @@
       "Z": 3767
      },
      "Grant": [
+      "cq_finished_skalklan_amulet"
+     ],
+     "Wearing": [
       "cq_finished_skalklan_amulet"
      ]
     },

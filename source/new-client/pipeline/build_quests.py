@@ -72,6 +72,7 @@ def main():
                                        (region, x0, x1, y0, y1))}
     cols = [r[1] for r in db.execute('pragma table_info(DataQuest)')]
     want_items = set()
+    equipment_items = set()
     n = 0
     for row in db.execute('select * from DataQuest where ID>=20000 and StartRegionID=?', (region,)):
         d = dict(zip(cols, row))
@@ -108,6 +109,7 @@ def main():
             if i + 1 in searches:
                 st['search'] = searches[i + 1]
             c = csteps[i + 1] if i + 1 < len(csteps) and csteps[i + 1] else {}
+            equipment_items.update(c.get('Wearing') or ())
             if c.get('Marker'):
                 mk = c['Marker']
                 st['marker'] = point(mk['Region'], mk['X'], mk['Y'], mk.get('Z', 0))
@@ -128,6 +130,8 @@ def main():
                                                             'dex', 'qui', 'equipment', 'body_type'], tpl))
             if c.get('Custom'):
                 cu = {k.lower(): v for k, v in c['Custom'].items() if v not in (None, '', [], {})}
+                if cu.get('kind') == 'equip_item':
+                    equipment_items.add(cu['item'])
                 if cu.get('region'):
                     pt = point(cu['region'], cu.get('x', 0), cu.get('y', 0), cu.get('z', 0))
                     if pt:
@@ -183,10 +187,11 @@ def main():
                               for k, v in rep.items()})
     invented = set(json.loads((HERE / 'data/reward_items_report.json').read_text(encoding='utf-8')).get('invented', {}))         if (HERE / 'data/reward_items_report.json').exists() else set()
     fcols = ', '.join(FIELDS)
+    want_items.update(equipment_items)
     for tid in list(want_items):                           # per-class rewards: every class's own item too
         want_items |= set(period_rewards.get(tid, {}).get('variants', {}).values())
     for tid in sorted(want_items):
-        if tid in out['items'] and tid not in period_rewards:     # reward rows are rebuilt each run
+        if tid in out['items'] and tid not in period_rewards and tid not in equipment_items:
             continue
         row = db.execute(f'select Id_nb, {fcols} from ItemTemplate where Id_nb=?', (tid,)).fetchone()
         if row is None and tid in period_rewards:

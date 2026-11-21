@@ -66,12 +66,18 @@ namespace DOL.UnitTests
         }
         public class Inventory : DispatchProxy
         {
+            public DbInventoryItem EquippedTestItem;
             public DbInventoryItem Removed;
             public int RemovalCount;
             private readonly System.Threading.Lock _lock = new();
             protected override object Invoke(MethodInfo method, object[] args)
             {
                 if (method.Name == "get_Lock") return _lock;
+                if (method.Name == "GetFirstItemByID" && EquippedTestItem != null &&
+                    (string)args[0] == EquippedTestItem.Id_nb &&
+                    EquippedTestItem.SlotPosition >= (int)(eInventorySlot)args[1] &&
+                    EquippedTestItem.SlotPosition <= (int)(eInventorySlot)args[2])
+                    return EquippedTestItem;
                 if (method.Name == "RemoveItem")
                 {
                     Removed = (DbInventoryItem)args[0];
@@ -131,6 +137,35 @@ namespace DOL.UnitTests
             typeof(GameLiving).GetField("m_inventory", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(p, inv);
             return p;
         }
+        [Test]
+        public void SavedQuestAtAxeStepAdvancesOnlyAfterEquippingExistingAxe()
+        {
+            var player = CreatePlayer();
+            var inventory = (Inventory)player.Inventory;
+            var axe = GameInventoryItem.Create(new DbItemTemplate { Id_nb = "cq_ancient_axe", Name = "Ancient Axe" });
+            axe.SlotPosition = (int)eInventorySlot.FirstBackpack;
+            inventory.EquippedTestItem = axe;
+            var quest = new Quest(player, new DbDataQuest
+            {
+                ID = 21054, Name = "Thane's Blood", StartRegionID = 200,
+                StepType = "4|0|8|4|5",
+                StepText = "get charm|wear charm|wield axe|find smith|return",
+                TargetName = "Dahn;200|Seer;200||Dverge;200|Gythja;200"
+            }, 3);
+            var step = new ClassicQuests.StepInfo
+            {
+                Custom = new ClassicQuests.CustomStep { Kind = "equip_item", Item = axe.Id_nb, Give = true }
+            };
+            var update = typeof(ClassicQuests).GetMethod("CheckCustomStep", BindingFlags.NonPublic | BindingFlags.Static);
+
+            update.Invoke(null, new object[] { player, quest, step });
+            Assert.That(quest.Step, Is.EqualTo(3));
+            axe.SlotPosition = (int)eInventorySlot.RightHandWeapon;
+            update.Invoke(null, new object[] { player, quest, step });
+            Assert.That(quest.Step, Is.EqualTo(4));
+            Assert.That(inventory.RemovalCount, Is.Zero);
+        }
+
         private static Quest TroyaQuest(Player p, short step = 2)
         {
             var q = new Quest(p, new DbDataQuest

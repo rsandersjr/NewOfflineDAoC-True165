@@ -666,8 +666,9 @@ namespace DOL.GS.Quests
         }
 
         /// <summary>Passive custom triggers, checked on the refresh tick: a place reached, an item held, a quest finished.</summary>
-        private static void CheckCustomStep(GamePlayer player, DataQuest quest, CustomStep custom)
+        private static void CheckCustomStep(GamePlayer player, DataQuest quest, StepInfo step)
         {
+            CustomStep custom = step.Custom;
             if (custom.Give && !string.IsNullOrEmpty(custom.Item) &&
                 player.Inventory.GetFirstItemByID(custom.Item, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) == null)
             {
@@ -684,13 +685,15 @@ namespace DOL.GS.Quests
             bool done = custom.Kind switch
             {
                 "travel" => InPlace(player, custom),
+                "equip_item" => !string.IsNullOrEmpty(custom.Item) && IsWorn(player, custom.Item),
                 "group" => player.Group != null && player.Group.MemberCount >= 2,
                 "has_item" => !string.IsNullOrEmpty(custom.Item) &&
                               player.Inventory.GetFirstItemByID(custom.Item, eInventorySlot.Min_Inv, eInventorySlot.Max_Inv) != null,
                 "quest" => !string.IsNullOrEmpty(custom.Quest) && FinishedCount(player, custom.Quest) >= QuestsNeeded(custom.Quest, custom.Count),
                 _ => false,
             };
-            if (done) quest.AdvanceByScript(player);
+            if (done && (step.Wearing == null || MissingWorn(step.Wearing, id => IsWorn(player, id)) == null))
+                quest.AdvanceByScript(player);
         }
 
         /// <summary>On the map point (flat distance: walkthrough locations carry no height), or anywhere in the region.</summary>
@@ -838,6 +841,7 @@ namespace DOL.GS.Quests
                         player.Out.SendMessage("Nothing happens. This can only be done in darkness.", PacketHandler.eChatType.CT_System, PacketHandler.eChatLoc.CL_SystemWindow);
                         continue;
                     }
+                    if (!StepAllowed(quest, player)) continue;
                     if (custom.Consume) player.Inventory.RemoveCountFromStack(item, 1);
                     quest.AdvanceByScript(player);
                     return;
@@ -1173,7 +1177,7 @@ namespace DOL.GS.Quests
                         if (step?.Grant != null) GrantItems(player, quest, step);
                         if (!string.IsNullOrEmpty(step?.NeedsItem)) ReissueWithoutIssuer(player, quest, step);
                         GiveDeliveryItem(player, quest);
-                        if (step?.Custom != null) CheckCustomStep(player, quest, step.Custom);
+                        if (step?.Custom != null) CheckCustomStep(player, quest, step);
                     }
                 }
                 foreach (var entry in EventSpawns.ToArray())

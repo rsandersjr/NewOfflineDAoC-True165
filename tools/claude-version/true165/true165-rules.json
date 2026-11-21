@@ -52696,6 +52696,42 @@
   {
    "sql": "UPDATE ItemTemplate SET SpellID=0, Charges=0, MaxCharges=0 WHERE (Id_nb, SpellID) IN (('Ancient Vitriolic Fang', 4075), ('Bane_of_Life', 33333), ('Blackened_Granite_Shield', 32190), ('Burr''s_Prey_Seeker', 40003), ('Guthlac_Great_Shield', 32151), ('Seething_Ember', 32171)) AND NOT EXISTS (SELECT 1 FROM Spell WHERE SpellID=ItemTemplate.SpellID)",
    "reason": "Issue 12 follow-up: clear missing charged effects on obtainable weapons and shields"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=24, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_charm' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_charm"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=10, Object_Type=13, AllowedClasses='', Model=316, Type_Damage=2, Hand=0 WHERE Id_nb='cq_ancient_axe' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_ancient_axe"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=12, Object_Type=8, AllowedClasses='', Model=19, Type_Damage=1, Hand=1 WHERE Id_nb='cq_staff_of_enlightenment' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_staff_of_enlightenment"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=25, Object_Type=32, AllowedClasses='', Model=139 WHERE Id_nb='cq_bandit_tunic' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_bandit_tunic"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=35, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_ring_av_den_dode' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_ring_av_den_dode"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=24, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_tomte_tooth_earring' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_tomte_tooth_earring"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=29, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_morvalt_finger_bone_charm' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_morvalt_finger_bone_charm"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=29, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_druid_s_necklace' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_druid_s_necklace"
+  },
+  {
+   "sql": "UPDATE ItemTemplate SET Item_Type=29, Object_Type=0, AllowedClasses='' WHERE Id_nb='cq_finished_skalklan_amulet' AND Item_Type=40 AND Object_Type=0",
+   "reason": "Restore documented Classic quest equipment interaction: cq_finished_skalklan_amulet"
   }
  ]
 }

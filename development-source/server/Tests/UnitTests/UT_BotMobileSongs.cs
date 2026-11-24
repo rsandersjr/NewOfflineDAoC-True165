@@ -1054,6 +1054,36 @@ namespace DOL.UnitTests
             Assert.That(ordinary.Interrupted, Is.True);
         }
 
+        [TestCase(typeof(ClassBard), "EnduranceRegenBuff", 1, true)]
+        [TestCase(typeof(ClassMinstrel), "PowerRegenBuff", 1, true)]
+        [TestCase(typeof(ClassSkald), "DamageAdd", 0, true)]
+        [TestCase(typeof(ClassBard), "SpeedEnhancement", 1, false)]
+        public void MeleeFallbackPreservesCombatPulsesAndRequiredInstruments(Type type, string songType,
+            int instrument, bool preserve)
+        {
+            bool mode = DOL.GS.ServerProperties.Properties.CLASSIC165_MODE;
+            DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = true;
+            try
+            {
+                Bot bot = NewBot(type);
+                Spell song = Song(songType, instrument: instrument);
+                if (instrument > 0)
+                    bot.Instrument = new DbInventoryItem { Object_Type = (int)eObjectType.Instrument, DPS_AF = instrument };
+                var source = new ECSPulseEffect(new(bot, 0, 1, new SpellHandler(bot, song, Line)), song.Frequency);
+                source.Start();
+                bot.effectListComponent.BeginTick();
+
+                Assert.That(typeof(BotBrain).GetMethod("HasActiveCombatSongInstrument", Hidden).Invoke(bot.Brain, null),
+                    Is.EqualTo(preserve && instrument > 0));
+                typeof(BotBrain).GetMethod("StopTwistedSong", Hidden).Invoke(bot.Brain, new object[] { true });
+                Assert.That(source.IsEnding || source.IsEnded, Is.EqualTo(!preserve));
+            }
+            finally
+            {
+                DOL.GS.ServerProperties.Properties.CLASSIC165_MODE = mode;
+            }
+        }
+
         [Test]
         public void WardensDoNotAlternateAnActiveBladeturnAndPaladinsDoNotToggleActiveChant()
         {

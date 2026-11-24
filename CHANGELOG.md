@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Bards, Minstrels and Skalds keep active combat songs when hit in melee. Instrument songs keep the
+  instrument equipped, and starting a song still follows normal interruption rules.
 - Battleground assault waves can regroup after casualties. Bots march to the closed gate and use melee
   once they can reach it, so an assault can proceed without a ram.
 - Jailer Vifil's two tunnel guardians in Tuscaran Glacier no longer stack across pulls or boss respawns.

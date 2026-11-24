@@ -2876,9 +2876,11 @@ namespace DOL.AI.Brain
                     s.Level <= bot.Level && s.IsPulsing && s.SpellType == fightSong);
                 if (playing?.SpellHandler.Spell.SpellType == fightSong || !knowsFightSong)
                 {
-                    if (playing != null && playing.SpellHandler.Spell.SpellType != fightSong)
+                    Spell currentSong = playing?.SpellHandler.Spell;
+                    if (currentSong != null && currentSong.SpellType != fightSong && !PreserveCombatSong(currentSong))
                         StopTwistedSong();
-                    SwitchToUsableMeleeWeapon();
+                    if (!KeepsCombatSongInstrument(currentSong))
+                        SwitchToUsableMeleeWeapon();
                     _nextSongTwistTick = GameLoop.GameLoopTime + 1_000;
                     return false;
                 }
@@ -3330,7 +3332,21 @@ namespace DOL.AI.Brain
             AggroList.Keys.Any(attacker => attacker?.IsAlive == true &&
                                            Body.IsWithinRadius(attacker, Body.MeleeAttackRange + 35));
 
-        private void StopTwistedSong()
+        private bool PreserveCombatSong(Spell spell) =>
+            Classic165Mode.IsOn && IsClassicSongClass(BotBody) && spell != null &&
+            spell.SpellType != eSpellType.SpeedEnhancement && BotSongTwistPolicy.IsManagedSong(Body, spell);
+
+        private bool KeepsCombatSongInstrument(Spell spell) =>
+            spell?.NeedInstrument == true && PreserveCombatSong(spell) &&
+            Body.ActiveWeapon is { Object_Type: (int)eObjectType.Instrument } instrument &&
+            (instrument.DPS_AF == 4 || instrument.DPS_AF == spell.InstrumentRequirement);
+
+        private bool HasActiveCombatSongInstrument() =>
+            Classic165Mode.IsOn && IsClassicSongClass(BotBody) &&
+            Body.effectListComponent.GetPulseEffects().Any(effect => !effect.IsEnding && !effect.IsEnded &&
+                KeepsCombatSongInstrument(effect.SpellHandler?.Spell));
+
+        private void StopTwistedSong(bool preserveCombatSongs = false)
         {
             if (Body == null)
                 return;
@@ -3338,15 +3354,18 @@ namespace DOL.AI.Brain
             // End the maintained pulse, not the short-duration child buffs it
             // already applied. Scanning also adopts/corrects a song that was
             // started before this brain began tracking its rotation.
+            _activeTwistedSongId = 0;
             foreach (ECSPulseEffect active in Body.effectListComponent.GetPulseEffects()
                          .Where(effect => effect?.SpellHandler?.Spell is Spell spell &&
                                           spell.IsPulsing && !spell.IsHarmful &&
                                           IsMaintainableClassBuff(spell))
                          .ToList())
             {
-                active.End();
+                if (preserveCombatSongs && !active.IsEnding && !active.IsEnded && PreserveCombatSong(active.SpellHandler.Spell))
+                    _activeTwistedSongId = active.SpellHandler.Spell.ID;
+                else
+                    active.End();
             }
-            _activeTwistedSongId = 0;
         }
 
         private static bool IsClassicSongClass(GameBot bot) => bot?.CharacterClass != null &&
@@ -4407,6 +4426,14 @@ namespace DOL.AI.Brain
                 }
                 else
                 {
+                    // The performer can still heal, control or use shouts above. An instrument song
+                    // needs the instrument equipped, so do not enter the weapon or unarmed fallback.
+                    if (HasActiveCombatSongInstrument())
+                    {
+                        Body.StopAttack();
+                        return;
+                    }
+
                     if (rangedCaster && Body.TargetObject is GameLiving spellTarget)
                     {
                         // Try casts (including instant spells) first.
@@ -4676,7 +4703,7 @@ namespace DOL.AI.Brain
             bool actuallyUnderAttack = Body.IsBeingInterruptedByOther ||
                 target == _recentDirectAttacker &&
                 GameLoop.GameLoopTime - _recentDirectAttackTick <= 5_000;
-            if (!actuallyUnderAttack)
+            if (!actuallyUnderAttack || HasActiveCombatSongInstrument())
                 return false;
 
             // M7 / G12: a pure caster first walks once to the group's tank, so the tank can taunt or protect it
@@ -4689,10 +4716,9 @@ namespace DOL.AI.Brain
             if (Body.IsCasting)
                 Body.StopCurrentSpellcast();
 
-            // A Paladin's or Warden's chant pulses on while it fights (owner 2026-11-08: Osbert's chant dropped at every
-            // hit and was recast a second later); only the other classes' songs stop here.
+            // An active combat song survives a hit. Instrument-free chants can coexist with melee.
             if (!KeepsChantInMelee(BotBody))
-                StopTwistedSong();
+                StopTwistedSong(preserveCombatSongs: true);
             SwitchToUsableMeleeWeapon();
 
             CheckOffensiveAbilities();
@@ -4877,7 +4903,7 @@ namespace DOL.AI.Brain
                 !NoAttackSpellYet())
                 return false;
 
-            StopTwistedSong();
+            StopTwistedSong(preserveCombatSongs: true);
             SwitchToUsableMeleeWeapon();
             CheckOffensiveAbilities();
             CommandPetAttack(target);

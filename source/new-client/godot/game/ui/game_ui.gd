@@ -2035,6 +2035,15 @@ func _process_inner(_delta: float) -> void:
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.pressed 			and (event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_RIGHT):
 		ClassicWindow.raise_clicked(get_viewport())        # (reset day C3: a click brings its window to the front)
+	elif event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_ESCAPE:
+		var vp := get_viewport()
+		var hovered := vp.gui_get_hovered_control()
+		# Godot handles Escape before _unhandled_input and can consume it to dismiss the shop tooltip.
+		# Let the game's untarget shortcut have priority over that tooltip, while leaving drag cancellation first.
+		if merchant and merchant.visible and hovered and merchant.is_ancestor_of(hovered) \
+				and options and not options.visible and not vp.gui_is_dragging() \
+				and not PlayerData.target.is_empty() and clear_target.is_valid() and handle_input(event):
+			vp.set_input_as_handled()
 
 
 func _unhandled_input(event: InputEvent) -> void:

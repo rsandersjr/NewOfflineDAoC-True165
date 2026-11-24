@@ -23,8 +23,11 @@ namespace DOL.GS
     {
         // Teleporter trips into a battleground have no walking alternative.
         private const double BattlegroundNoWalkSeconds = 3600;
+        private const int BattlegroundGateGuardRadius = 450;
         private long _nextBattlegroundRoamTick;
         private Vector3? _battlegroundRoamPoint;
+        private int _battlegroundApproachDoor;
+        private Vector3 _battlegroundDoorApproach;
 
         private bool ExecuteBattleground(BotBrain brain, GameBot bot)
         {
@@ -62,7 +65,10 @@ namespace DOL.GS
             _rvrSharedEvent = false;
             // Too few of the realm here for a wave: fight in the field instead of standing at the staging point or
             // feeding single bots to the keep's guards (Thidranki, 2026-10-17).
-            bool tooFew = assault && AutonomousBattlegroundWave.TooFewForAssault(bot.Realm, bracket);
+            bool classic = Classic165Mode.IsOn;
+            bool tooFew = assault && (classic
+                ? !AutonomousBattlegroundWave.CanAssault(bot, bracket, central)
+                : AutonomousBattlegroundWave.TooFewForAssault(bot.Realm, bracket));
             _rvrIntent = assault && !tooFew ? AutonomousRvrEventLayer.Intent.AssaultKeep : AutonomousRvrEventLayer.Intent.Roam;
             if (!assault || tooFew)
                 _battlegroundGatePassed = false;
@@ -101,7 +107,15 @@ namespace DOL.GS
                     SetBattlegroundStatus(bot, bracket, "Gathering for the assault", $"{central.Name}: {gathered}");
                     return true;
                 }
-                GameLiving target = FindReachableEnemyDoor(bot, shutGate) ?? FindRvrTarget(bot);
+                GameLiving target = FindReachableEnemyDoor(bot, shutGate, classic);
+                // The normal threat scan and retaliation have already had their turn. Avoid pulling
+                // the force off the march to chase optional keep guards before it reaches the gate.
+                bool marchBeforeGuards = classic && shutGate != null && !bot.InCombat &&
+                    !bot.IsWithinRadius(shutGate, BattlegroundGateGuardRadius);
+                if (target == null && marchBeforeGuards && MarchToBattlegroundGate(bot, bracket, central, shutGate, classic))
+                    return true;
+
+                target ??= FindRvrTarget(bot);
                 if (target != null)
                 {
                     bot.StopMovingOnPath();
@@ -113,18 +127,13 @@ namespace DOL.GS
                         $"{central.Name} is held by {Holder(central)}", target.Name);
                     return false;
                 }
-                GameKeepGuard lord = central.Guards.Values.FirstOrDefault(guard => guard is GuardLord && guard.IsAlive);
                 if (shutGate != null)
                 {
-                    if (IssuePath(bot, KeepRaidDoors.StandOff(central, shutGate), retargetWhileMoving: true))
-                    {
-                        if (lord != null) TraceStorm(this, bot, central, lord, shutGate, "closed-gate");
-                        SetBattlegroundStatus(bot, bracket, "Marching on the keep gate", central.Name, shutGate.Name);
-                        return true;
-                    }
-                    return false;
+                    // Skip a second movement order when this turn already tried the same approach.
+                    return !marchBeforeGuards && MarchToBattlegroundGate(bot, bracket, central, shutGate, classic);
                 }
 
+                GameKeepGuard lord = central.Guards.Values.FirstOrDefault(guard => guard is GuardLord && guard.IsAlive);
                 if (lord != null && lord.CurrentRegionID == bot.CurrentRegionID)
                 {
                     if (_battlegroundGateKeep != central.KeepID)
@@ -319,9 +328,42 @@ namespace DOL.GS
         }
 
         /// <summary>A closed gate of the enemy-held keep that this bot can stand at and hit, like players did.</summary>
-        private static GameLiving FindReachableEnemyDoor(GameBot bot, GameKeepDoor door) =>
-            door != null && bot.IsWithinRadius(door, 450) && GameServer.ServerRules.IsAllowedToAttack(bot, door, true)
-                ? door : null;
+        private static GameLiving FindReachableEnemyDoor(GameBot bot, GameKeepDoor door, bool classic) =>
+            door != null && bot.IsWithinRadius(door, classic ? BattlegroundDoorMeleeReach(door) : BattlegroundGateGuardRadius) &&
+            GameServer.ServerRules.IsAllowedToAttack(bot, door, true) ? door : null;
+
+        private static int BattlegroundDoorMeleeReach(GameKeepDoor door) =>
+            GameBot.ClassicBaseMeleeAttackRange + GameDoorBase.MeleeReachBonus(door, true);
+
+        private bool MarchToBattlegroundGate(GameBot bot, BattlegroundBrackets.Bracket bracket,
+            AbstractGameKeep central, GameKeepDoor gate, bool classic)
+        {
+            Vector3 approach = KeepRaidDoors.StandOff(central, gate);
+            if (classic)
+            {
+                if (_battlegroundApproachDoor != gate.DoorId)
+                {
+                    _battlegroundApproachDoor = gate.DoorId;
+                    _battlegroundDoorApproach = approach;
+                    var zone = bot.CurrentRegion?.GetZone((int)approach.X, (int)approach.Y);
+                    var nav = PathfindingProvider.Instance;
+                    if (zone != null && nav is { IsAvailable: true } && nav.HasNavmesh(zone) &&
+                        nav.GetClosestPoint(zone, approach, 48, 48, 96, nav.BlockingDoorAvoidanceFilters) is { } floor &&
+                        Vector3.DistanceSquared(floor, new(gate.X, gate.Y, gate.Z)) <=
+                            BattlegroundDoorMeleeReach(gate) * BattlegroundDoorMeleeReach(gate) &&
+                        !IsPastBattlegroundGate(central, gate, floor))
+                        _battlegroundDoorApproach = floor;
+                }
+                approach = _battlegroundDoorApproach;
+            }
+
+            if (!IssuePath(bot, approach, retargetWhileMoving: true))
+                return false;
+            if (central.Guards.Values.FirstOrDefault(guard => guard is GuardLord && guard.IsAlive) is { } lord)
+                TraceStorm(this, bot, central, lord, gate, "closed-gate");
+            SetBattlegroundStatus(bot, bracket, "Marching on the keep gate", central.Name, gate.Name);
+            return true;
+        }
 
         private static Vector3 BattlegroundBreachPoint(AbstractGameKeep keep, GameKeepDoor door) =>
             BattlegroundBreachPoint(new(keep.X, keep.Y), new(door.X, door.Y, door.Z), door.Heading);

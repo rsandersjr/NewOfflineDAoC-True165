@@ -13,6 +13,17 @@ namespace DOL.GS.Tests
         [SetUp] public void SetUp() { RvrEventTestState.Clear(); }
         [TearDown] public void TearDown() { RvrEventTestState.Clear(); }
 
+        [TestCase(7, false, 7, 0, false)]
+        [TestCase(8, false, 0, 0, true)]
+        [TestCase(7, true, 0, 179_999, true)]
+        [TestCase(7, true, 0, 180_000, false)]
+        [TestCase(4, true, 4, 180_000, true)]
+        [TestCase(3, true, 3, 0, false)]
+        public void LaunchQuorumDoesNotAbortAnActiveAssault(int inside, bool launched, int nearKeep, long elapsed, bool allowed)
+        {
+            Assert.That(AutonomousBattlegroundWave.AllowsAssault(inside, launched, nearKeep, elapsed), Is.EqualTo(allowed));
+        }
+
         // ---- the defense loop (BG250 D1, BG252 S3, BG253 F2)
 
         [TestCase((ushort)250, false)]

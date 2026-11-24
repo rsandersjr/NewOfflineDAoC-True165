@@ -387,13 +387,15 @@ namespace DOL.GS
 
         /// <summary>True 1.65 Mode: a bot's melee reach is a player's (128, +32 when it or its target moves, +150 on a
         /// keep part; owner 2026-10-31). Elsewhere bots keep the monster reach of 200.</summary>
+        internal const int ClassicBaseMeleeAttackRange = 128;
+
         public override int MeleeAttackRange
         {
             get
             {
                 if (!Classic165Mode.IsOn)
                     return base.MeleeAttackRange;
-                int range = 128;
+                int range = ClassicBaseMeleeAttackRange;
                 if (TargetObject is DOL.GS.Keeps.GameKeepComponent)
                     range += 150;
                 else if (GameDoorBase.MeleeReachBonus(TargetObject, true) is > 0 and var doorway)

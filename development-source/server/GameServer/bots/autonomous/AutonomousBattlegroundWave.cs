@@ -29,6 +29,7 @@ public static class AutonomousBattlegroundWave
         public Vector3? Staging;
         public long GatherSince, GoingSince, NextCount, NextTotalCount;
         public bool Going;
+        public eRealm KeepHolder;
         public int Total, Gathered, NearKeep;
     }
 
@@ -61,6 +62,37 @@ public static class AutonomousBattlegroundWave
 
     public static bool IsTooFew(int realmBotsInside) => realmBotsInside < MinimumWave;
 
+    /// <summary>The launch quorum is only for starting a wave. Let survivors who are still working
+    /// the keep finish their current assault, and give the rest time to reach it after a casualty.</summary>
+    public static bool AllowsAssault(int inside, bool launched, int nearKeep, long elapsed)
+    {
+        return !IsTooFew(inside) ||
+               launched && inside >= WaveSpentNearKeep &&
+               (elapsed < WaveSpentCheckMilliseconds || nearKeep >= WaveSpentNearKeep);
+    }
+
+    public static bool CanAssault(GameBot bot, BattlegroundBrackets.Bracket bracket, AbstractGameKeep central)
+    {
+        long now = GameLoop.GameLoopTime;
+        Wave wave = Waves.GetOrAdd((bracket.RegionId, bot.Realm), _ => new Wave { GatherSince = now });
+        lock (wave)
+        {
+            if (wave.KeepHolder != central.Realm)
+            {
+                wave.KeepHolder = central.Realm;
+                wave.GatherSince = now;
+                wave.Going = false;
+                wave.NextCount = 0;
+            }
+
+            RefreshAttendance(wave, bot.Realm, bracket, central, now);
+            bool allowed = AllowsAssault(wave.Total, wave.Going, wave.NearKeep, now - wave.GoingSince);
+            if (!allowed && wave.Going)
+                EndWave(wave, bot.Realm, bracket, now);
+            return allowed;
+        }
+    }
+
     /// <summary>A wave goes in at this many gathered: 60% of the realm's bots inside, at least <see cref="MinimumWave"/>.</summary>
     public static int WaveSize(int realmBotsInside) => Math.Max(MinimumWave, realmBotsInside * 6 / 10);
 
@@ -80,28 +112,20 @@ public static class AutonomousBattlegroundWave
         Wave wave = Waves.GetOrAdd((bracket.RegionId, bot.Realm), _ => new Wave { GatherSince = now });
         lock (wave)
         {
-            wave.Staging ??= StagingPoint(bot, bracket, central);
+            if (!wave.Staging.HasValue)
+            {
+                wave.Staging = StagingPoint(bot, bracket, central);
+                if (wave.Staging.HasValue)
+                    wave.NextCount = 0; // Include the newly selected staging point in the attendance sample.
+            }
             if (!wave.Staging.HasValue) return false;
             staging = wave.Staging.Value;
-            if (now >= wave.NextCount)
-            {
-                wave.NextCount = now + 5_000;
-                var keepPoint = new Point3D(central.X, central.Y, central.Z);
-                var stagePoint = new Point3D((int)staging.X, (int)staging.Y, (int)staging.Z);
-                GameBot[] realmBots = AutonomousBotRegistry.Snapshot().Where(other => other.IsAlive && other.Realm == bot.Realm &&
-                    other.CurrentRegionID == bracket.RegionId && AutonomousObjectiveAssignments.IsBattlegroundPvp(other)).ToArray();
-                wave.Total = realmBots.Length;
-                wave.Gathered = realmBots.Count(other => other.IsWithinRadius(stagePoint, 900));
-                wave.NearKeep = realmBots.Count(other => other.IsWithinRadius(keepPoint, 2_500));
-            }
+            RefreshAttendance(wave, bot.Realm, bracket, central, now);
             if (wave.Going)
             {
                 if (now - wave.GoingSince >= WaveSpentCheckMilliseconds && wave.NearKeep < WaveSpentNearKeep)
                 {
-                    wave.Going = false;
-                    wave.GatherSince = now;
-                    Log.Info($"BG_WAVE_SPENT battleground={bracket.Name} realm={GlobalConstants.RealmToName(bot.Realm)} " +
-                             $"nearKeep={wave.NearKeep} inside={wave.Total}");
+                    EndWave(wave, bot.Realm, bracket, now);
                 }
                 else return false;
             }
@@ -118,6 +142,36 @@ public static class AutonomousBattlegroundWave
             progress = $"{wave.Gathered}/{needed} gathered";
             return true;
         }
+    }
+
+    private static void RefreshAttendance(Wave wave, eRealm realm, BattlegroundBrackets.Bracket bracket,
+        AbstractGameKeep central, long now)
+    {
+        if (now < wave.NextCount) return;
+        wave.NextCount = wave.NextTotalCount = now + 5_000;
+        var keepPoint = new Point3D(central.X, central.Y, central.Z);
+        var stage = wave.Staging;
+        var stagePoint = stage.HasValue ? new Point3D((int)stage.Value.X, (int)stage.Value.Y, (int)stage.Value.Z) : null;
+
+        wave.Total = wave.Gathered = wave.NearKeep = 0;
+        foreach (GameBot other in AutonomousBotRegistry.Snapshot())
+        {
+            if (!other.IsAlive || other.Realm != realm || other.CurrentRegionID != bracket.RegionId ||
+                !AutonomousObjectiveAssignments.IsBattlegroundPvp(other))
+                continue;
+
+            wave.Total++;
+            if (stagePoint != null && other.IsWithinRadius(stagePoint, 900)) wave.Gathered++;
+            if (other.IsWithinRadius(keepPoint, 2_500)) wave.NearKeep++;
+        }
+    }
+
+    private static void EndWave(Wave wave, eRealm realm, BattlegroundBrackets.Bracket bracket, long now)
+    {
+        wave.Going = false;
+        wave.GatherSince = now;
+        Log.Info($"BG_WAVE_SPENT battleground={bracket.Name} realm={GlobalConstants.RealmToName(realm)} " +
+                 $"nearKeep={wave.NearKeep} inside={wave.Total}");
     }
 
     /// <summary>On the realm's side of the keep: from the keep toward the realm's field arrival, on the navmesh.</summary>

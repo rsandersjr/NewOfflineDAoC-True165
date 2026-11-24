@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Jailer Vifil's two tunnel guardians in Tuscaran Glacier no longer stack across pulls or boss respawns.
+
 ## 1.0
 
 - Tab cycles nearby enemies from closest to farthest. Left-clicks check NPC surfaces before selecting,

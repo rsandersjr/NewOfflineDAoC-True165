@@ -61,7 +61,7 @@ def sha(path: Path) -> str:
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--assets", type=Path, required=True)
-    parser.add_argument("--version", default="0.9")
+    parser.add_argument("--version", default="1.0")
     args = parser.parse_args()
     folder = args.assets.resolve() / f"v{args.version}"
     if not (folder / "download-manifest.json").is_file():

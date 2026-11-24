@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.0 (coming next)
 
+- Pressing Esc while hovering a merchant item clears the target and keeps the tooltip visible.
+  Item tooltips remain available with no target selected. Esc still returns a held inventory item first.
 - Thane's Blood now checks for the worn Charm on the Seer kill and advances when the Ancient Axe is equipped.
   Existing characters on the axe step can equip the axe they already own and resume the quest.
 - Restored equippable quest gear and the documented wear checks in Arc of Ages, Bandit Camp, Better Off Buried,

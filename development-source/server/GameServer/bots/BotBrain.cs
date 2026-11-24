@@ -3460,14 +3460,14 @@ namespace DOL.AI.Brain
             {
                 BotPartyRole.Tank => 0,
                 BotPartyRole.Support => 2,
-                _ => cls.ClassType == eClassType.ListCaster ? 3 : 1,
+                _ => cls.ClassType == eClassType.ListCaster && id != eCharacterClass.Valewalker ? 3 : 1,
             };
         }
 
         /// <summary>
         /// Whether a stat buff does anything for this target's class, so a bot spends its concentration where a player
-        /// would (player report 2026-11-01: companions put strength and strength/constitution buffs on mages instead of
-        /// the tanks). Strength buffs skip pure casters; acuity buffs go only to classes that cast from a mana stat.
+        /// would. Pure casters benefit from the constitution in a combined buff, but standalone strength is reserved
+        /// for weapon users. Acuity follows the class's actual mana rules.
         /// Pets: everything but power/endurance regeneration, acuity and fatigue (GitHub #28, BotPetBuffBenefit).
         /// </summary>
         internal static bool BuffHelps(GameLiving target, Spell spell) => BotPetBuffBenefit.IsPetLike(target)
@@ -3484,11 +3484,15 @@ namespace DOL.AI.Brain
                 return true;
             return spell.SpellType switch
             {
+                eSpellType.StrengthConstitutionBuff when classic165 => true,
+                eSpellType.StrengthBuff when classic165 =>
+                    cls.ClassType != eClassType.ListCaster || cls.ID == (int)eCharacterClass.Valewalker,
                 eSpellType.StrengthBuff or eSpellType.StrengthConstitutionBuff => cls.ClassType != eClassType.ListCaster,
                 // True 1.65: the server adds acuity only to a pure caster's mana stat (StatCalculator), so a Shaman's
                 // acuity on a Healer or a hybrid was wasted concentration
                 eSpellType.AcuityBuff => classic165 ? cls.ClassType == eClassType.ListCaster : cls.ManaStat is not eStat.UNDEFINED,
-                eSpellType.CombatSpeedBuff when classic165 => cls.ClassType != eClassType.ListCaster,
+                eSpellType.CombatSpeedBuff when classic165 =>
+                    cls.ClassType != eClassType.ListCaster || cls.ID == (int)eCharacterClass.Valewalker,
                 eSpellType.PowerRegenBuff when classic165 => cls.ManaStat is not eStat.UNDEFINED,
                 // Q14 (veteran review 2026-11-11): damage adds and weapon procs only help a class that fights in melee -
                 // not a Runemaster, Spiritmaster or Healer

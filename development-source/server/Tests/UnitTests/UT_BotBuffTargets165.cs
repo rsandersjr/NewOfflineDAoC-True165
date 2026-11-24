@@ -41,6 +41,37 @@ namespace DOL.GS.Tests
             Assert.That(BotBrain.BuffHelps(new ClassWizard(), haste, false), Is.True, "normal mode unchanged");
         });
 
+        [TestCase("StrengthBuff")]
+        [TestCase("StrengthConstitutionBuff")]
+        [TestCase("CombatSpeedBuff")]
+        public void ValewalkerIsEligibleForMeleeBuffs(string type)
+        {
+            var valewalker = new ClassValewalker();
+            Spell spell = Buff(type);
+
+            Assert.That(BotBrain.BuffHelps(valewalker, spell, true), Is.True);
+            Assert.That(BotBrain.VeteranBuffTargetRank(valewalker, spell.SpellType, 0),
+                Is.EqualTo(BotBrain.VeteranBuffTargetRank(new ClassBlademaster(), spell.SpellType, 0)));
+            Assert.That(BotBrain.VeteranBuffTargetRank(valewalker, eSpellType.DexterityBuff, 0),
+                Is.EqualTo(BotBrain.VeteranBuffTargetRank(new ClassWizard(), eSpellType.DexterityBuff, 0)));
+        }
+
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void CombinedStrengthConstitutionCoversCastersAfterMelee(int emphasis)
+        {
+            Spell spell = Buff("StrengthConstitutionBuff");
+            var wizard = new ClassWizard();
+            var valewalker = new ClassValewalker();
+
+            Assert.That(BotBrain.BuffHelps(wizard, spell, true), Is.True);
+            Assert.That(BotBrain.BuffHelps(wizard, spell, false), Is.False);
+            Assert.That(BotBrain.BuffHelps(wizard, Buff("StrengthBuff"), true), Is.False);
+            Assert.That(BotBrain.VeteranBuffTargetRank(wizard, spell.SpellType, emphasis),
+                Is.GreaterThan(BotBrain.VeteranBuffTargetRank(valewalker, spell.SpellType, emphasis)));
+        }
+
         // The Healer's Purity of Offense and the Druid's Hunter's line: a concentration haste kept up between fights
         // (it was never cast); Celerity (group, 20 s, no concentration) stays a fight buff.
         [Test]

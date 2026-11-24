@@ -85,6 +85,11 @@ namespace DOL.AI.Brain
         public static int VeteranBuffTargetRank(ICharacterClass cls, eSpellType type, int emphasis)
         {
             int role = BuffTargetRank(cls);
+            // The caster emphasis applies to caster buffs. Spend combined Strength/Con on the
+            // front line first, then cover casters who can still use the Constitution.
+            if (type is eSpellType.StrengthBuff or eSpellType.StrengthConstitutionBuff or eSpellType.CombatSpeedBuff)
+                return role;
+
             bool spellUser = cls != null && (role == 2 || cls.ClassType == eClassType.ListCaster);
             return emphasis == 2 || emphasis == 0 &&
                 type is eSpellType.DexterityBuff or eSpellType.DexterityQuicknessBuff or eSpellType.PowerRegenBuff

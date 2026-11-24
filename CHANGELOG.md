@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Companion buffers give Valewalkers melee priority for Strength, Strength/Constitution and haste.
+  Pure casters can receive Strength/Constitution after higher-priority targets are covered.
 - Bards, Minstrels and Skalds keep active combat songs when hit in melee. Instrument songs keep the
   instrument equipped, and starting a song still follows normal interruption rules.
 - Battleground assault waves can regroup after casualties. Bots march to the closed gate and use melee

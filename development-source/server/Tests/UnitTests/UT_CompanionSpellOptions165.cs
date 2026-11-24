@@ -103,6 +103,8 @@ namespace DOL.UnitTests
                 "half power or more: nuke");
             Assert.That(StrictSavesPower(SavePowerStrict, 40, BotCasterPriority.FinishTargetBelowPercent - 1), Is.False,
                 "a nearly dead monster is finished");
+            Assert.That(StrictSavesPower(SavePowerNoFinish, 49, 1), Is.True, "no finishing exception");
+            Assert.That(StrictSavesPower(SavePowerNoFinish, 50, 1), Is.False, "half power is allowed");
             Assert.That(StrictSavesPower(0, 40, 80), Is.False, "Automatic is not Strict");
             Assert.That(StrictSavesPower(1, 40, 80), Is.False, "Off is not Strict");
 
@@ -122,8 +124,9 @@ namespace DOL.UnitTests
             Assert.That(save, Is.Not.Null);
             Assert.That(save.Value.Key, Is.EqualTo("savepower"), "the same stored key as everyone's Save power row");
             Assert.That(save.Value.Choices.Take(2), Is.EqualTo(new[] { "Automatic (on)", "Off" }), "0 and 1 unchanged");
-            Assert.That(save.Value.Choices, Has.Length.EqualTo(3));
-            Assert.That(save.Value.Choices[SavePowerStrict], Does.StartWith("Strict"));
+            Assert.That(save.Value.Choices, Has.Length.EqualTo(4));
+            Assert.That(save.Value.Choices[SavePowerStrict], Does.Contain("finish PvE targets under 30%"));
+            Assert.That(save.Value.Choices[SavePowerNoFinish], Does.Contain("no damage spells"));
 
             var attack = CompanionOptions165.Option(CompanionOptions165.KindAttackSpells);
             Assert.That(attack, Is.Not.Null);

@@ -13,7 +13,7 @@ namespace DOL.GS
         public const int RoleMeleeHeal = 3;
 
         /// <summary>Save power choice 2 (casters): under half power whoever holds the monster, area damage included.</summary>
-        public const int SavePowerStrict = 2;
+        public const int SavePowerStrict = 2, SavePowerNoFinish = 3;
 
         /// <summary>Attack spells choices (casters): 1 area damage only, 2 none (buffs and crowd control only).</summary>
         public const int AttackAreaOnly = 1, AttackNone = 2;
@@ -58,8 +58,10 @@ namespace DOL.GS
         /// needs a tank holding it); a monster under 30% is still finished, as with Automatic.
         /// </summary>
         public static bool StrictSavesPower(int savePowerChoice, int casterPowerPercent, int targetHealthPercent) =>
-            savePowerChoice == SavePowerStrict &&
-            BotCasterPriority.SavePowerInGroup(casterPowerPercent, targetHealthPercent, true);
+            savePowerChoice == SavePowerNoFinish
+                ? casterPowerPercent < BotCasterPriority.SavePowerBelowPercent
+                : savePowerChoice == SavePowerStrict &&
+                  BotCasterPriority.SavePowerInGroup(casterPowerPercent, targetHealthPercent, true);
 
         /// <summary>Pure: while Strict saves power every damage spell waits - point blank and area damage too. Crowd
         /// control, debuffs, buffs and the pet focus shield are no damage spells.</summary>

@@ -38,7 +38,7 @@ namespace DOL.GS
         /// <summary>Companion controls (veteran review M7 and the owner's twist option, 2026-11-11; CompanionControls165).</summary>
         public const byte KindTwist = 40, KindStance = 41, KindCrowdControl = 42, KindPetJob = 43, KindWeapon = 44,
             KindStag = 47, KindCriticalShot = 48, KindOpeningStun = 49, KindEngage = 50, KindSlamSwap = 51,
-            KindTripleWield = 52;
+            KindTripleWield = 52, KindBuffPriority = 53, KindRunemasterBladeturn = 54;
         /// <summary>The fourth Role choice of every healer's Role row (owner 2026-11-11; CompanionSpellOptions165).</summary>
         public const string MeleeHealChoice = "Melee and heal, no attack spells (melee interrupts casts)";
         public static readonly HashSet<string> Verbs = ["charm", "pet", "subpet", "song", "option"];
@@ -117,8 +117,15 @@ namespace DOL.GS
             // pure casters (owner 2026-11-11, "AI options only for those casters"): the same stored key with a third choice,
             // Strict - no damage spells under 50% power whoever holds the monster, point blank and area damage too
             new(KindSavePowerCaster, "savepower", "Save power", ["Automatic (on)", "Off",
-                    "Strict (no nukes or area under 50%, tank or not)"],
+                    "Below 50%: finish PvE targets under 30%", "Below 50%: no damage spells"],
                 bot => HasAttackSpell(bot) && IsCaster(bot)),
+            new(KindBuffPriority, "buffpriority", "Buff priority",
+                ["Automatic (by job)", "Front line first", "Casters and healers first"],
+                bot => (bot.MiscSpells ?? []).Any(spell => spell?.IsConcentration == true &&
+                    spell.Target == eSpellTarget.REALM && BotBrain.IsMaintainableClassBuff(spell))),
+            new(KindRunemasterBladeturn, "runempbt", "Group bladeturn", ["Automatic", "Keep up when grouped", "Off"],
+                bot => bot.CharacterClass?.ID == (int)eCharacterClass.Runemaster &&
+                    (bot.MiscSpells ?? []).Any(BotBrain.IsGroupBladeturnPulse)),
             // ... and which attack spells at all (a Runemaster: "afk personal bladeturn, no nukes"): area damage only, or
             // none - buffs (its own bladeturn kept up in the fight), crowd control and utility only (CompanionSpellOptions165)
             new(KindAttackSpells, "attackspells", "Attack spells", ["Automatic", "Area spells only (no single-target nukes)",

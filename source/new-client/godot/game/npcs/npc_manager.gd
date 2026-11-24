@@ -753,6 +753,8 @@ func pick(camera: Camera3D, screen_pos: Vector2, prefer_service := true) -> Npc:
 	var to := from + dir * 120.0
 	var q := PhysicsRayQueryParameters3D.create(from, to, 1 << 9)
 	q.collide_with_areas = false
+	if not prefer_service:
+		return _pick_body_or_name(camera, screen_pos, q)
 	# a corpse isn't clickable: the ray goes on through it, so a dead bot lying under it can still be targeted for
 	# a resurrection (owner 2026-10-11)
 	# GitHub #48 (2026-11-12): a living gamebot standing in front of (or in) a merchant, trainer, stable master, healer,
@@ -789,6 +791,39 @@ func pick(camera: Camera3D, screen_pos: Vector2, prefer_service := true) -> Npc:
 		last_pick_dist = first_dist
 		return first
 	return _pick_name(camera, screen_pos, prefer_service)
+
+
+## Keep the physics box as a broad-phase query. On selection, nearer surfaces win over empty bounds;
+## name plates and approximate picks for animated figures remain available.
+func _pick_body_or_name(camera: Camera3D, screen_pos: Vector2, query: PhysicsRayQueryParameters3D) -> Npc:
+	var best: Npc
+	var fallback: Npc
+	var fallback_d := INF
+	for _i in 16:
+		var hit := get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty():
+			break
+		var distance := query.from.distance_to(hit.position)
+		if distance > last_pick_dist:
+			break
+		query.exclude = query.exclude + [hit.rid]
+		var n: Npc = hit.collider.get_meta("npc", null)
+		if not is_instance_valid(n) or not (n.state.alive or n.rez_target()):
+			continue
+		var surface := n.click_surface_distance(query.from, query.to)
+		if surface < last_pick_dist:
+			last_pick_dist = surface
+			best = n
+		if fallback == null and (n.rez_target() or n.click_near_body(query.from, query.to)):
+			fallback = n
+			fallback_d = distance
+	if best != null:
+		return best
+	var named := _pick_name(camera, screen_pos, false)
+	if named != null:
+		return named
+	last_pick_dist = fallback_d
+	return fallback
 
 
 ## GitHub #48: what a click prefers over a gamebot. The server sends no NPC class, so the client takes what it knows:
@@ -955,20 +990,37 @@ func target_state() -> NpcState:
 	return _retarget
 
 
-## Tab-style: the nearest enemy (targetable, not of your realm) within range: a monster, or a character of another
-## realm (tester 0.5: the key never picked the other realms' people - it looked at realm 0 only). Another realm's
-## peaceful NPC is no enemy.
+## Tab cycles the nearby eligible enemies in distance order. Restart after a pause or a manual target change.
+var _cycle_last: Npc
+var _cycle_until := 0
+var _cycle_seen := {}
+
+
 func nearest_enemy(max_range := 60.0) -> Npc:
-	var best: Npc = null
-	var best_d := max_range
-	for i in active:
-		var n: Npc = active[i]
+	var now := Time.get_ticks_msec()
+	if target != _cycle_last or now > _cycle_until:
+		_cycle_seen.clear()
+	var nearest: Npc
+	var next: Npc
+	var nearest_d := max_range * max_range
+	var next_d := nearest_d
+	for n: Npc in active.values():
 		var realm := int(n.spawn.realm)
 		if n.is_friendly() or (realm != 0 and int(n.spawn.flags) & Npc.FLAG_PEACE) \
-				or (int(n.spawn.flags) & Npc.FLAG_CANTTARGET) or n == target or n.state.stealthed or not n.state.alive:
+				or (int(n.spawn.flags) & Npc.FLAG_CANTTARGET) or n.state.stealthed or not n.state.alive:
 			continue
-		var d := n.global_position.distance_to(player.global_position)
-		if d < best_d:
-			best_d = d
-			best = n
-	return best
+		var d := n.global_position.distance_squared_to(player.global_position)
+		if d < nearest_d:
+			nearest_d = d
+			nearest = n
+		if d < next_d and not _cycle_seen.has(n.state):
+			next_d = d
+			next = n
+	if next == null:
+		_cycle_seen.clear()
+		next = nearest
+	if next != null:
+		_cycle_seen[next.state] = true
+	_cycle_last = next
+	_cycle_until = now + 3000
+	return next

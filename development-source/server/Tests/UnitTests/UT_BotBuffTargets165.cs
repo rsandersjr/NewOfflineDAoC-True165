@@ -94,6 +94,32 @@ namespace DOL.GS.Tests
             });
         }
 
+        [Test]
+        public void CompanionAutomaticPrioritizesBuffsByRecipientAndPurpose()
+        {
+            var runemaster = new ClassRunemaster();
+            var tank = new ClassArmsman();
+            Assert.Multiple(() =>
+            {
+                Assert.That(BotBrain.VeteranBuffTargetRank(runemaster, eSpellType.DexterityBuff, 0),
+                    Is.LessThan(BotBrain.VeteranBuffTargetRank(tank, eSpellType.DexterityBuff, 0)));
+                Assert.That(BotBrain.VeteranBuffTargetRank(runemaster, eSpellType.DexterityBuff, 1),
+                    Is.GreaterThan(BotBrain.VeteranBuffTargetRank(tank, eSpellType.DexterityBuff, 1)));
+                Assert.That(BotBrain.VeteranBuffSpellRank(eSpellType.EnduranceRegenBuff),
+                    Is.LessThan(BotBrain.VeteranBuffSpellRank(eSpellType.StrengthConstitutionBuff)));
+                Assert.That(BotBrain.VeteranBuffSpellRank(eSpellType.ConstitutionBuff),
+                    Is.LessThan(BotBrain.VeteranBuffSpellRank(eSpellType.BaseArmorFactorBuff)));
+            });
+        }
+
+        [Test]
+        public void GroupPulseIsDistinctFromOneShotBladeturn()
+        {
+            Spell Bubble(int pulse) => new(new DbSpell { Type = "Bladeturn", Target = "Group", Pulse = pulse }, 26);
+            Assert.That(BotBrain.IsGroupBladeturnPulse(Bubble(1)), Is.True);
+            Assert.That(BotBrain.IsGroupBladeturnPulse(Bubble(0)), Is.False);
+        }
+
         // A Healer and a Shaman both spent concentration on the shared baseline Augmentation buffs: one keeps each.
         [Test]
         public void ABaseBuffBothBuffersKnowIsLeftToTheHealerElseTheLowerObjectId() => Assert.Multiple(() =>

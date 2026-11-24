@@ -853,10 +853,11 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 	elif Keybinds.pressed(event, "target_group_1") and not player._ui_typing():
 		target_self()                                      # Target Group #1 (F1): you - always the first of your group
-	elif Keybinds.pressed(event, "target_enemy") and npcs:
+	elif Keybinds.pressed(event, "target_enemy") and npcs and not player._ui_typing():
 		var n := npcs.nearest_enemy()
 		if n:
 			npcs.select(n)
+		get_viewport().set_input_as_handled()
 
 
 ## The 1.64 client's other targeting keys on the server (owner 2026-11-02: no code read them): Target Group #2-8,

@@ -642,7 +642,6 @@ namespace DOL.AI.Brain
         private long _nextDeployablePetTick;
         private long _nextCombatProgressTick;
         private long _nextMaintenanceBuffTick;
-        private bool _fightSongTried;
         private readonly Dictionary<(GameLiving Target, int Spell), (int Tries, long Since)> _buffAttempts = new();
 
         /// <summary>
@@ -2550,6 +2549,9 @@ namespace DOL.AI.Brain
                 return false;
             }
 
+            if (TryMaintainRunemasterBladeturn())
+                return true;
+
             bool autonomousPetUpkeep = bot.CharacterClass != null &&
                 AutonomousPetSupport.OwnsPetUpkeep((eCharacterClass)bot.CharacterClass.ID);
             List<Spell> known = (bot.MiscSpells ?? [])
@@ -2562,6 +2564,7 @@ namespace DOL.AI.Brain
                                  AutonomousPetSupport.ShouldMaintainRoutinePetBuff(spell, false)) &&
                                 (!waitingForLeader || CompanionFollowPolicy.CanStopForNativeTravelSpeed(bot, spell)) &&
                                 !BotSongTwistPolicy.IsReservedPulse(bot, spell) &&
+                                !(ManagesRunemasterBladeturn && IsGroupBladeturnPulse(spell)) &&
                                 !BaseBuffLeftToGroupmate(spell) &&
                                 !BladeturnBlocked(spell))   // df-bosses L3
                 .DistinctBy(spell => spell.ID)
@@ -2581,11 +2584,12 @@ namespace DOL.AI.Brain
             int maintenancePulse = BotMaintenancePulsePolicy.Choose(known, traveling);
             IEnumerable<Spell> candidates = known
                 .Where(spell => BotMaintenancePulsePolicy.CanMaintain(spell, maintenancePulse))
-                .Where(spell => spell.SpellType != eSpellType.SpeedEnhancement || traveling)
+                .Where(spell => spell.SpellType != eSpellType.SpeedEnhancement || traveling &&
+                    (!ManagesRunemasterBladeturn || !GroupmateHasStrongerSpeed(spell)))
                 .OrderByDescending(spell => spell.SpellType == eSpellType.SpeedEnhancement && traveling)
                 // True 1.65: by buff type first (Value compared across types put endurance regeneration, value 1-5,
                 // after everything else, when the concentration had run out)
-                .ThenBy(spell => Classic165Mode.IsOn ? UpkeepPriority165(spell) : 0)
+                .ThenBy(BuffUpkeepPriority)
                 .ThenByDescending(spell => spell.Value)
                 .ThenByDescending(spell => spell.Level);
 
@@ -2870,7 +2874,7 @@ namespace DOL.AI.Brain
                     effect.SpellHandler?.Spell is Spell s && s.IsPulsing && !s.IsHarmful && IsMaintainableClassBuff(s));
                 bool knowsFightSong = (bot.MiscSpells ?? []).Concat(bot.InstantMiscSpells ?? []).Any(s => s != null &&
                     s.Level <= bot.Level && s.IsPulsing && s.SpellType == fightSong);
-                if (playing?.SpellHandler.Spell.SpellType == fightSong || !knowsFightSong || _fightSongTried)
+                if (playing?.SpellHandler.Spell.SpellType == fightSong || !knowsFightSong)
                 {
                     if (playing != null && playing.SpellHandler.Spell.SpellType != fightSong)
                         StopTwistedSong();
@@ -2878,10 +2882,7 @@ namespace DOL.AI.Brain
                     _nextSongTwistTick = GameLoop.GameLoopTime + 1_000;
                     return false;
                 }
-                _fightSongTried = true;   // one try per fight: the song code below starts it, then it melees
             }
-            else if (!immediateCombat)
-                _fightSongTried = false;
 
             // True 1.65: a Minstrel holding a pet twists its charm song with ONE other song, as a player does (owner
             // 2026-11-03): see TryTwistWithCharm. Between the partner song and the renewed charm, TryRenewTwistedCharm
@@ -2962,7 +2963,7 @@ namespace DOL.AI.Brain
                 var characterClass = (eCharacterClass)bot.CharacterClass.ID;
                 Spell anchor = song;
                 List<Spell> cycle = songsByType.Values.Where(candidate => candidate.ID == anchor.ID ||
-                        CompanionControls165.TwistPartner(characterClass, candidate.SpellType, anchor.SpellType, _songTraveling,
+                        CompanionControls165.TwistPartner(characterClass, candidate.SpellType, anchor.SpellType, _songTraveling && !immediateCombat,
                             bot.Mana >= bot.PowerCost(candidate)))
                     .ToList();
                 if (cycle.Count > 1)
@@ -2985,7 +2986,8 @@ namespace DOL.AI.Brain
                 return false;
             }
             // a held song stays at least HoldMilliseconds; starting to travel may always switch to speed
-            if (!twisting && activePulse != null && now < _songHoldUntil && song.SpellType != eSpellType.SpeedEnhancement)
+            if (!immediateCombat && !twisting && activePulse != null && now < _songHoldUntil &&
+                song.SpellType != eSpellType.SpeedEnhancement)
             {
                 _nextSongTwistTick = Math.Min(_songHoldUntil, now + 1_000);
                 return false;
@@ -3413,12 +3415,13 @@ namespace DOL.AI.Brain
             // One pool: players, companions, world bots and valid attached pets.
             // Do not leave pets until every humanoid has been processed first.
             IEnumerable<GameLiving> pool = members.Concat(BotGroupPetBuffTargets.Enumerate(BotBody, spell));
-            bool Eligible(GameLiving target) => target.IsAlive && Body.IsWithinRadius(target, range) && BuffHelps(target, spell) &&
-                !LivingHasEffect(target, spell) && !(claims?.IsReserved(target, family, now) ?? false);
-            // True 1.65: the tanks first, then melee, healers, casters (period groups buffed the tanks first)
+            bool Eligible(GameLiving target) => target.IsAlive && Body.IsWithinRadius(target, range) &&
+                PartyBuffHelps(target, spell) && !LivingHasEffect(target, spell) && !(claims?.IsReserved(target, family, now) ?? false);
+            int emphasis = UsesVeteranBuffing ? CompanionOptions165.Choice(BotBody, "buffpriority") : 0;
             return Classic165Mode.IsOn
                 ? BotBuffReservations<GameLiving>.ChooseBest(pool, Eligible, target =>
-                    BotPetBuffBenefit.IsPetLike(target) ? BotPetBuffBenefit.PetRank : BuffTargetRank(ClassOf(target)))   // pets after players and bots (GitHub #28)
+                    BotPetBuffBenefit.IsPetLike(target) ? BotPetBuffBenefit.PetRank :
+                        UsesVeteranBuffing ? VeteranBuffTargetRank(ClassOf(target), spell.SpellType, emphasis) : BuffTargetRank(ClassOf(target)))
                 : BotBuffReservations<GameLiving>.Choose(pool, Eligible);
         }
 
@@ -3738,7 +3741,9 @@ namespace DOL.AI.Brain
                     _baseBuffsLeftToMates = BaseBuffsKeptByMates(members);
                 }
             }
-            return _baseBuffsLeftToMates.TryGetValue(spell.ID, out GameBot keeper) && keeper.IsAlive && keeper.Group == group;
+            return _baseBuffsLeftToMates.TryGetValue(spell.ID, out GameBot keeper) && keeper.IsAlive && keeper.Group == group &&
+                (!UsesVeteranBuffing || keeper.CanAffordConcentration(spell) && !keeper.InCombat &&
+                 Body.IsWithinRadius(keeper, Math.Max(350, spell.CalculateEffectiveRange(Body))));
         }
 
         private Dictionary<int, GameBot> BaseBuffsKeptByMates(List<GameLiving> members)
@@ -5424,11 +5429,14 @@ namespace DOL.AI.Brain
         private bool SavePowerForGroup()
         {
             GameBot bot = BotBody;
-            if (!Classic165Mode.IsOn || bot == null || Body.ManaPercent >= BotCasterPriority.SavePowerBelowPercent ||
-                Body.TargetObject is not GameNPC target || target is GameBot || !target.IsAlive)
+            if (!Classic165Mode.IsOn || bot == null || Body.ManaPercent >= BotCasterPriority.SavePowerBelowPercent)
                 return false;
-            // a caster's "Save power: Strict" (owner 2026-11-11): whoever holds the monster, grouped or not
             int savePower = bot.IsPlayerCompanion ? CompanionOptions165.Choice(bot, "savepower") : 0;
+            if (savePower == CompanionSpellOptions165.SavePowerNoFinish)
+                return true;
+            if (Body.TargetObject is not GameNPC target || target is GameBot || !target.IsAlive)
+                return false;
+            // The original explicit mode keeps its PvE finishing exception.
             if (savePower == CompanionSpellOptions165.SavePowerStrict)
                 return CompanionSpellOptions165.StrictSavesPower(savePower, Body.ManaPercent, target.HealthPercent);
             if (Body.Group == null)
@@ -5756,6 +5764,7 @@ namespace DOL.AI.Brain
             }
             else if (!casted && type == eCheckSpellType.Offensive)
             {
+                if (TryMaintainRunemasterBladeturn()) return true;
                 // df-bosses L2: from where the target takes no damage, no attack spell: the caller walks in to range
                 if (BeyondTargetDamageRange()) return false;
                 if (TryPvpCrowdControl()) return true;
@@ -6912,6 +6921,9 @@ namespace DOL.AI.Brain
             (Spell spell, GameLiving target) spellToCast = BotBody.IsEndgameCompanion
                 ? spellsToCast.OrderByDescending(entry => entry.Item1.Level).ThenByDescending(entry => entry.Item1.ID).First()
                 : spellsToCast[Util.Random(spellsToCast.Count - 1)];
+            if (UsesVeteranBuffing && IsMaintainableClassBuff(spellToCast.spell))
+                spellToCast = spellsToCast.Where(entry => IsMaintainableClassBuff(entry.Item1))
+                    .OrderBy(entry => BuffUpkeepPriority(entry.Item1)).ThenByDescending(entry => entry.Item1.Level).First();
             Body.TargetObject = spellToCast.target;
             bool cast = CastCoordinatedBuff(spellToCast.spell);
 
@@ -7076,6 +7088,11 @@ namespace DOL.AI.Brain
 
             if (pulseEffect != null)
                 return true;
+
+            if (UsesVeteranBuffing && spell.SpellType == eSpellType.DamageAdd)
+                return target.effectListComponent.GetSpellEffects(spellEffect).Any(effect =>
+                    !effect.IsEnding && effect.SpellHandler?.Spell is Spell other &&
+                    (other.ID == spell.ID || other.EffectGroup == spell.EffectGroup && other.Damage >= spell.Damage));
 
             // DoTs from different effect groups stack (Sluaghbinder Rot + Bane), so
             // only a DoT the server would treat as conflicting blocks a new one.

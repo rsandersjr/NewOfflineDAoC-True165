@@ -709,6 +709,37 @@ func _build_pick() -> void:
 	add_child(_pick)
 
 
+## Test visible part meshes only after the inexpensive world ray hits this NPC's broad bounds.
+## Mesh caches its triangle tree. Animated meshes use the rest geometry plus a forgiving body fallback.
+func click_surface_distance(from: Vector3, to: Vector3) -> float:
+	var best := INF
+	if model == null or not is_instance_valid(model):
+		return best
+	for part: MeshInstance3D in model.find_children("*", "MeshInstance3D", true, false):
+		if not part.is_visible_in_tree() or part.mesh == null:
+			continue
+		var inverse := part.global_transform.affine_inverse()
+		var local_from := inverse * from
+		var local_to := inverse * to
+		if part.get_aabb().intersects_segment(local_from, local_to) == null and not part.get_aabb().has_point(local_from):
+			continue
+		var triangles := part.mesh.generate_triangle_mesh()
+		if triangles == null:
+			continue
+		var hit := triangles.intersect_segment(local_from, local_to)
+		if not hit.is_empty():
+			best = minf(best, from.distance_to(part.global_transform * hit.position))
+	return best
+
+
+func click_near_body(from: Vector3, to: Vector3) -> bool:
+	var feet := global_position
+	var h := maxf(height, 0.3)
+	var segment := Geometry3D.get_closest_points_between_segments(from, to,
+		feet + Vector3.UP * h * 0.15, feet + Vector3.UP * h * 0.86)
+	return segment[0].distance_squared_to(segment[1]) < pow(clampf(h * 0.19, 0.28, 0.85), 2.0)
+
+
 ## The drawn model's bounds in this NPC's own space (every mesh incl. held weapons), or a figure-sized box.
 var _fx_bounds := AABB()                                  # an effect-only figure's drawn box (local), else empty
 

@@ -4,6 +4,15 @@ The newest version is first.
 
 ## 1.0 (coming next)
 
+- Tab cycles nearby enemies from closest to farthest. Left-clicks check NPC surfaces before selecting,
+  so gaps inside large models can reveal targets behind them. Overhead names remain clickable.
+- Companions allocate buffs by job, prioritize endurance for melee and give base Dex and Con priority
+  over optional Strength and base AF. A second buffer can cover base buffs when the first is out of concentration.
+  AI Options can favor the front line or casters and healers.
+- Runemasters track and recover group pulsing bladeturn in combat, and cast compatible damage adds alongside
+  a Skald chant. Skalds retry the selected combat chant when the fight starts.
+- Caster power-saving options below 50% power can either finish PvE targets under 30% health or hold all damage
+  spells. Automatic keeps its existing behavior.
 - Pressing Esc while hovering a merchant item clears the target and keeps the tooltip visible.
   Item tooltips remain available with no target selected. Esc still returns a held inventory item first.
 - Thane's Blood now checks for the worn Charm on the Seer kill and advances when the Ancient Axe is equipped.

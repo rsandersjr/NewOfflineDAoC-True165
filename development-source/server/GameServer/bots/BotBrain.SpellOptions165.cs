@@ -25,7 +25,8 @@ namespace DOL.AI.Brain
                      CompanionSpellOptions165.AttackChoiceBlocks(attack, spell))
                 reason = attack == CompanionSpellOptions165.AttackNone ? "attack-none" : "attack-area-only";
             else if (BotCasterPriority.IsDamage(spell) &&
-                     CompanionOptions165.Choice(bot, "savepower") == CompanionSpellOptions165.SavePowerStrict &&
+                     (CompanionOptions165.Choice(bot, "savepower") is CompanionSpellOptions165.SavePowerStrict or
+                         CompanionSpellOptions165.SavePowerNoFinish) &&
                      CompanionSpellOptions165.StrictBlocks(spell, SavePowerForGroup()))
                 reason = "savepower-strict";
             if (reason == null)

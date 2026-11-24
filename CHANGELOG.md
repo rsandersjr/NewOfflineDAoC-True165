@@ -2,6 +2,8 @@
 
 The newest version is first.
 
+## 1.1 (coming next)
+
 ## 1.0
 
 - Tab cycles nearby enemies from closest to farthest. Left-clicks check NPC surfaces before selecting,

@@ -718,6 +718,18 @@
  "starter_guilds": [],
  "updates": [
   {
+   "sql": "WITH fixes(id, model, old_color, new_color) AS (VALUES ('black_enamel2', 495, 0, 74), ('blue_enamel2', 495, 0, 52), ('rust_enamel2', 495, 0, 49), ('rust_enamel3', 495, 0, 49), ('green_cloth_dye2', 229, 59, 69)) UPDATE ItemTemplate SET Color = (SELECT new_color FROM fixes WHERE (Id_nb = fixes.id AND Model = fixes.model AND Item_Type = 40) AND ItemTemplate.Color = fixes.old_color) WHERE EXISTS (SELECT 1 FROM fixes WHERE (Id_nb = fixes.id AND Model = fixes.model AND Item_Type = 40) AND ItemTemplate.Color = fixes.old_color)",
+   "reason": "Issue #22 dye colors: ItemTemplate"
+  },
+  {
+   "sql": "WITH fixes(id, model, old_color, new_color) AS (VALUES ('black_enamel2', 495, 0, 74), ('blue_enamel2', 495, 0, 52), ('rust_enamel2', 495, 0, 49), ('rust_enamel3', 495, 0, 49), ('green_cloth_dye2', 229, 59, 69)) UPDATE ItemUnique SET Color = (SELECT new_color FROM fixes WHERE (substr(Id_nb, 1, length(fixes.id) + 1) = fixes.id || '#' AND Model = fixes.model AND Item_Type = 40) AND ItemUnique.Color = fixes.old_color) WHERE EXISTS (SELECT 1 FROM fixes WHERE (substr(Id_nb, 1, length(fixes.id) + 1) = fixes.id || '#' AND Model = fixes.model AND Item_Type = 40) AND ItemUnique.Color = fixes.old_color)",
+   "reason": "Issue #22 dye colors: ItemUnique"
+  },
+  {
+   "sql": "WITH fixes(id, model, old_color, new_color) AS (VALUES ('black_enamel2', 495, 0, 74), ('blue_enamel2', 495, 0, 52), ('rust_enamel2', 495, 0, 49), ('rust_enamel3', 495, 0, 49), ('green_cloth_dye2', 229, 59, 69)) UPDATE Inventory SET Color = (SELECT new_color FROM fixes WHERE (ITemplate_Id = fixes.id OR EXISTS (SELECT 1 FROM ItemUnique u WHERE u.Id_nb = Inventory.UTemplate_Id AND u.Model = fixes.model AND u.Item_Type = 40 AND substr(u.Id_nb, 1, length(fixes.id) + 1) = fixes.id || '#')) AND Inventory.Color = fixes.old_color) WHERE EXISTS (SELECT 1 FROM fixes WHERE (ITemplate_Id = fixes.id OR EXISTS (SELECT 1 FROM ItemUnique u WHERE u.Id_nb = Inventory.UTemplate_Id AND u.Model = fixes.model AND u.Item_Type = 40 AND substr(u.Id_nb, 1, length(fixes.id) + 1) = fixes.id || '#')) AND Inventory.Color = fixes.old_color)",
+   "reason": "Issue #22 dye colors: Inventory"
+  },
+  {
    "sql": "UPDATE DataQuest SET MaxLevel = 50 WHERE ID BETWEEN 21065 AND 21069 AND Name = 'The Red Dagger' AND MinLevel = 15 AND MaxLevel = 19",
    "reason": "Issue #9 quality-of-life exception: the level 15 epic starter remains available through level 50; period level cap was 19"
   },

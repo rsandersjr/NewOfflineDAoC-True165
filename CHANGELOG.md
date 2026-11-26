@@ -4,6 +4,7 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Crafted black, blue and rust enamel apply their proper colors, and Midgard green cloth dye applies green. Existing bottles with the wrong color are repaired on update.
 - Enchanting Helper bonus and gem-tier pickers use a fixed-height scroll box that scales with the interface. The full list is reachable without extending beyond the game window.
 - Near the Breifine hill, bots can use the validated route into Mount Collory when a nearby destination carries the wrong elevation.
 

@@ -935,6 +935,19 @@ namespace DOL.GS
                 !CompanionFollowPolicy.TryZoneExit(_ownerPosition, destination, zone.XOffset, zone.YOffset, zone.Width, zone.Height,
                     out Vector3 exit))
                 return false;
+            if (AutonomousZoneItinerary.IsBreifineHillCrossing(Owner.CurrentRegionID, zone, next, _ownerPosition, destination) &&
+                AutonomousZoneItinerary.TryNextStep(Owner.CurrentRegion, zone, next, _ownerPosition, destination,
+                    PathfindingProvider.Instance, out var crossing))
+            {
+                if (Vector3.DistanceSquared(_ownerPosition, crossing.Inside) > 16 * 16)
+                    PathToInternal(crossing.Inside, speed);
+                else
+                {
+                    UnsetFlag(MovementState.Pathfinding);
+                    WalkToInternal(crossing.Outside, speed);
+                }
+                return true;
+            }
             Vector3 direction = Vector3.Normalize(destination - _ownerPosition);
             Vector3 inside = exit - direction * CompanionFollowPolicy.BorderInset;
             if (Vector3.DistanceSquared(_ownerPosition, inside) > CompanionFollowPolicy.BorderOutset * CompanionFollowPolicy.BorderOutset &&

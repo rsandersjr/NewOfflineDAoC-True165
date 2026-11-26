@@ -5,7 +5,10 @@ namespace DOL.GS
 {
     public static class AutonomousZoneBoundaryRouting
     {
-        public readonly record struct Step(Vector3 Inside, Vector3 Outside);
+        public readonly record struct Step(Vector3 Inside, Vector3 Outside)
+        {
+            public Vector3? ResolvedGoal { get; init; }
+        }
 
         public static bool TryResolveHeights(Vector3 inside, Vector3 outside,
             Func<Vector3, Vector3?> snapInside, Func<Vector3, Vector3?> snapOutside, out Step step)

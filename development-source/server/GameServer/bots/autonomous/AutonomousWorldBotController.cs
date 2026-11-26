@@ -5731,7 +5731,7 @@ namespace DOL.GS
                         // Both seam points were validated by the itinerary. If
                         // this enters the goal zone, its final corridor was too.
                         Vector3? final = destinationZone == bot.CurrentRegion.GetZone((int)step.Outside.X, (int)step.Outside.Y)
-                            ? destination : null;
+                            ? (step.ResolvedGoal ?? destination) : null;
                         mover.PathAcrossValidatedSeam(step.Inside, step.Outside, final, bot.MaxSpeed);
                     }
                     else bot.PathTo(step.Inside, bot.MaxSpeed);

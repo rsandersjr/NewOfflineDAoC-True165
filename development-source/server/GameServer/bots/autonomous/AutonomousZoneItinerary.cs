@@ -206,7 +206,7 @@ namespace DOL.GS
         /// </summary>
         [ThreadStatic] public static bool LastStepWasReversed;
 
-        private static (ushort, ushort, ushort, int, int, int, int, int, int, int) StepKey(Region region, Zone from, Zone to,
+        private static (ushort, ushort, ushort, int, int, int, int, int, int, int, Vector3?) StepKey(Region region, Zone from, Zone to,
             Vector3 start, Vector3 goal, Func<Zone, bool> allowed, out int? targetArea)
         {
             int allowedMask = 0;
@@ -216,8 +216,10 @@ namespace DOL.GS
             // the key: two goals in one 2,048 cell on different ground must not share a step. Memoized per goal, so a
             // remembered step pays one lock-free lookup for it (review).
             targetArea = AutonomousSeamChains.ConfidentTargetArea(region.ID, to, goal);
+            // A repaired hill destination is valid only for the position that was checked.
+            Vector3? localGoal = IsBreifineHillCrossing(region.ID, from, to, start, goal) ? goal : null;
             return (region.ID, from.ID, to.ID, (int)start.X >> 9, (int)start.Y >> 9, (int)start.Z >> 8,
-                (int)goal.X >> 11, (int)goal.Y >> 11, allowedMask, targetArea ?? -1);
+                (int)goal.X >> 11, (int)goal.Y >> 11, allowedMask, targetArea ?? -1, localGoal);
         }
 
         /// <summary>
@@ -243,12 +245,12 @@ namespace DOL.GS
         // toward one place, and each re-ran the same corridor proofs (zone steps were the main cost of
         // 113 of 138 AI turns over 300 ms in run 10).
         public const long SolvedStepMemoryMilliseconds = 120_000;
-        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int),
+        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int, Vector3?),
             (AutonomousZoneBoundaryRouting.Step Step, long Until)> SolvedSteps = new();
-        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int), long>
+        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int, Vector3?), long>
             FailedSteps = new();
         // The failed entries written by ForgetStep (seam reversal), so a member can tell them from a plain no-seam failure.
-        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int), long>
+        private static readonly System.Collections.Concurrent.ConcurrentDictionary<(ushort, ushort, ushort, int, int, int, int, int, int, int, Vector3?), long>
             ReversedSteps = new();
 
         private static bool TryNextStepCore(Region region, Zone from, Zone to, Vector3 start, Vector3 goal,
@@ -275,7 +277,7 @@ namespace DOL.GS
             Vector3 raw = start;
             AutonomousNavigationSurface.TryFloor(nav, from, start, out start);
             Topology topology = Topologies.GetValue(region, key => new Topology(key.Zones));
-            if (TryNextStep(topology, from, to, start, goal, nav, out step, allowed, targetArea)) return true;
+            if (TryNextStepWithLocalGoalRepair(topology, from, to, start, goal, nav, out step, allowed, targetArea)) return true;
             // Lough Gur's direct eastern seam reaches a Sheeroe cliff pocket; the main ground joins through the west end
             // of Bog of Cullen's northern border. The seam-area route above finds that crossing and goes straight there.
             // It used to be forced through a road point far south in Bog of Cullen first: the Cuuldurach raid walked
@@ -306,7 +308,7 @@ namespace DOL.GS
                 AutonomousNavigationSurface.TryFloor(nav, from, start, out start);
                 int? targetArea = AutonomousSeamChains.ConfidentTargetArea(regionId, to, goal);
                 trace?.Add($"target area {(targetArea?.ToString() ?? "none")}");
-                return TryNextStep(new Topology(zones, regionId), from, to, start, goal, nav, out step, allowed, targetArea);
+                return TryNextStepWithLocalGoalRepair(new Topology(zones, regionId), from, to, start, goal, nav, out step, allowed, targetArea);
             }
             finally { _probeTrace = null; }
         }
@@ -317,6 +319,38 @@ namespace DOL.GS
             public readonly int Area;
             public int Excluded;
             public TargetFilter(int area) => Area = area;
+        }
+
+        // The northeast Breifine slope is much higher than the ground just across the border in Mount Collory.
+        // Follow and rally destinations can carry an uphill Z onto the other side of the border.
+        internal static bool IsBreifineHillCrossing(ushort regionId, Zone from, Zone to, Vector3 start, Vector3 goal)
+        {
+            return regionId == 200 && from.ID == 212 && to.ID == 210 &&
+                Vector2.DistanceSquared(new(start.X, start.Y), new(417865, 417792)) <= 768 * 768 &&
+                Vector2.DistanceSquared(new(goal.X, goal.Y), new(417865, 417792)) <= 768 * 768;
+        }
+
+        private static bool TryNextStepWithLocalGoalRepair(Topology topology, Zone from, Zone to, Vector3 start,
+            Vector3 goal, IPathfindingMgr nav, out AutonomousZoneBoundaryRouting.Step step, Func<Zone, bool> allowed, int? targetArea)
+        {
+            if (TryNextStep(topology, from, to, start, goal, nav, out step, allowed, targetArea))
+                return true;
+
+            const float horizontalLimit = 48f;
+            const float depthLimit = 256f;
+            if (IsBreifineHillCrossing(topology.RegionId, from, to, start, goal) && nav.IsAvailable &&
+                nav.HasNavmesh(to) && !AutonomousNavigationSurface.TryFloor(nav, to, goal, out _) &&
+                nav.GetClosestPoint(to, goal, horizontalLimit, horizontalLimit, depthLimit, nav.DefaultFilters) is Vector3 floor &&
+                Contains(to, floor) && goal.Z - floor.Z is > 32f and <= depthLimit &&
+                Vector2.DistanceSquared(new(goal.X, goal.Y), new(floor.X, floor.Y)) <= horizontalLimit * horizontalLimit &&
+                TryNextStep(topology, from, to, start, floor, nav, out step, allowed,
+                    AutonomousSeamChains.ConfidentTargetArea(topology.RegionId, to, floor)))
+            {
+                step = step with { ResolvedGoal = floor };
+                return true;
+            }
+
+            return false;
         }
 
         private static bool TryNextStep(Topology topology, Zone from, Zone to, Vector3 start, Vector3 goal, IPathfindingMgr nav,

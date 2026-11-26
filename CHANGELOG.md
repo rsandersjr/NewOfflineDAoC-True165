@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Enchanting Helper bonus and tier menus stay inside the game window and scroll at any UI scale.
+
 - Companion buffers give Valewalkers melee priority for Strength, Strength/Constitution and haste.
   Pure casters can receive Strength/Constitution after higher-priority targets are covered.
 - Bards, Minstrels and Skalds keep active combat songs when hit in melee. Instrument songs keep the

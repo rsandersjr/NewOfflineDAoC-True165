@@ -25,12 +25,15 @@ func check(good: bool, text: String) -> void:
 
 func _ready() -> void:
 	await get_tree().process_frame
-	get_tree().root.size = Vector2i(560, 400)
+	get_tree().root.size = Vector2i(1600, 900)
 	var panel := Enchant.new()
 	get_tree().root.add_child(panel)
 	panel.set_process(false)
+	panel.scale = Vector2(2, 2)
 	var button := OptionButton.new()
 	panel.add_child(button)
+	var initial_size := get_tree().root.size
+	button.position = (Vector2(initial_size) - Vector2(160, 90)) / panel.scale
 	for i in 80:
 		button.add_item("BONUS %d" % i)
 	panel._limit_choice_popup(button)
@@ -38,15 +41,50 @@ func _ready() -> void:
 	button.show_popup()
 	await get_tree().process_frame
 	await get_tree().process_frame
-	print("[fixes] menu size=", menu.size, " cap=", menu.max_size)
-	check(menu.size.y <= get_tree().root.size.y and menu.item_count == 80 and menu.max_size.y <= 360, "bonus popup fits viewport with all items")
+	check(choice_fits(menu) and menu.item_count == 80, "scaled bonus popup fits at bottom right with all items")
 	var scroll := internal_scroll(menu)
-	check(scroll != null and scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page, "bonus scrollbar can scroll")
+	check(scroll != null and scroll.get_v_scroll_bar().is_visible_in_tree() and
+		scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page, "bonus scrollbar is visible and can scroll")
+	if scroll != null:
+		var bar := scroll.get_v_scroll_bar()
+		menu.scroll_to_item(79)
+		await get_tree().process_frame
+		check(bar.value > 0 and bar.max_value - bar.page - bar.value <= 3, "bonus popup reaches last item")
+		menu.scroll_to_item(0)
+		await get_tree().process_frame
+		check(bar.value <= 3, "bonus popup returns to first item")
+
+	get_tree().root.size = Vector2i(640, 480)
+	panel.scale = Vector2(1.5, 1.5)
+	panel._process(0.0)
+	await get_tree().process_frame
+	check(menu.visible and choice_fits(menu), "open bonus popup refits when viewport and interface scale change")
 	if scroll != null:
 		menu.scroll_to_item(79)
 		await get_tree().process_frame
-		check(scroll.scroll_vertical > 0, "bonus popup reaches last item")
+		var bar := scroll.get_v_scroll_bar()
+		check(bar.value > 0 and bar.max_value - bar.page - bar.value <= 3, "last option stays reachable after resize")
+	menu.index_pressed.emit(79)
+	check(button.selected == 79, "bounded popup still selects the original bonus index")
 	menu.hide()
+
+	var tier := OptionButton.new()
+	panel.add_child(tier)
+	tier.position = Vector2(350, 250)
+	tier.add_item("LESSER")
+	tier.add_item("GREATER")
+	tier.set_item_tooltip(1, "Greater gem")
+	panel._limit_choice_popup(tier)
+	tier.show_popup()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	var tier_menu := tier.get_popup()
+	check(choice_fits(tier_menu) and tier_menu.size.y < 160, "short tier popup uses its content height")
+	check(tier.get_item_tooltip(1) == "Greater gem", "tier tooltips remain available")
+	tier_menu.index_pressed.emit(1)
+	check(tier.selected == 1, "bounded popup still selects the original tier index")
+	tier_menu.hide()
+	get_tree().root.size = Vector2i(560, 400)
 	panel.queue_free()
 	var viewer := ProbeViewer.new()
 	get_tree().root.add_child(viewer)
@@ -91,6 +129,11 @@ func _ready() -> void:
 	viewer._server_mount(0)
 	check(absf(p.global_position.y - 6.5) < 0.04, "duplicate dismount keeps position")
 	get_tree().quit(failed)
+
+func choice_fits(menu: PopupMenu) -> bool:
+	var bounds := Rect2i(menu.position, menu.size)
+	return bounds.has_area() and bounds.size.y <= 360 and Rect2i(Vector2i.ZERO, get_tree().root.size).encloses(bounds)
+
 
 func internal_scroll(node: Node) -> ScrollContainer:
 	for child in node.get_children(true):

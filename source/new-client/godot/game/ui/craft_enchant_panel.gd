@@ -59,6 +59,9 @@ var _enchant: Button
 var _stop: Button
 var _status: RichTextLabel
 var _tick := 0.0
+var _open_choice: OptionButton
+var _choice_anchor := Rect2()
+var _choice_viewport := Rect2i()
 
 
 func setup(w: Control) -> void:
@@ -367,14 +370,53 @@ func _build_rows() -> void:
 		picks.append(pick)
 
 
-## Let PopupMenu scroll long lists inside the available game viewport.
+## Keep Godot's native menu and its focus and selection behavior. Its wrap minimum
+## can exceed max_size after applying the scaled HUD transform.
 func _limit_choice_popup(button: OptionButton) -> void:
 	var popup := button.get_popup()
-	var fit := func():
-		var height := int(button.get_viewport_rect().size.y * 0.65)
-		popup.max_size = Vector2i(0, clampi(height, 1, 360))
-	fit.call()
-	popup.about_to_popup.connect(fit)
+	popup.about_to_popup.connect(func():
+		popup.max_size = Vector2i(button.get_viewport_rect().size)
+	)
+	popup.visibility_changed.connect(func():
+		if popup.visible:
+			_open_choice = button
+			_choice_viewport = Rect2i()
+			_fit_open_choice.call_deferred()
+		else:
+			if _open_choice == button:
+				_open_choice = null
+			popup.wrap_controls = true
+	)
+
+
+func _fit_open_choice() -> void:
+	if not is_instance_valid(_open_choice):
+		return
+	var popup := _open_choice.get_popup()
+	if not popup.visible:
+		return
+	var transform := _open_choice.get_global_transform_with_canvas()
+	var anchor := transform * Rect2(Vector2.ZERO, _open_choice.size)
+	var viewport := Rect2i(_open_choice.get_viewport_rect())
+	if not viewport.has_area() or (anchor == _choice_anchor and viewport == _choice_viewport):
+		return
+	_choice_anchor = anchor
+	_choice_viewport = viewport
+
+	var hud_scale := minf(transform.get_scale().x, transform.get_scale().y)
+	var natural := Vector2i((popup.get_contents_minimum_size() * hud_scale).ceil())
+	popup.wrap_controls = false
+	popup.min_size = Vector2i.ZERO
+	popup.max_size = viewport.size
+	popup.content_scale_factor = hud_scale
+	var height_limit := clampi(int(viewport.size.y * 0.65), 1, 360)
+	popup.size = Vector2i(clampi(maxi(natural.x, ceili(anchor.size.x)), 1, viewport.size.x),
+		clampi(natural.y, 1, height_limit))
+
+	var origin := Vector2i(anchor.position.x, anchor.end.y)
+	if origin.y + popup.size.y > viewport.end.y and anchor.position.y - popup.size.y >= viewport.position.y:
+		origin.y = floori(anchor.position.y) - popup.size.y
+	popup.position = origin.clamp(viewport.position, viewport.end - popup.size)
 
 
 ## The gems of a bonus type, weakest first.
@@ -572,6 +614,7 @@ func _on_message(kind: String) -> void:
 
 
 func _process(delta: float) -> void:
+	_fit_open_choice()
 	_tick += delta
 	if _tick < 1.0 or not is_visible_in_tree():
 		return

@@ -4,7 +4,7 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
-- Enchanting Helper bonus and tier menus stay inside the game window and scroll at any UI scale.
+- Enchanting Helper bonus and gem-tier pickers use a fixed-height scroll box that scales with the interface. The full list is reachable without extending beyond the game window.
 - Near the Breifine hill, bots can use the validated route into Mount Collory when a nearby destination carries the wrong elevation.
 
 - Companion buffers give Valewalkers melee priority for Strength, Strength/Constitution and haste.

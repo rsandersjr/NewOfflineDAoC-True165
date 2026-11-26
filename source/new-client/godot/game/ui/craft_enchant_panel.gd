@@ -11,6 +11,36 @@ extends Control
 ## The craft window makes it (load(...).new()), sets its position and size, adds it and calls setup(window).
 
 const Net := preload("res://game/net/craft_assist_net.gd")
+# A bounded list control owns scrolling. PopupMenu otherwise derives its
+# minimum height from every option, which can overrun a scaled game window.
+class ChoiceButton extends Button:
+	signal item_selected(index: int)
+
+	var selected := -1
+	var labels: Array[String] = []
+	var tips: Dictionary = {}
+
+	func clear() -> void:
+		labels.clear()
+		tips.clear()
+		select(-1)
+
+	func add_item(label: String) -> void:
+		labels.append(label)
+		if selected < 0:
+			select(0)
+
+	func set_item_tooltip(index: int, tip: String) -> void:
+		tips[index] = tip
+
+	func select(index: int) -> void:
+		if index < -1 or index >= labels.size():
+			return
+		selected = index
+		text = labels[index] if index >= 0 else ""
+
+const CHOICE_SIZE := Vector2(242, 182)
+const CHOICE_MARGIN := 4.0
 const SPELLCRAFTING := 13
 const ALCHEMY := 4
 const MAX_SLOTS := 4
@@ -32,7 +62,7 @@ var window: Control = null
 var slot := -1                                       # the picked backpack slot (-1: none)
 var items: Array = []                                # the item list's rows: {slot, name, level, quality, icon}
 var tab := 0                                         # 0 SPELLCRAFT, 1 ALCHEMY
-var picks: Array = []                                # one per free bonus slot: {bonus: OptionButton, tier: OptionButton}
+var picks: Array = []                                # one per free bonus slot: {bonus: ChoiceButton, tier: ChoiceButton}
 var bonus_types: Array = []                          # the bonus drop-downs' types (after "NONE")
 var tinctures: Array = []                            # the tincture list's rows (enchant_info tinctures that fit)
 var tincture := -1                                   # the chosen tincture recipe id
@@ -59,9 +89,12 @@ var _enchant: Button
 var _stop: Button
 var _status: RichTextLabel
 var _tick := 0.0
-var _open_choice: OptionButton
-var _choice_anchor := Rect2()
-var _choice_viewport := Rect2i()
+var _choice_overlay: Control
+var _choice_popup: Panel
+var _choice_list: ItemList
+var _open_choice: ChoiceButton
+var _choice_rect := Rect2i()
+var _choice_scale := 0.0
 
 
 func setup(w: Control) -> void:
@@ -328,6 +361,7 @@ func set_tab(t: int) -> void:
 
 ## One bonus + tier row per free bonus slot of the item, from the server's gem rows.
 func _build_rows() -> void:
+	_close_choice()
 	if _rows_box == null:
 		return
 	for c in _rows_box.get_children():
@@ -361,62 +395,132 @@ func _build_rows() -> void:
 		var bw := (inner - 48.0) * 0.45
 		var tw := inner - 48.0 - bw - 8.0
 		var idx := picks.size()
-		pick.bonus = CompanionUi.option(row, names, Vector2.ZERO, Vector2(bw, 18), func(_i: int): _pick_bonus(idx))
-		pick.tier = CompanionUi.option(row, ["-"], Vector2.ZERO, Vector2(tw, 18), func(_i: int): refresh())
-		_limit_choice_popup(pick.bonus)
-		_limit_choice_popup(pick.tier)
+		pick.bonus = _make_choice(row, names, bw, func(_i: int): _pick_bonus(idx))
+		pick.tier = _make_choice(row, ["-"], tw, func(_i: int): refresh())
 		pick.tier.disabled = true
 		pick.gems = []
 		picks.append(pick)
 
 
-## Keep Godot's native menu and its focus and selection behavior. Its wrap minimum
-## can exceed max_size after applying the scaled HUD transform.
-func _limit_choice_popup(button: OptionButton) -> void:
-	var popup := button.get_popup()
-	popup.about_to_popup.connect(func():
-		popup.max_size = Vector2i(button.get_viewport_rect().size)
-	)
-	popup.visibility_changed.connect(func():
-		if popup.visible:
-			_open_choice = button
-			_choice_viewport = Rect2i()
-			_fit_open_choice.call_deferred()
-		else:
-			if _open_choice == button:
-				_open_choice = null
-			popup.wrap_controls = true
-	)
+func _make_choice(row: Control, labels: Array, width: float, on_pick: Callable) -> ChoiceButton:
+	var button := ChoiceButton.new()
+	button.custom_minimum_size = Vector2(width, 18)
+	button.clip_text = true
+	button.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_font_override("font", UiArt.font(true))
+	button.add_theme_font_size_override("font_size", 8)
+	button.add_theme_color_override("font_color", UiArt.CREAM)
+	button.add_theme_stylebox_override("normal", UiArt.bar_style(0))
+	button.add_theme_stylebox_override("hover", UiArt.bar_style(1))
+	button.add_theme_stylebox_override("pressed", UiArt.bar_style(2))
+	button.add_theme_stylebox_override("disabled", UiArt.bar_style(3))
+	UiArt.themed(button)
+	for label in labels:
+		button.add_item(String(label).to_upper())
+	button.item_selected.connect(on_pick)
+	button.pressed.connect(func(): _show_choice(button))
+	row.add_child(button)
+	return button
 
 
-func _fit_open_choice() -> void:
-	if not is_instance_valid(_open_choice):
-		return
-	var popup := _open_choice.get_popup()
-	if not popup.visible:
+func _show_choice(button: ChoiceButton) -> void:
+	if _choice_popup == null:
+		var layer := CanvasLayer.new()
+		layer.layer = 100
+		add_child(layer)
+		_choice_overlay = Control.new()
+		_choice_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+		layer.add_child(_choice_overlay)
+		_choice_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_choice_overlay.gui_input.connect(func(event: InputEvent):
+			if event is InputEventMouseButton and event.pressed and event.button_index <= MOUSE_BUTTON_MIDDLE:
+				_close_choice())
+		visibility_changed.connect(func():
+			if not is_visible_in_tree():
+				_close_choice())
+		_choice_popup = Panel.new()
+		var border := StyleBoxFlat.new()
+		border.bg_color = Color(0.05, 0.045, 0.04, 0.98)
+		border.border_color = UiArt.GOLD.darkened(0.3)
+		border.set_border_width_all(1)
+		_choice_popup.add_theme_stylebox_override("panel", border)
+		_choice_overlay.add_child(_choice_popup)
+		_choice_list = ItemList.new()
+		_choice_list.max_columns = 1
+		_choice_list.max_text_lines = 1
+		_choice_list.auto_height = false
+		_choice_list.auto_width = false
+		_choice_list.add_theme_font_override("font", UiArt.font(true))
+		_choice_list.add_theme_font_size_override("font_size", 9)
+		_choice_list.add_theme_color_override("font_color", UiArt.CREAM)
+		_choice_list.add_theme_constant_override("v_separation", 6)
+		_choice_popup.add_child(_choice_list)
+		_choice_list.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		_choice_list.offset_left = CHOICE_MARGIN
+		_choice_list.offset_top = CHOICE_MARGIN
+		_choice_list.offset_right = -CHOICE_MARGIN
+		_choice_list.offset_bottom = -CHOICE_MARGIN
+		_choice_list.item_clicked.connect(func(index: int, _at: Vector2, mouse: int):
+			if mouse == MOUSE_BUTTON_LEFT:
+				_accept_choice(index))
+		_choice_list.item_activated.connect(_accept_choice)
+		_choice_list.gui_input.connect(func(event: InputEvent):
+			if event.is_action_pressed("ui_cancel"):
+				_choice_list.accept_event()
+				_close_choice())
+	_open_choice = button
+	_choice_rect = Rect2i()
+	_choice_list.clear()
+	for i in button.labels.size():
+		_choice_list.add_item(button.labels[i])
+		_choice_list.set_item_tooltip(i, String(button.tips.get(i, "")))
+	if button.selected >= 0:
+		_choice_list.select(button.selected)
+	_choice_overlay.show()
+	_fit_choice()
+	_choice_list.grab_focus()
+	_choice_list.ensure_current_is_visible.call_deferred()
+
+
+func _fit_choice() -> void:
+	if not is_instance_valid(_open_choice) or not _open_choice.is_visible_in_tree() or _open_choice.disabled:
+		_close_choice()
 		return
 	var transform := _open_choice.get_global_transform_with_canvas()
+	var viewport := _open_choice.get_viewport_rect()
 	var anchor := transform * Rect2(Vector2.ZERO, _open_choice.size)
-	var viewport := Rect2i(_open_choice.get_viewport_rect())
-	if not viewport.has_area() or (anchor == _choice_anchor and viewport == _choice_viewport):
-		return
-	_choice_anchor = anchor
-	_choice_viewport = viewport
-
 	var hud_scale := minf(transform.get_scale().x, transform.get_scale().y)
-	var natural := Vector2i((popup.get_contents_minimum_size() * hud_scale).ceil())
-	popup.wrap_controls = false
-	popup.min_size = Vector2i.ZERO
-	popup.max_size = viewport.size
-	popup.content_scale_factor = hud_scale
-	var height_limit := clampi(int(viewport.size.y * 0.65), 1, 360)
-	popup.size = Vector2i(clampi(maxi(natural.x, ceili(anchor.size.x)), 1, viewport.size.x),
-		clampi(natural.y, 1, height_limit))
+	var scale_factor := minf(hud_scale, minf(viewport.size.x * 0.92 / CHOICE_SIZE.x,
+		viewport.size.y * 0.62 / CHOICE_SIZE.y))
+	if scale_factor <= 0.0:
+		return
+	var extent := (CHOICE_SIZE * scale_factor).ceil().max(Vector2.ONE)
+	var x := clampf(anchor.position.x, viewport.position.x, viewport.end.x - extent.x)
+	var y := anchor.end.y if anchor.end.y + extent.y <= viewport.end.y else anchor.position.y - extent.y
+	y = clampf(y, viewport.position.y, viewport.end.y - extent.y)
+	var rect := Rect2i(Vector2i(Vector2(x, y).floor()), Vector2i(extent))
+	if rect == _choice_rect and is_equal_approx(scale_factor, _choice_scale):
+		return
+	_choice_rect = rect
+	_choice_scale = scale_factor
+	_choice_popup.scale = Vector2.ONE * scale_factor
+	_choice_popup.size = CHOICE_SIZE
+	_choice_popup.position = Vector2(rect.position)
 
-	var origin := Vector2i(anchor.position.x, anchor.end.y)
-	if origin.y + popup.size.y > viewport.end.y and anchor.position.y - popup.size.y >= viewport.position.y:
-		origin.y = floori(anchor.position.y) - popup.size.y
-	popup.position = origin.clamp(viewport.position, viewport.end - popup.size)
+
+func _close_choice() -> void:
+	_open_choice = null
+	if _choice_overlay != null:
+		_choice_overlay.hide()
+
+
+func _accept_choice(index: int) -> void:
+	if not is_instance_valid(_open_choice) or _open_choice.disabled or index < 0 or index >= _open_choice.labels.size():
+		return
+	var button := _open_choice
+	_close_choice()
+	button.select(index)
+	button.item_selected.emit(index)
 
 
 ## The gems of a bonus type, weakest first.
@@ -431,8 +535,8 @@ func gems_of(t: int) -> Array:
 
 func _pick_bonus(i: int) -> void:
 	var p: Dictionary = picks[i]
-	var b: OptionButton = p.bonus
-	var tier: OptionButton = p.tier
+	var b: ChoiceButton = p.bonus
+	var tier: ChoiceButton = p.tier
 	tier.clear()
 	p.gems = []
 	if b.selected <= 0:
@@ -465,11 +569,11 @@ func choose(i: int, bonus_type: int, tier := -1) -> void:
 	if i >= picks.size():
 		return
 	var k := bonus_types.find(bonus_type)
-	var b: OptionButton = picks[i].bonus
+	var b: ChoiceButton = picks[i].bonus
 	b.select(k + 1)
 	_pick_bonus(i)
 	if tier >= 0:
-		(picks[i].tier as OptionButton).select(tier)
+		(picks[i].tier as ChoiceButton).select(tier)
 		refresh()
 
 
@@ -477,8 +581,8 @@ func choose(i: int, bonus_type: int, tier := -1) -> void:
 func chosen_gems() -> Array:
 	var out := []
 	for p in picks:
-		var b: OptionButton = p.bonus
-		var tier: OptionButton = p.tier
+		var b: ChoiceButton = p.bonus
+		var tier: ChoiceButton = p.tier
 		if b.selected > 0 and tier.selected >= 0 and tier.selected < (p.gems as Array).size():
 			out.append(p.gems[tier.selected])
 	return out
@@ -614,7 +718,8 @@ func _on_message(kind: String) -> void:
 
 
 func _process(delta: float) -> void:
-	_fit_open_choice()
+	if _choice_overlay != null and _choice_overlay.visible:
+		_fit_choice()
 	_tick += delta
 	if _tick < 1.0 or not is_visible_in_tree():
 		return
@@ -700,8 +805,8 @@ func refresh() -> void:
 	_spell_box.visible = tab == 0
 	_alch_box.visible = tab == 1
 	for p in picks:
-		(p.bonus as OptionButton).disabled = busy
-		(p.tier as OptionButton).disabled = busy or (p.bonus as OptionButton).selected <= 0
+		(p.bonus as ChoiceButton).disabled = busy
+		(p.tier as ChoiceButton).disabled = busy or (p.bonus as ChoiceButton).selected <= 0
 	_over.disabled = busy
 	if tab == 0:
 		_show_meter()

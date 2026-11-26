@@ -25,67 +25,7 @@ func check(good: bool, text: String) -> void:
 
 func _ready() -> void:
 	await get_tree().process_frame
-	get_tree().root.size = Vector2i(1600, 900)
-	var panel := Enchant.new()
-	get_tree().root.add_child(panel)
-	panel.set_process(false)
-	panel.scale = Vector2(2, 2)
-	var button := OptionButton.new()
-	panel.add_child(button)
-	var initial_size := get_tree().root.size
-	button.position = (Vector2(initial_size) - Vector2(160, 90)) / panel.scale
-	for i in 80:
-		button.add_item("BONUS %d" % i)
-	panel._limit_choice_popup(button)
-	var menu := button.get_popup()
-	button.show_popup()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	check(choice_fits(menu) and menu.item_count == 80, "scaled bonus popup fits at bottom right with all items")
-	var scroll := internal_scroll(menu)
-	check(scroll != null and scroll.get_v_scroll_bar().is_visible_in_tree() and
-		scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page, "bonus scrollbar is visible and can scroll")
-	if scroll != null:
-		var bar := scroll.get_v_scroll_bar()
-		menu.scroll_to_item(79)
-		await get_tree().process_frame
-		check(bar.value > 0 and bar.max_value - bar.page - bar.value <= 3, "bonus popup reaches last item")
-		menu.scroll_to_item(0)
-		await get_tree().process_frame
-		check(bar.value <= 3, "bonus popup returns to first item")
-
-	get_tree().root.size = Vector2i(640, 480)
-	panel.scale = Vector2(1.5, 1.5)
-	panel._process(0.0)
-	await get_tree().process_frame
-	check(menu.visible and choice_fits(menu), "open bonus popup refits when viewport and interface scale change")
-	if scroll != null:
-		menu.scroll_to_item(79)
-		await get_tree().process_frame
-		var bar := scroll.get_v_scroll_bar()
-		check(bar.value > 0 and bar.max_value - bar.page - bar.value <= 3, "last option stays reachable after resize")
-	menu.index_pressed.emit(79)
-	check(button.selected == 79, "bounded popup still selects the original bonus index")
-	menu.hide()
-
-	var tier := OptionButton.new()
-	panel.add_child(tier)
-	tier.position = Vector2(350, 250)
-	tier.add_item("LESSER")
-	tier.add_item("GREATER")
-	tier.set_item_tooltip(1, "Greater gem")
-	panel._limit_choice_popup(tier)
-	tier.show_popup()
-	await get_tree().process_frame
-	await get_tree().process_frame
-	var tier_menu := tier.get_popup()
-	check(choice_fits(tier_menu) and tier_menu.size.y < 160, "short tier popup uses its content height")
-	check(tier.get_item_tooltip(1) == "Greater gem", "tier tooltips remain available")
-	tier_menu.index_pressed.emit(1)
-	check(tier.selected == 1, "bounded popup still selects the original tier index")
-	tier_menu.hide()
-	get_tree().root.size = Vector2i(560, 400)
-	panel.queue_free()
+	await check_enchant_picker()
 	var viewer := ProbeViewer.new()
 	get_tree().root.add_child(viewer)
 	var p := ProbePlayer.new()
@@ -130,19 +70,83 @@ func _ready() -> void:
 	check(absf(p.global_position.y - 6.5) < 0.04, "duplicate dismount keeps position")
 	get_tree().quit(failed)
 
-func choice_fits(menu: PopupMenu) -> bool:
-	var bounds := Rect2i(menu.position, menu.size)
-	return bounds.has_area() and bounds.size.y <= 360 and Rect2i(Vector2i.ZERO, get_tree().root.size).encloses(bounds)
+func check_enchant_picker() -> void:
+	var viewport := get_tree().root
+	if "--borderless-probe" in OS.get_cmdline_user_args():
+		viewport.borderless = true
+		check(viewport.borderless, "borderless window is active")
+	var hud := Control.new()
+	viewport.add_child(hud)
+	var panel := Enchant.new()
+	hud.add_child(panel)
+	var labels := []
+	for i in 80:
+		labels.append("BONUS %d" % i)
+	labels[79] = "TWO HANDED SPECIFICATION FOCUS"
+	var picked := [-1]
+	var button := panel._make_choice(panel, labels, 146.0, func(i: int): picked[0] = i)
+	button.size = Vector2(146, 18)
+	button.set_item_tooltip(79, "Last option tooltip")
+	for resolution in [Vector2i(640, 480), Vector2i(1280, 720), Vector2i(1920, 1080), Vector2i(3840, 2160)]:
+		for ui_scale in [0.6, 1.0, 1.6]:
+			viewport.size = resolution
+			hud.scale = Vector2.ONE * resolution.y / 600.0 * 0.78 * ui_scale
+			button.position = Vector2(viewport.size) / hud.scale - button.size - Vector2(10, 10)
+			button.select(0)
+			panel._show_choice(button)
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var popup: Panel = panel._choice_popup
+			var list: ItemList = panel._choice_list
+			var scroll := list.get_v_scroll_bar()
+			var fitted := viewport.get_visible_rect().encloses(Rect2(popup.position, popup.size * popup.scale))
+			scroll.value = scroll.min_value
+			await get_tree().process_frame
+			var top_visible := scroll.value <= scroll.min_value + 1 and list.get_item_rect(0).end.y <= list.size.y
+			var wheel := InputEventMouseButton.new()
+			wheel.position = list.get_global_transform_with_canvas() * Vector2(25, 25)
+			wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+			wheel.pressed = true
+			viewport.push_input(wheel, true)
+			await get_tree().process_frame
+			var wheel_moves := scroll.value > 0
+			scroll.value = scroll.max_value
+			await get_tree().process_frame
+			var bottom_visible := scroll.value > 0 and list.get_item_rect(79).end.y - scroll.value <= list.size.y
+			check(fitted and top_visible and bottom_visible and scroll.visible and list.get_item_count() == 80
+				and list.get_item_tooltip(79) == "Last option tooltip", "bounded bonus picker %s at %.1f" % [resolution, ui_scale])
+			var last := list.get_item_rect(79).get_center() - Vector2(0, scroll.value)
+			var click := InputEventMouseButton.new()
+			click.position = list.get_global_transform_with_canvas() * last
+			click.button_index = MOUSE_BUTTON_LEFT
+			click.pressed = true
+			viewport.push_input(click, true)
+			click.pressed = false
+			viewport.push_input(click, true)
+			check(picked[0] == 79 and button.selected == 79 and not popup.is_visible_in_tree(), "select final bonus")
+	var tier := panel._make_choice(panel, ["+1 IMBUE", "+2 IMBUE", "+3 IMBUE"], 146.0, func(i: int): picked[0] = i)
+	tier.position = button.position
+	tier.size = button.size
+	panel._show_choice(tier)
+	await get_tree().process_frame
+	hud.scale *= 0.7
+	viewport.size = Vector2i(1024, 768)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	check(panel._choice_list.get_item_count() == 3 and
+		viewport.get_visible_rect().encloses(Rect2(panel._choice_popup.position, panel._choice_popup.size * panel._choice_popup.scale)),
+		"open gem tiers refit on a live resize and UI-scale change")
+	panel._choice_list.item_activated.emit(2)
+	check(tier.selected == 2 and picked[0] == 2, "keyboard activates gem tier")
+	panel._show_choice(tier)
+	await get_tree().process_frame
+	var cancel := InputEventKey.new()
+	cancel.keycode = KEY_ESCAPE
+	cancel.pressed = true
+	viewport.push_input(cancel, true)
+	check(not panel._choice_overlay.visible, "Escape dismisses the picker")
+	hud.queue_free()
 
-
-func internal_scroll(node: Node) -> ScrollContainer:
-	for child in node.get_children(true):
-		if child is ScrollContainer:
-			return child
-		var result := internal_scroll(child)
-		if result != null:
-			return result
-	return null
 
 func make_npc(mgr: NpcManager, i: int, spawn: Dictionary, pos: Vector3) -> Npc:
 	var view := Npc.new()

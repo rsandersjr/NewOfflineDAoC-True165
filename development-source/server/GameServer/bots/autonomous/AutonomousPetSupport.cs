@@ -1143,7 +1143,7 @@ public static class AutonomousPetSupport
         // channel, not a fire-and-forget buff, and consumes every casting turn
         // while the pet fights. Leave it available to manual/player-hotbar
         // casts, but never select it as their autonomous pet upkeep.
-        if (IsDisabledBotDamageShield(owner, spell))
+        if (RequiresManagedPetFocusShield(owner, spell))
             return false;
 
         // Spell.Duration is normalized to milliseconds by Spell's constructor.
@@ -1151,10 +1151,8 @@ public static class AutonomousPetSupport
         return !shortTacticalEffect || hasCombatTarget;
     }
 
-    public static bool IsDisabledBotDamageShield(GameLiving owner, Spell spell) =>
-        spell?.SpellType == eSpellType.DamageShield && owner is GameBot bot &&
-        (eCharacterClass?)bot.CharacterClass?.ID is eCharacterClass.Cabalist or eCharacterClass.Enchanter or
-            eCharacterClass.Spiritmaster;
+    public static bool RequiresManagedPetFocusShield(GameLiving owner, Spell spell) =>
+        owner is GameBot && BotPetFocusShieldPolicy.IsPetFocusShield(spell);
 
     /// <summary>
     /// The three primary caster-pet classes must be allowed to acquire and

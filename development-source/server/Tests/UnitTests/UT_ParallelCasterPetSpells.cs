@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Reflection;
 using DOL.Database;
@@ -46,7 +47,7 @@ namespace DOL.UnitTests
         [TestCase(eCharacterClass.Enchanter, true)]
         [TestCase(eCharacterClass.Spiritmaster, false)]
         [TestCase(eCharacterClass.Spiritmaster, true)]
-        public void EveryShieldRankIsRejectedAndDamageSpellRemainsSelectable(eCharacterClass characterClass, bool companion)
+        public void EveryFocusShieldRankUsesTheManagedCastPath(eCharacterClass characterClass, bool companion)
         {
             Bot bot = Create(characterClass);
             typeof(GameBot).GetProperty(nameof(GameBot.IsTemporaryGroupHelper)).SetValue(bot, companion);
@@ -55,7 +56,7 @@ namespace DOL.UnitTests
             // Reject by spell type, not names or today's database IDs.
             for (int rank = 1; rank <= 50; rank++)
             {
-                Spell shield = Shield(rank, rank % 2 == 0);
+                Spell shield = Shield(rank, true);
                 known.Add(shield);
                 Assert.That(AutonomousPetSupport.ShouldMaintainRoutinePetBuff(shield, true, bot), Is.False);
                 Assert.That(AutonomousPetSupport.ShouldMaintainRoutinePetBuff(shield, false, bot), Is.False);
@@ -67,13 +68,54 @@ namespace DOL.UnitTests
             Assert.That(bot.HarmfulSpells, Does.Contain(damage));
         }
 
-        [TestCase(eCharacterClass.Bonedancer)]
-        public void OtherPetClassesKeepExistingSpellPolicy(eCharacterClass characterClass)
+        [TestCase(eCharacterClass.Enchanter)]
+        [TestCase(eCharacterClass.Spiritmaster)]
+        [TestCase(eCharacterClass.Cabalist)]
+        [TestCase(eCharacterClass.Animist)]
+        public void TimedRealmShieldStaysAvailableToBuffAValewalker(eCharacterClass characterClass)
         {
             Bot bot = Create(characterClass);
-            Spell shield = Shield(1, true);
-            Assert.That(AutonomousPetSupport.IsDisabledBotDamageShield(bot, shield), Is.False);
-            Assert.That(AutonomousPetSupport.ShouldMaintainRoutinePetBuff(shield, true, bot), Is.True);
+            Spell timed = new(new DbSpell { SpellID = 4312, Type = "DamageShield", Target = "Realm", Duration = 1200, CastTime = 3 }, 4);
+            bot.Spells = [timed];
+            bot.SortSpells();
+            Assert.That(AutonomousPetSupport.RequiresManagedPetFocusShield(bot, timed), Is.False);
+            Assert.That(bot.MiscSpells, Does.Contain(timed));
+            Assert.That(DOL.AI.Brain.BotBrain.IsMaintainableClassBuff(timed, true), Is.True);
+            Assert.That(DOL.AI.Brain.BotBrain.BuffHelps(new ClassValewalker(), timed, true), Is.True);
+            Assert.That(BotPetFocusShieldPolicy.KnowsPetFocusShield(bot), Is.False);
+        }
+
+        [TestCase(eCharacterClass.Enchanter)]
+        [TestCase(eCharacterClass.Spiritmaster)]
+        [TestCase(eCharacterClass.Cabalist)]
+        [TestCase(eCharacterClass.Animist)] // catalog-based eligibility if a class learns a genuine focus shield
+        public void HiredFocusShieldRequiresAnExplicitOptIn(eCharacterClass characterClass)
+        {
+            Bot bot = Create(characterClass);
+            bot.DatabaseID = long.MaxValue - 21;
+            bot.Spells = [Shield(51, true)];
+            Assert.That(BotPetFocusShieldPolicy.KnowsPetFocusShield(bot), Is.False);
+            bot.Spells = [Shield(1, true)];
+            Assert.That(BotPetFocusShieldPolicy.KnowsPetFocusShield(bot), Is.True);
+            Assert.That(CompanionOptions165.PetFocusShieldEnabled(bot), Is.True, "world bot keeps the existing combat policy");
+            (string key, string[] choices) = CompanionOptions165.Option(CompanionOptions165.KindPetFocusShield).Value;
+            Assert.That(choices[0], Is.EqualTo("Off"));
+            var hired = (ConcurrentDictionary<long, OfflineHiredCompanionRecord>) typeof(HiredCompanions165)
+                .GetField("Hired", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+            var record = new OfflineHiredCompanionRecord { BotId = bot.DatabaseID };
+            Assert.That(hired.TryAdd(bot.DatabaseID, record), Is.True);
+            try
+            {
+                Assert.That(CompanionOptions165.PetFocusShieldEnabled(bot), Is.False);
+                record.Options = key + "=1";
+                Assert.That(CompanionOptions165.PetFocusShieldEnabled(bot), Is.True);
+                record.Options = "";
+                Assert.That(CompanionOptions165.PetFocusShieldEnabled(bot), Is.False);
+            }
+            finally
+            {
+                hired.TryRemove(bot.DatabaseID, out _);
+            }
         }
 
         [TestCase(eCharacterClass.Cabalist)]
@@ -104,6 +146,7 @@ namespace DOL.UnitTests
                 eCharacterClass.Cabalist => new ClassCabalist(),
                 eCharacterClass.Enchanter => new ClassEnchanter(),
                 eCharacterClass.Spiritmaster => new ClassSpiritmaster(),
+                eCharacterClass.Animist => new ClassAnimist(),
                 _ => new ClassBonedancer()
             };
             return bot;

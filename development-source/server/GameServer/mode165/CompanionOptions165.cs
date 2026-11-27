@@ -21,7 +21,7 @@ namespace DOL.GS
     ///
     /// Kinds 5 and up are generic (client protocol, 2026-11-05): names[0] is the row's caption, the rest the choices,
     /// [3] the chosen index into the choices without the caption; the client sends "option (row) (kind) (slot) (i)".
-    /// Each is one class AI choice from the 2026-11-05 class audit (see Generics); choice 0 is always "Automatic".
+    /// Each is one class AI choice from the 2026-11-05 class audit (see Generics); choice 0 is the default.
     /// 2026-11-11: kind 29 is the pure casters' "Save power" row (key savepower, third choice Strict; kind 26 stays for
     /// everyone else), kind 30 "Attack spells" (casters); every Role row (13-15) has a fourth choice, 3 "Melee and heal".
     /// </summary>
@@ -38,12 +38,14 @@ namespace DOL.GS
         /// <summary>Companion controls (veteran review M7 and the owner's twist option, 2026-11-11; CompanionControls165).</summary>
         public const byte KindTwist = 40, KindStance = 41, KindCrowdControl = 42, KindPetJob = 43, KindWeapon = 44,
             KindStag = 47, KindCriticalShot = 48, KindOpeningStun = 49, KindEngage = 50, KindSlamSwap = 51,
-            KindTripleWield = 52, KindBuffPriority = 53, KindRunemasterBladeturn = 54;
+            KindTripleWield = 52, KindBuffPriority = 53, KindRunemasterBladeturn = 54, KindPetFocusShield = 55;
+        private const string PetFocusShieldKey = "petfocusshield";
+
         /// <summary>The fourth Role choice of every healer's Role row (owner 2026-11-11; CompanionSpellOptions165).</summary>
         public const string MeleeHealChoice = "Melee and heal, no attack spells (melee interrupts casts)";
         public static readonly HashSet<string> Verbs = ["charm", "pet", "subpet", "song", "option"];
 
-        /// <summary>A generic AI choice row: its kind, stored key, caption, choices (0 = Automatic) and who gets it.</summary>
+        /// <summary>A generic AI choice row: its kind, stored key, caption, choices (0 = default) and who gets it.</summary>
         private sealed record Generic(byte Kind, string Key, string Caption, string[] Choices, Func<GameBot, bool> Applies);
 
         private static readonly Generic[] Generics =
@@ -123,6 +125,8 @@ namespace DOL.GS
                 ["Automatic (by job)", "Front line first", "Casters and healers first"],
                 bot => (bot.MiscSpells ?? []).Any(spell => spell?.IsConcentration == true &&
                     spell.Target == eSpellTarget.REALM && BotBrain.IsMaintainableClassBuff(spell))),
+            new(KindPetFocusShield, PetFocusShieldKey, "Pet focus shield", ["Off", "On (when pet is tanking)"],
+                BotPetFocusShieldPolicy.KnowsPetFocusShield),
             new(KindRunemasterBladeturn, "runempbt", "Group bladeturn", ["Automatic", "Keep up when grouped", "Off"],
                 bot => bot.CharacterClass?.ID == (int)eCharacterClass.Runemaster &&
                     (bot.MiscSpells ?? []).Any(BotBrain.IsGroupBladeturnPulse)),
@@ -183,7 +187,7 @@ namespace DOL.GS
                        (bot.HarmfulSpells ?? []).Concat(bot.InstantHarmfulSpells ?? []).Any(BotControlSpells.IsStun)),
         ];
 
-        /// <summary>A generic AI option's stored key and choices (choice 0 Automatic), or null for an unknown kind.</summary>
+        /// <summary>A generic AI option's stored key and choices (choice 0 is the default), or null for an unknown kind.</summary>
         public static (string Key, string[] Choices)? Option(byte kind) =>
             Generics.FirstOrDefault(g => g.Kind == kind) is { } option ? (option.Key, option.Choices) : null;
 
@@ -205,9 +209,14 @@ namespace DOL.GS
             roleChoice is 1 or 2 or 3 &&
             characterClass is eCharacterClass.Cleric or eCharacterClass.Druid or eCharacterClass.Healer;
 
-        /// <summary>The player's choice for a generic AI option (0 = Automatic; always 0 for gamebots).</summary>
+        /// <summary>The player's choice for a generic AI option (0 = default; always 0 for gamebots).</summary>
         public static int Choice(GameBot bot, string key) =>
             Get(bot, key) is { } v && int.TryParse(v, out int i) ? i : 0;
+
+        /// <summary>Only hired companions have an owner setting. Unset and Off both mean no focus shield.</summary>
+        public static bool PetFocusShieldEnabled(GameBot bot) =>
+            HiredCompanions165.HiredRecord(bot) is not { } hired ||
+            Read(hired).TryGetValue(PetFocusShieldKey, out string value) && value == "1";
 
         // ---- debuffs (owner 2026-11-08: "pick which debuffs are used before nuking as long as they stack on a target, or
         // choose just one, or just two, or none ... if debuffs before nuking is on")

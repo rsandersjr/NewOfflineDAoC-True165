@@ -3672,7 +3672,7 @@ namespace DOL.AI.Brain
                 return false;
 
             Spell shield = Body.MiscSpells
-                .Where(spell => IsShortCombatShield(spell) && !AutonomousPetSupport.IsDisabledBotDamageShield(BotBody, spell) &&
+                .Where(spell => IsShortCombatShield(spell) && !AutonomousPetSupport.RequiresManagedPetFocusShield(BotBody, spell) &&
                                 CanCastDefensiveSpell(spell))
                 .OrderByDescending(spell => spell.Level)
                 .FirstOrDefault();
@@ -4609,7 +4609,7 @@ namespace DOL.AI.Brain
                     spell.Level <= Body.Level && spell.Target is eSpellTarget.ENEMY or eSpellTarget.AREA or eSpellTarget.CONE &&
                     spell.SpellType is not eSpellType.Charm and not eSpellType.Amnesia and not eSpellType.Confusion and not eSpellType.Taunt &&
                     !BotControlSpells.IsControl(spell) &&   // owner 2026-11-08: control is no attack spell to stand at
-                    !AutonomousPetSupport.IsDisabledBotDamageShield(BotBody, spell) &&
+                    !AutonomousPetSupport.RequiresManagedPetFocusShield(BotBody, spell) &&
                     AnimistSingleTargetPolicy.AllowsAutomatedSpell(BotBody, spell))
                 .Select(spell => spell.Target == eSpellTarget.AREA && spell.Range <= 0
                     ? Math.Max(1, spell.Radius) : Math.Max(1, spell.CalculateEffectiveRange(Body)))
@@ -4807,7 +4807,7 @@ namespace DOL.AI.Brain
                     spell.SpellType is not eSpellType.Charm and not eSpellType.Amnesia and
                         not eSpellType.Confusion and not eSpellType.Taunt &&
                     !BotControlSpells.IsControl(spell) &&   // owner 2026-11-08: power for a snare or stun is no attack power
-                    !AutonomousPetSupport.IsDisabledBotDamageShield(BotBody, spell) &&
+                    !AutonomousPetSupport.RequiresManagedPetFocusShield(BotBody, spell) &&
                     !BotSpellPower.BlocksAttackerRotation(BotBody, spell) &&
                     !IsOutclassedDamageSpell(spell) &&
                     AnimistSingleTargetPolicy.AllowsAutomatedSpell(BotBody, spell))

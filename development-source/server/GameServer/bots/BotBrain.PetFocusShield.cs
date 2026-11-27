@@ -20,9 +20,8 @@ namespace DOL.AI.Brain
 
         /// <summary>A pet shield class with its pet out (cheap test before the full shield check).</summary>
         private bool MayOpenWithPetShield =>
-            Classic165Mode.IsOn && Body.ControlledBrain != null &&
-            (eCharacterClass?)BotBody?.CharacterClass?.ID is eCharacterClass.Cabalist or eCharacterClass.Enchanter or
-                eCharacterClass.Spiritmaster;
+            Classic165Mode.IsOn && Body.ControlledBrain != null && CompanionOptions165.PetFocusShieldEnabled(BotBody) &&
+            BotPetFocusShieldPolicy.KnowsPetFocusShield(BotBody);
 
         private bool IsChannellingPetShield =>
             Body.castingComponent is { IsFocusChanneling: true } casting &&
@@ -79,7 +78,8 @@ namespace DOL.AI.Brain
         private bool TryStartPetFocusShield(bool nothingElseToCast)
         {
             ObservePetShieldChannel();
-            if (BotBody?.CharacterClass == null || Body.IsCasting || Body.castingComponent?.HasPendingSkillRequests == true)
+            if (BotBody?.CharacterClass == null || Body.ControlledBrain == null || Body.IsCasting ||
+                Body.castingComponent?.HasPendingSkillRequests == true || !CompanionOptions165.PetFocusShieldEnabled(BotBody))
                 return false;
             Spell shield = BestPetFocusShield();
             if (shield == null || !PetTanking(out GameNPC pet, out GameLiving target))
@@ -145,6 +145,12 @@ namespace DOL.AI.Brain
                 EndOrphanedPetShieldPulses();
                 return false;
             }
+            if (!CompanionOptions165.PetFocusShieldEnabled(BotBody))
+            {
+                DropPetFocusShield();
+                EndOrphanedPetShieldPulses();
+                return false;
+            }
             long now = GameLoop.GameLoopTime;
             if (!_petShieldChannelling)
             {
@@ -175,14 +181,18 @@ namespace DOL.AI.Brain
         /// </summary>
         private void EndOrphanedPetShieldPulses()
         {
-            if (BotBody?.CharacterClass == null ||
-                (eCharacterClass)BotBody.CharacterClass.ID is not (eCharacterClass.Cabalist or eCharacterClass.Enchanter or
-                    eCharacterClass.Spiritmaster) ||
-                Body.effectListComponent?.ContainsEffectForEffectType(eEffect.Pulse) != true || PetTanking(out _, out _))
+            if (Body.effectListComponent?.ContainsEffectForEffectType(eEffect.Pulse) != true)
                 return;
+            bool? keep = null;
             foreach (ECSPulseEffect pulse in Body.effectListComponent.GetPulseEffects())
-                if (BotPetFocusShieldPolicy.IsPetFocusShield(pulse.SpellHandler?.Spell))
-                    pulse.End();
+            {
+                if (!BotPetFocusShieldPolicy.IsPetFocusShield(pulse.SpellHandler?.Spell))
+                    continue;
+                keep ??= CompanionOptions165.PetFocusShieldEnabled(BotBody) && PetTanking(out _, out _);
+                if (keep.Value)
+                    return;
+                pulse.End();
+            }
         }
 
         /// <summary>Ends the channel and clears the bot's spell state, so nothing waits behind it.</summary>

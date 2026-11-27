@@ -2622,7 +2622,7 @@ namespace DOL.GS
 
             foreach (Spell spell in Spells)
             {
-                if (spell == null || AutonomousPetSupport.IsDisabledBotDamageShield(this, spell) ||
+                if (spell == null || AutonomousPetSupport.RequiresManagedPetFocusShield(this, spell) ||
                     !AnimistSingleTargetPolicy.AllowsAutomatedSpell(this, spell))
                     continue;
 
@@ -3431,11 +3431,10 @@ namespace DOL.GS
             // freed pet turns on its charmer. Only the Minstrel's own timed twist (BotBrain.TryTwistWithCharm) plays
             // another song meanwhile (GitHub #13, owner 2026-11-03).
             if (Classic165Mode.IsOn && spell != CharmTwistSong && Charm165.PulseWouldLosePet(this, spell)) { LogCompanionCast165(spell, "keeping-charm"); return false; }
-            // Final boundary as well as selection filtering: no rank of the
-            // disabled shield can keep a Cabalist/Enchanter bot channeling.
+            // Only the managed combat decision can start a pet focus channel.
             // The pet focus shield is cast only by its own decision (BotBrain.TryStartPetFocusShield), never by upkeep.
-            bool approvedPetShield = PetFocusShieldApproved && BotPetFocusShieldPolicy.IsPetFocusShield(spell);
-            if (AutonomousPetSupport.IsDisabledBotDamageShield(this, spell) && !approvedPetShield ||
+            bool approvedPetShield = PetFocusShieldApproved && CompanionOptions165.PetFocusShieldEnabled(this);
+            if (AutonomousPetSupport.RequiresManagedPetFocusShield(this, spell) && !approvedPetShield ||
                 BotSpellPower.BlocksAttackerRotation(this, spell) ||
                 !AnimistSingleTargetPolicy.AllowsAutomatedSpell(this, spell) ||
                 !BotAnimistPolicy.MayPlant(this, spell))

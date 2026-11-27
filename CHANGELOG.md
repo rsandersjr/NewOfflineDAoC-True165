@@ -4,6 +4,8 @@ The newest version is first.
 
 ## 1.1 (coming next)
 
+- Enchanters can maintain their timed party damage shield. Hired companions with a pet focus damage shield can opt in under AI Options; the channel defaults to Off.
+- Long companion AI Options lists scroll, and keyboard focus brings off-screen options into view.
 - The updater backs up edited documentation and continues in place. Other changed patch files offer an explicit back-up-and-update option or a fresh install with progress transfer.
 - Spell and item tooltips follow resolution and interface scale. Long detail lines wrap inside the game window.
 - Crafted black, blue and rust enamel apply their proper colors, and Midgard green cloth dye applies green. Existing bottles with the wrong color are repaired on update.

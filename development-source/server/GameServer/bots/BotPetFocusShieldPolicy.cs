@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace DOL.GS
 {
     /// <summary>
@@ -26,6 +28,9 @@ namespace DOL.GS
 
         public static bool IsPetFocusShield(Spell spell) =>
             spell?.SpellType == eSpellType.DamageShield && spell.IsFocus && spell.Target == eSpellTarget.PET;
+
+        public static bool KnowsPetFocusShield(GameBot bot) =>
+            bot?.Spells?.Any(spell => IsPetFocusShield(spell) && spell.Level <= bot.Level) == true;
 
         public static bool ShouldStart(bool petInMelee, int targetHealthPercent, bool casterUnderAttack, bool enemyPlayersNear,
             bool mustMove, int powerPercent, bool nothingElseToCast, bool petShielded, long now, long backoffUntil,

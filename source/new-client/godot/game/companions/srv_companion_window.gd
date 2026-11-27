@@ -681,13 +681,17 @@ const DEBUFF_LINE := 28                             # one row per debuff the com
 func _build_options(page: Control) -> void:
 	# scrolls: a caster's debuff rows (one per debuff it knows) can run past the page (0.5, owner 2026-11-08)
 	var sc := ScrollContainer.new()
-	sc.position = Vector2(12, 0)
-	sc.size = Vector2(SIZE.x - 24, 250)
-	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	page.add_child(sc)
+	sc.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	sc.offset_left = 12.0
+	sc.offset_right = -12.0
+	sc.offset_bottom = -16.0
+	sc.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	sc.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_RESERVE
+	sc.mouse_force_pass_scroll_events = false
 	_options_box = Control.new()
-	_options_box.size = Vector2(SIZE.x - 24 - 12, 250)       # (room for the scroll bar)
-	_options_box.custom_minimum_size = Vector2(_options_box.size.x, 0)
+	_options_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_options_box.size.x = sc.size.x - sc.get_v_scroll_bar().get_combined_minimum_size().x
 	sc.add_child(_options_box)
 
 
@@ -754,6 +758,8 @@ func _refresh_options() -> void:
 			for i in 2:
 				var b := CompanionUi.button(_options_box, String(names[i]), Vector2(OPT_X + i * (room * 0.5 + 2.0), y),
 						Vector2(room * 0.5 - 2.0, 16), pick.bind(i), 8)
+				b.focus_mode = Control.FOCUS_ALL
+				b.focus_entered.connect(_reveal_option.bind(b))
 				b.toggle_mode = true
 				b.set_pressed_no_signal(i == chosen)
 				b.clip_text = true
@@ -773,12 +779,24 @@ func _refresh_options() -> void:
 			ob.item_selected.connect(func(i: int):
 				ob.tooltip_text = String(names[i]) if i < names.size() else ""
 				pick.call(i))
+			ob.focus_entered.connect(_reveal_option.bind(ob))
 			_popup_tips(ob.get_popup(), names, ids)
 			_options_box.add_child(ob)
 		y += 22.0
 	if in_debuffs:
 		y = _debuff_hint(y)
 	_options_box.custom_minimum_size.y = y                    # (the scroll's length)
+
+
+## Focused rows use content coordinates, so the HUD's scale does not affect scroll travel.
+func _reveal_option(control: Control) -> void:
+	var scroll := _options_box.get_parent() as ScrollContainer
+	var top := control.position.y
+	var bottom := top + control.size.y
+	if top < scroll.scroll_vertical:
+		scroll.scroll_vertical = floori(top)
+	elif bottom > scroll.scroll_vertical + scroll.size.y:
+		scroll.scroll_vertical = ceili(bottom - scroll.size.y)
 
 
 func _debuff_hint(y: float) -> float:

@@ -25,7 +25,7 @@ static func make(it: Dictionary) -> Control:
 		# the server's delve text (hover: prefetched) - your slot's, or an exchange item's (its detail_key)
 		var d := Server.item_lines(it.detail_key if it.has("detail_key") else int(String(it.id).substr(4)))
 		if not d.is_empty():
-			var sbox := VBoxContainer.new()
+			var sbox := DelveBox.new()
 			sbox.add_theme_constant_override("separation", -1)
 			sbox.add_child(_line(String(d.caption), con_color(int(it.get("level", 0)), PlayerData.level)))
 			for l in d.lines:
@@ -34,7 +34,7 @@ static func make(it: Dictionary) -> Control:
 			return sbox
 	if it.is_empty() or not is_gear(it):
 		return null
-	var box := VBoxContainer.new()
+	var box := DelveBox.new()
 	box.add_theme_constant_override("separation", -1)
 	box.add_child(_line(String(it.get("name", "")), con_color(int(it.get("level", 0)), PlayerData.level)))
 	for l in ItemDb.summary(it):
@@ -85,7 +85,7 @@ static func skill(e: Dictionary) -> Control:
 
 ## A caption over lines of text, the delve box's look (an item's caption in its con colour: `caption_color`).
 static func text_box(caption: String, lines: Array, caption_color := UiArt.GOLD_HI) -> Control:
-	var box := VBoxContainer.new()
+	var box := DelveBox.new()
 	box.add_theme_constant_override("separation", -1)
 	box.add_child(_line(caption, caption_color))
 	for l in lines:
@@ -96,5 +96,26 @@ static func text_box(caption: String, lines: Array, caption_color := UiArt.GOLD_
 
 static func _line(text: String, col: Color) -> Label:
 	var l := UiArt.label(text, 13, col)
-	l.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	l.remove_theme_font_size_override("font_size")
+	l.theme_type_variation = &"TooltipLabel"
 	return l
+
+
+class DelveBox extends VBoxContainer:
+	func _ready() -> void:
+		theme_changed.connect(_fit_lines, CONNECT_DEFERRED)
+		get_tree().root.size_changed.connect(_fit_lines, CONNECT_DEFERRED)
+		# The root HUD rethemes at any resize or interface scale change.
+		_fit_lines()
+
+	func _fit_lines() -> void:
+		var window_size := Vector2(get_tree().root.size)
+		var limit := maxf(48.0, minf(window_size.x * 0.7, window_size.x - 32.0))
+		for child in get_children():
+			var line := child as Label
+			var font := line.get_theme_font("font")
+			var font_size := line.get_theme_font_size("font_size")
+			var width := font.get_multiline_string_size(line.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+			var wrap := width > limit
+			line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART if wrap else TextServer.AUTOWRAP_OFF
+			line.custom_minimum_size.x = minf(width, limit) if wrap else 0.0

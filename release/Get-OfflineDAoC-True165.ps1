@@ -3,7 +3,7 @@
 # GET-OFFLINE-DAOC-TRUE165.cmd runs this. It checks the PC, then either
 #  - New install: downloads the complete game in verified parts (resuming if stopped) into a new folder, or
 #  - Update (from v0.2 on): updates an installed game in the folder it is in, with a small patch. Every file it would
-#    replace is checked against the released versions first; nothing is touched if any was changed. Everything it
+#    replace is checked against the released versions first; changed docs are backed up automatically. Everything it
 #    replaces is backed up in patch-backups\, and a failed update is undone. Saves are never touched.
 param(
     # New install: where the game goes (a new folder). Default: OfflineDAoC-True165 next to this downloader's folder,
@@ -18,6 +18,8 @@ param(
     [switch]$Yes,
     [ValidateSet('ask','install','update')]
     [string]$Mode = 'ask',
+    # Explicitly approve replacing changed patch files after backing them up. Never writes saves or settings.
+    [switch]$ForceUpdate,
     [switch]$NoShortcut
 )
 $ErrorActionPreference = 'Stop'
@@ -220,8 +222,12 @@ function Install-Game([string]$game, [switch]$KeepMarkers) {
 
 # ---------------------------------------------------------------- update in place
 function Test-NeverTouch([string]$rel) {
-    $low = $rel.ToLowerInvariant()
-    foreach ($p in @($patch.NeverTouch)) {
+    $low = $rel.Replace('\','/').ToLowerInvariant()
+    if ($low -match '(^/|:|(^|/)\.\.?(/|$))') { return $true }
+    $protected = @('runtime/data/', 'runtime/account.txt', 'runtime/logs/', 'runtime/server/logs/',
+        'runtime/server/state-165/', 'new-client/save/', 'tools/offlinedaoc crafting guide/progress.json',
+        'patch-backups/', '.install/', '.patch/')
+    foreach ($p in ($protected + @($patch.NeverTouch))) {
         if ($low -eq $p.TrimEnd('/') -or $low.StartsWith($p)) { return $true }
     }
     return $false
@@ -251,6 +257,8 @@ function Get-InstalledVersion([string]$game) {
 # What has to happen to each patch file in this folder: 'skip' (already new), 'replace' (a released version),
 # 'add' (missing), or 'changed' (a version no release had: changed on this PC).
 function Get-Plan([string]$game) {
+    $docs = @('README.md', 'READ ME FIRST.txt', 'CHANGELOG.md', 'QUICK COMMANDS.txt',
+        'ALL SERVER COMMANDS.txt', 'THIRD_PARTY.md', 'LICENSE', 'docs/PLAY.md', 'docs/NEW-CLIENT.md')
     $plan = @()
     foreach ($f in @($patch.Files)) {
         if (Test-NeverTouch $f.Path) { Stop-Install 'The update list has an invalid entry.' }
@@ -259,6 +267,7 @@ function Get-Plan([string]$game) {
         $have = Get-Sha $path
         if ($have -eq $f.Sha256) { $action = 'skip' }
         elseif (@($f.From) -contains $have) { $action = 'replace' }
+        elseif ($docs -contains $f.Path) { $action = 'changed-doc' }
         else { $action = 'changed' }
         $plan += [pscustomobject]@{ File = $f; Action = $action }
     }
@@ -308,9 +317,9 @@ function Update-Game([string]$game) {
     Say "Checking your game in $game (v$from)..."
     $plan = Get-Plan $game
     $changed = @($plan | Where-Object { $_.Action -eq 'changed' })
-    $work = @($plan | Where-Object { $_.Action -eq 'replace' -or $_.Action -eq 'add' })
     $removes = @()
     foreach ($r in @($patch.Remove)) {
+        if (Test-NeverTouch $r.Path) { Stop-Install 'The update removal list has an invalid entry.' }
         $path = Join-Path $game $r.Path
         if ((Test-Path -LiteralPath $path -PathType Leaf) -and (@($r.From) -contains (Get-Sha $path))) { $removes += $r }
     }
@@ -318,33 +327,54 @@ function Update-Game([string]$game) {
         $list = Join-Path $game 'UPDATE-CHANGED-FILES.txt'
         $changed | ForEach-Object { $_.File.Path } | Set-Content -LiteralPath $list -Encoding UTF8
         Say ''
-        Say "$($changed.Count) file(s) this update would replace were changed on this PC since they were installed, so the"
-        Say "update can't safely be applied here. Nothing was changed. The list is in $list."
-        Say ''
-        Say 'You can put the original files back (for example from a fresh download) and run this again, or make a fresh'
-        Say "v$ReleaseVersion install in a new folder and bring your save over (your account, characters, companions, bots"
-        Say 'and settings). Your old folder is only read, never changed.'
-        if (!(Ask 'Make a fresh install and bring your save over?')) { Stop-Install 'Nothing was changed.' }
-        $new = [IO.Path]::GetFullPath("$game-v$ReleaseVersion")
-        if (Test-Path -LiteralPath $new) {
-            Stop-Install "A folder already exists at $new. Choose the completed install or move that folder before retrying."
+        Say "$($changed.Count) file(s) this update would replace were changed on this PC or do not match a released copy."
+        Say "The list is in $list."
+        $choice = '1'
+        if (!$ForceUpdate -and !$Yes) {
+            Say '1 = Back up the changed files and update this folder anyway'
+            Say '2 = Make a fresh install in a new folder and bring your progress over'
+            Say '3 = Cancel'
+            do { $choice = (Read-Host 'Press 1, 2 or 3, then Enter').Trim() } until ($choice -match '^[123]$')
+        } elseif (!$ForceUpdate) {
+            $choice = '2'
         }
-        $world = Join-Path $game 'runtime\data\opendaoc-165.sqlite3.db'
-        if (!(Test-Path -LiteralPath $world -PathType Leaf) -or (Get-Item -LiteralPath $world).Length -lt 100) {
-            Stop-Install "The old install has no usable world database at $world. Nothing was copied."
+        if ($choice -eq '3') { Stop-Install 'The game files were not changed.' }
+        if ($choice -eq '1') {
+            if (!$ForceUpdate -and !(Ask 'Replace the listed files after backing them up?')) {
+                Stop-Install 'The game files were not changed.'
+            }
+            foreach ($item in $changed) { $item.Action = 'replace' }
+        } else {
+            $new = [IO.Path]::GetFullPath("$game-v$ReleaseVersion")
+            if (Test-Path -LiteralPath $new) {
+                Stop-Install "A folder already exists at $new. Choose the completed install or move that folder before retrying."
+            }
+            $world = Join-Path $game 'runtime\data\opendaoc-165.sqlite3.db'
+            if (!(Test-Path -LiteralPath $world -PathType Leaf) -or (Get-Item -LiteralPath $world).Length -lt 100) {
+                Stop-Install "The old install has no usable world database at $world. Nothing was copied."
+            }
+            $pending = "$new.incomplete"
+            Install-Game -game $pending -KeepMarkers
+            Stop-Running $game
+            Say 'Bringing your save over...'
+            Copy-Progress $game $pending
+            [IO.Directory]::Move($pending, $new)
+            Remove-Item -LiteralPath (Join-Path $new '.install') -Recurse -Force
+            Say ''
+            Write-Host "A fresh $Product v$ReleaseVersion with your save is in $new" -ForegroundColor Green
+            Say 'Play from that folder from now on. Your old folder was not changed; delete it when you are happy.'
+            return $new
         }
-        $pending = "$new.incomplete"
-        Install-Game -game $pending -KeepMarkers
-        Stop-Running $game
-        Say 'Bringing your save over...'
-        Copy-Progress $game $pending
-        [IO.Directory]::Move($pending, $new)
-        Remove-Item -LiteralPath (Join-Path $new '.install') -Recurse -Force
-        Say ''
-        Write-Host "A fresh $Product v$ReleaseVersion with your save is in $new" -ForegroundColor Green
-        Say 'Play from that folder from now on. Your old folder was not changed; delete it when you are happy.'
-        return $new
     }
+    $docs = @($plan | Where-Object { $_.Action -eq 'changed-doc' })
+    if ($docs.Count -gt 0) {
+        Say 'The update will back up and refresh your local copies of these documents:'
+        foreach ($item in $docs) {
+            Say ("  " + $item.File.Path)
+            $item.Action = 'replace'
+        }
+    }
+    $work = @($plan | Where-Object { $_.Action -eq 'replace' -or $_.Action -eq 'add' })
     if ($work.Count -eq 0 -and $removes.Count -eq 0) {
         if (Test-Path -LiteralPath $state) { Remove-Item -LiteralPath $state -Recurse -Force }
         Say ''

@@ -214,22 +214,34 @@ static func bar_style(state: int) -> StyleBox:
 
 
 ## Tooltips the client's way: a short caption in a dark box (the client's tooltips.csv is captions; item details
-## live in the information window). Tooltips are their own little windows, so the size is screen pixels.
+## live in the information window). Tooltips have their own window, so their pixel sizes follow the HUD explicitly.
 static func tooltip_theme() -> Theme:
 	var t := Theme.new()
 	var panel := StyleBoxFlat.new()
 	panel.bg_color = Color(0.02, 0.02, 0.02, 0.85)         # the client's caption box: dark, thin grey rim
 	panel.border_color = Color(0.55, 0.55, 0.5, 0.9)
-	panel.set_border_width_all(1)
-	panel.content_margin_left = 7
-	panel.content_margin_right = 7
-	panel.content_margin_top = 3
-	panel.content_margin_bottom = 4
 	t.set_stylebox("panel", "TooltipPanel", panel)
+	t.set_type_variation("TooltipLabel", "Label")
 	t.set_font("font", "TooltipLabel", font(true))
-	t.set_font_size("font_size", "TooltipLabel", 13)
 	t.set_color("font_color", "TooltipLabel", CREAM)
 	t.set_color("font_shadow_color", "TooltipLabel", SHADOW)
-	t.set_constant("shadow_offset_x", "TooltipLabel", 1)
-	t.set_constant("shadow_offset_y", "TooltipLabel", 1)
+	set_tooltip_scale(t, 1.404)
 	return t
+
+
+static func set_tooltip_scale(t: Theme, hud_scale: float) -> void:
+	# Preserve the existing font at the default 1080p HUD scale.
+	var factor := hud_scale / 1.404
+	var font_px := maxi(10, roundi(13.0 * factor))
+	if t.has_font_size("font_size", "TooltipLabel") and t.get_font_size("font_size", "TooltipLabel") == font_px:
+		return
+	t.set_font_size("font_size", "TooltipLabel", font_px)
+	var rim := maxi(1, roundi(factor))
+	t.set_constant("shadow_offset_x", "TooltipLabel", rim)
+	t.set_constant("shadow_offset_y", "TooltipLabel", rim)
+	var panel := t.get_stylebox("panel", "TooltipPanel") as StyleBoxFlat
+	panel.set_border_width_all(rim)
+	panel.content_margin_left = maxf(4.0, roundf(7.0 * factor))
+	panel.content_margin_right = panel.content_margin_left
+	panel.content_margin_top = maxf(2.0, roundf(3.0 * factor))
+	panel.content_margin_bottom = maxf(2.0, roundf(4.0 * factor))

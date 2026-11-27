@@ -99,7 +99,18 @@ def main():
     (w / "game2/VERSION.txt").write_text("Offline DAoC True 1.65 v0.2\r\n", encoding="utf-8")       # added
     (w / "client2/new-client/VERSION.txt").write_text("Offline DAoC True 1.65 v0.2 new client\r\n", encoding="utf-8")
     (w / "client2/new-client/godot/content/a.png").write_bytes(os.urandom(3_000_000))             # changed (big)
+    sys.path.insert(0, str(HERE))
+    from make_release_true165 import PLAYER_DOCS
+
+    docs = w / "player-docs"
+    for rel in PLAYER_DOCS:
+        target = docs / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(args.repo / rel, target)
+    args.repo = docs
     for v, n in (("0.1", "1"), ("0.2", "2")):
+        if v == "0.2":
+            (docs / "READ ME FIRST.txt").write_text("New instructions for v0.2", encoding="utf-8")
         run(py + [str(HERE / "make_release_true165.py"), "--game", w / f"game{n}", "--client", w / f"client{n}",
                   "--repo", args.repo, "--out", w / "assets", "--version", v, "--part-budget", "4000000"])
     run(py + [str(HERE / "make_patch_true165.py"), "--base", f"0.1={w / 'assets/baseline-0.1.sha256'}",
@@ -145,6 +156,34 @@ def main():
     for rel in SAVE_FILES:
         assert sha(fresh / rel) == before[rel], f"{rel} was not brought over"
     print("1 ok: a changed file stops the update; the fresh install has the save")
+
+    # Documentation alone is refreshed in place, with the original preserved.
+    doc = "READ ME FIRST.txt"
+    g = install("docs")
+    (g / doc).write_bytes(b"Personal notes following the original documentation")
+    before = tree(g)
+    out = downloader("0.2", w / "assets", "-Mode", "update", "-Update", g)
+    assert "back up and refresh" in out and "updated to" in out
+    check_is_v02(g, {p: before[p] for p in SAVE_FILES})
+    (backup,) = (g / "patch-backups").iterdir()
+    assert sha(backup / doc) == before[doc]
+
+    # An explicit force updates changed patch files in place, using the same backup and rollback.
+    changed = "runtime/true165/drops165.json"
+    for folder, expect in (("force-ok", 0), ("force-rollback", 1)):
+        g = install(folder)
+        (g / changed).write_bytes(b"edited drop table")
+        before = tree(g)
+        env = dict(os.environ, OFFLINEDAOC_TEST_FAIL_AFTER="6") if expect else None
+        out = downloader("0.2", w / "assets", "-Mode", "update", "-Update", g, "-ForceUpdate", env=env, expect=expect)
+        if expect:
+            assert "back as it was" in out and tree(g) == before
+        else:
+            check_is_v02(g, {p: before[p] for p in SAVE_FILES})
+            (backup,) = (g / "patch-backups").iterdir()
+            assert sha(backup / changed) == before[changed]
+            assert not Path(str(g) + "-v0.2").exists()
+    print("Docs-only backup, forced update and forced rollback passed")
 
     # ---- 2. a failure halfway puts everything back
     g = install("g2")

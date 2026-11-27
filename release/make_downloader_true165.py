@@ -30,6 +30,8 @@ def readme(version: str) -> str:
         "       smaller download. Close the game and the launcher first. Your account, characters,",
         "       companions, bots and settings stay; the files it replaces are backed up in",
         "       patch-backups\\ in the game folder.",
+        "       Edited docs are backed up automatically. For other changed files you can choose",
+        "       to back up and update anyway, or make a fresh install and transfer progress.",
         "   2 = New install: the complete game, into a new folder, OfflineDAoC-True165, next to",
         "       this downloader's folder (or C:\\Games\\OfflineDAoC-True165 if that path would be too",
         "       long: the game needs a short path to keep its graphics cache).",

@@ -106,13 +106,14 @@ characters, companions, bots and settings stay as they are.
    [1. Download](#1-download).
 3. Double-click **`GET-OFFLINE-DAOC-TRUE165.cmd`** and press **1 = Update my game**. It finds your
    `OfflineDAoC-True165` folder (or asks you to pick it) and shows what it will download.
-4. It checks every file it will replace first. Then it downloads the cumulative update from a supported v0.1 through v0.7 install, backs up
+4. It checks every file it will replace first. Then it downloads the cumulative update from a supported version, backs up
    each file it replaces in `patch-backups\` in your game folder, and puts the new files in.
 5. Start the game as usual. The first **START SERVER** after an update brings the world up to date and can take a
    few minutes.
 
-- **If it says files were changed on this PC** (for example by a mod), it changes nothing. It can make a fresh
-  install in a new folder and bring your save over; your old folder is only read.
+- **With the updated downloader**, edited documentation is backed up and refreshed automatically. If other patch
+  files differ, choose **Back up the changed files and update this folder anyway**, install in a new folder and
+  bring your progress over, or cancel.
 - **If the update fails or the PC turns off**, run the downloader again: it puts your files back or finishes the
   update.
 - Your save (`runtime\data`), your login (`runtime\account.txt`) and your client settings (`new-client\save`) are

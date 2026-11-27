@@ -117,6 +117,7 @@ func _rescale() -> void:
 	var s := vp.y / BASE_H * 0.78 * ui_scale             # the client at 800x600 = 1:1; readable default at 1080p
 	root.scale = Vector2(s, s)
 	root.size = vp / s
+	UiArt.set_tooltip_scale(root.theme, s)
 
 
 ## Virtual (client-unit) size of the screen.
